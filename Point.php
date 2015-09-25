@@ -41,8 +41,7 @@ class Point {
 	public function isExtremite($segment) {
 		if ($this->isEqual($segment->getPointA())) {
 			return true;
-		}
-		else if ($this->isEqual($segment->getPointB())) {
+		} else if ($this->isEqual($segment->getPointB())) {
 			return true;
 		}
 		return false;

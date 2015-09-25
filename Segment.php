@@ -37,8 +37,7 @@ class Segment {
 	public function getOtherPoint($point) {
 		if ($point->isEqual($this->pointA)) {
 			return $this->pointB;
-		}
-		else if ($point->isEqual($this->pointB)) {
+		} else if ($point->isEqual($this->pointB)) {
 			return $this->pointA;
 		}
 		return null;
@@ -95,8 +94,7 @@ class Segment {
 	public function contient(Point $point) {
 		if (is_null($this->coefficientDirecteur)) {
 			return Math::isBetween($point->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee());
-		}
-		else {
+		} else {
 			return Math::isBetween($point->getAbscisse(), $this->pointA->getAbscisse(), $this->pointB->getAbscisse());
 		}
 	}
