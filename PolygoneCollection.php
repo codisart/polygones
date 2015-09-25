@@ -20,7 +20,7 @@ class PolygoneCollection extends Collection {
 	}
 
 	public function offsetSet($offset, $value) {		
-		if(parent::offsetSet($offset, $value) !== false) {
+		if (parent::offsetSet($offset, $value) !== false) {
 			$segments = $value->getSegments();
 			$this->segments->append($segments);
 		}
@@ -29,30 +29,30 @@ class PolygoneCollection extends Collection {
 
 
 	public function union() {
-		if(count($this) === 0) {
+		if (count($this) === 0) {
 			return $this;
 		}
 		
 		$listeSegments = new Collection();
 		$inArraySegments = new Collection();
 
-		$normalizedSegments= $this->normalize();
+		$normalizedSegments = $this->normalize();
 
 		foreach ($normalizedSegments as $segmentA) {
 			$inArray = false;
 			foreach ($listeSegments as $keyB => $segmentB) {
-				if($segmentA->isEqual($segmentB)) {
+				if ($segmentA->isEqual($segmentB)) {
 					$inArray = true;					
 					$inArraySegments[] = $segmentB;
 					unset($listeSegments[$keyB]);
 				}
 			}
 			foreach ($inArraySegments as $keyB => $segmentB) {
-				if($segmentA->isEqual($segmentB)) {
+				if ($segmentA->isEqual($segmentB)) {
 					$inArray = true;				
 				}
 			}
-			if(!$inArray) {
+			if (!$inArray) {
 				$listeSegments[] = $segmentA;
 			}
 		}
@@ -62,14 +62,14 @@ class PolygoneCollection extends Collection {
 		return $newPolygones;
 	}
 
-	private function getIntersections(){
+	private function getIntersections() {
 		$segmentsA = clone $this->segments;
 		$segmentsB = clone $this->segments;
 		$pointsIntersections = new Collection();
 
 		foreach ($segmentsA as $segmentA) {
 			foreach ($segmentsB as $segmentB) {
-				if($segmentA->intersect($segmentB)) {
+				if ($segmentA->intersect($segmentB)) {
 					echo $segmentA->toJSON();
 					echo $segmentB->toJSON();
 				}
@@ -77,12 +77,12 @@ class PolygoneCollection extends Collection {
 		}
 	}
 
-	public function getBoundingbox(){
-		if(count($this) === 0) {
+	public function getBoundingbox() {
+		if (count($this) === 0) {
 			return null;
 		}
 		
-		if(count($this) === 1) {
+		if (count($this) === 1) {
 			return $this->contenu[0]->getBoundingbox();
 		}
 
@@ -95,14 +95,14 @@ class PolygoneCollection extends Collection {
 		}
 
 		$latmin = $latmax = $lgtmin = $lgtmax = null;
-		foreach ($points as $coord){
+		foreach ($points as $coord) {
 			$lgtmin = Math::min($lgtmin, $coord[0]);
 			$lgtmax = Math::max($lgtmax, $coord[0]);
 			$latmin = Math::min($latmin, $coord[1]);
 			$latmax = Math::max($latmax, $coord[1]);
 		}
 
-		$boundingbox =  array(
+		$boundingbox = array(
 			array($lgtmax, $latmax),
 			array($lgtmin, $latmin),
 		);
@@ -112,6 +112,9 @@ class PolygoneCollection extends Collection {
 	}
 
 
+	/**
+	 * @param Collection $listeSegments
+	 */
 	private function buildPolygone($listeSegments) {
 		$points = array();
 		$listeSegments->rewind();
@@ -121,22 +124,22 @@ class PolygoneCollection extends Collection {
 
 		$newPolygones = new PolygoneCollection();
 		
-		while($listeSegments->count()) {
+		while ($listeSegments->count()) {
 			foreach ($listeSegments as $key => $segment) {
-				if($point->isExtremite($segment)) {	
+				if ($point->isExtremite($segment)) {	
 					$point = $segment->getOtherPoint($point);
 					unset($listeSegments[$key]);
 
-					if($pointOrigine->isEqual($point)) {
+					if ($pointOrigine->isEqual($point)) {
 						$ptListe = "";
-						foreach($points as $pt) {
-							$ptListe .=  $pt->toJSON();
+						foreach ($points as $pt) {
+							$ptListe .= $pt->toJSON();
 							$ptListe .= ",";
 						}
-						$ptListe .=  $pointOrigine->toJSON();
+						$ptListe .= $pointOrigine->toJSON();
 						$newPolygones[] = new Polygone(json_decode("[".$ptListe."]"));
 						
-						if($listeSegments->count()) {
+						if ($listeSegments->count()) {
 							$nPolygones = $this->buildPolygone($listeSegments);
 							$newPolygones->append($nPolygones);
 							$listeSegments = new Collection();
@@ -153,26 +156,26 @@ class PolygoneCollection extends Collection {
 		return $newPolygones;
 	}
 
-	private function normalize(){
+	private function normalize() {
 		$segments1 = clone $this->segments;
 		$segments2 = clone $this->segments;
 
-		while($segment1 = $segments1->next()) {
+		while ($segment1 = $segments1->next()) {
 			$key1 = $segments1->key();
 
 			$segmentsInput = new Collection();
 			foreach ($segments2 as $key2 => $segment2) {
 
-				if(!$segment1->isEqual($segment2) && $segment1->isOnSameDroite($segment2)) {
-					if($segment1->contient($segment2->getPointA()) && $segment1->contient($segment2->getPointB())) {
-						if(is_null($segment1->coefficientDirecteur)) {
+				if (!$segment1->isEqual($segment2) && $segment1->isOnSameDroite($segment2)) {
+					if ($segment1->contient($segment2->getPointA()) && $segment1->contient($segment2->getPointB())) {
+						if (is_null($segment1->coefficientDirecteur)) {
 							$signe = ($segment1->getPointB()->getOrdonnee() - $segment1->getPointA()->getOrdonnee()) * ($segment2->getPointB()->getOrdonnee() - $segment2->getPointA()->getOrdonnee());
 						}
 						else {							
 							$signe = ($segment1->getPointB()->getAbcisse() - $segment1->getPointA()->getAbcisse()) * ($segment2->getPointB()->getAbcisse() - $segment2->getPointA()->getAbcisse());
 						}
 
-						if($signe > 0) {
+						if ($signe > 0) {
 							$segmentsInput[] = new Segment($segment1->getPointA(), $segment2->getPointA());
 							$segmentsInput[] = new Segment($segment2->getPointA(), $segment2->getPointB());
 							$segmentsInput[] = new Segment($segment2->getPointB(), $segment1->getPointB());
@@ -183,16 +186,16 @@ class PolygoneCollection extends Collection {
 							$segmentsInput[] = new Segment($segment2->getPointA(), $segment1->getPointB());								
 						}
 					}
-					else if($segment1->contient($segment2->getPointA())) {
+					else if ($segment1->contient($segment2->getPointA())) {
 						$segmentsInput[] = new Segment($segment1->getPointA(), $segment2->getPointA());
 						$segmentsInput[] = new Segment($segment2->getPointA(), $segment1->getPointB());
 					}
-					else if($segment1->contient($segment2->getPointB())) {
+					else if ($segment1->contient($segment2->getPointB())) {
 						$segmentsInput[] = new Segment($segment1->getPointA(), $segment2->getPointB());
 						$segmentsInput[] = new Segment($segment2->getPointB(), $segment1->getPointB());
 					}
 				}
-				if($segmentsInput->count() > 0) {
+				if ($segmentsInput->count() > 0) {
 					$segments1->insert($key1, $segmentsInput);
 					$segments1->rewind();
 					break;
@@ -211,7 +214,7 @@ class PolygoneCollection extends Collection {
 		return '['.implode(', ', $json).']';
 	}
 
-	public function __toString(){
+	public function __toString() {
 		return $this->toJSON();
 	}
 }

@@ -19,7 +19,7 @@ class Polygone {
 		foreach ($pointsListe as $pointA) {
 			$pointB = next($pointsListe);
 
-			if($pointB) {
+			if ($pointB) {
 				$pointA = new Point($pointA);
 				$pointB = new Point($pointB);
 				$this->segments[] = new Segment($pointA, $pointB);
@@ -48,7 +48,7 @@ class Polygone {
 	public function getBoundingbox() {		
 		$latmin = $latmax = $lgtmin = $lgtmax = null;
 
-	    foreach ($this->segments as $i=>$segment){
+		foreach ($this->segments as $i=>$segment){
 			$lgtmin = Math::min($lgtmin, $segment->getPointA()->getAbscisse());
 			$lgtmax = Math::max($lgtmax, $segment->getPointA()->getAbscisse());
 			$latmin = Math::min($latmin, $segment->getPointA()->getOrdonnee());

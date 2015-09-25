@@ -30,9 +30,9 @@ class Math {
 	/**
 	 *
 	 */
-	public function isBetween($int,$first,$second){
-		$min = min($first,$second);
-		$max = max($first,$second);
-		return ($min<$int && $int<$max);
+	public function isBetween($int, $first, $second) {
+		$min = min($first, $second);
+		$max = max($first, $second);
+		return ($min < $int && $int < $max);
 	}
 }
