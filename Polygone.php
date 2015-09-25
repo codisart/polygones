@@ -37,18 +37,18 @@ class Polygone {
 		$json .= $this->segments[0]->getPointA()->toJSON();
 		return "[".$json."]";
 	}
-	public function __toString(){
+	public function __toString() {
 		return $this->toJSON();
 	}
 
-	public function getSegments(){
+	public function getSegments() {
 		return $this->segments;
 	}
 
 	public function getBoundingbox() {
 		$latmin = $latmax = $lgtmin = $lgtmax = null;
 
-		foreach ($this->segments as $i=>$segment){
+		foreach ($this->segments as $i=>$segment) {
 			$lgtmin = Math::min($lgtmin, $segment->getPointA()->getAbscisse());
 			$lgtmax = Math::max($lgtmax, $segment->getPointA()->getAbscisse());
 			$latmin = Math::min($latmin, $segment->getPointA()->getOrdonnee());
