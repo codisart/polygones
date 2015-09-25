@@ -37,8 +37,7 @@ class Segment {
 	public function getOtherPoint($point) {
 		if ($point->isEqual($this->pointA)) {
 			return $this->pointB;
-		}
-		else if ($point->isEqual($this->pointB)) {
+		} else if ($point->isEqual($this->pointB)) {
 			return $this->pointA;
 		}
 		return null;
@@ -53,8 +52,7 @@ class Segment {
 	public function isOnSameDroite($segment) {
 		if (is_null($this->coefficientDirecteur) && is_null($segment->coefficientDirecteur) && $this->pointA->getAbscisse() == $segment->getPointA()->getAbscisse()) {
 			return true;
-		}
-		else if (!is_null($this->coefficientDirecteur) && !is_null($segment->coefficientDirecteur)) {
+		} else if (!is_null($this->coefficientDirecteur) && !is_null($segment->coefficientDirecteur)) {
 			return ($this->coefficientDirecteur === $segment->coefficientDirecteur && $this->ordonneeOrigine === $segment->ordonneeOrigine);
 		}
 	}
@@ -70,8 +68,7 @@ class Segment {
 				if (Math::isBetween($segment->getPointA()->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee()) && isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
 					return true;
 				}
-			}
-			else if (Math::isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
+			} else if (Math::isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
 				return true;
 			}
 		}
@@ -82,8 +79,7 @@ class Segment {
 	public function partionnedByPoint(Point $point) {
 		if ($this->pointA->isEqual($point) || $this->pointB->isEqual($point)) {
 			return $this;
-		}
-		else if ($this->contient($point)) {
+		} else if ($this->contient($point)) {
 			$newSegments = new SegmentCollection();
 			$newSegments[] = new Segment($this->pointA, $point);
 			$newSegments[] = new Segment($point, $this->pointB);
@@ -95,8 +91,7 @@ class Segment {
 	public function contient(Point $point) {
 		if (is_null($this->coefficientDirecteur)) {
 			return Math::isBetween($point->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee());
-		}
-		else {
+		} else {
 			return Math::isBetween($point->getAbscisse(), $this->pointA->getAbscisse(), $this->pointB->getAbscisse());
 		}
 	}
