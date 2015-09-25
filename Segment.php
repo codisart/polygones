@@ -52,8 +52,7 @@ class Segment {
 	public function isOnSameDroite($segment) {
 		if (is_null($this->coefficientDirecteur) && is_null($segment->coefficientDirecteur) && $this->pointA->getAbscisse() == $segment->getPointA()->getAbscisse()) {
 			return true;
-		}
-		else if (!is_null($this->coefficientDirecteur) && !is_null($segment->coefficientDirecteur)) {
+		} else if (!is_null($this->coefficientDirecteur) && !is_null($segment->coefficientDirecteur)) {
 			return ($this->coefficientDirecteur === $segment->coefficientDirecteur && $this->ordonneeOrigine === $segment->ordonneeOrigine);
 		}
 	}
@@ -69,8 +68,7 @@ class Segment {
 				if (Math::isBetween($segment->getPointA()->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee()) && isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
 					return true;
 				}
-			}
-			else if (Math::isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
+			} else if (Math::isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
 				return true;
 			}
 		}
@@ -81,8 +79,7 @@ class Segment {
 	public function partionnedByPoint(Point $point) {
 		if ($this->pointA->isEqual($point) || $this->pointB->isEqual($point)) {
 			return $this;
-		}
-		else if ($this->contient($point)) {
+		} else if ($this->contient($point)) {
 			$newSegments = new SegmentCollection();
 			$newSegments[] = new Segment($this->pointA, $point);
 			$newSegments[] = new Segment($point, $this->pointB);
