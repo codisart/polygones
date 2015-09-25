@@ -171,8 +171,7 @@ class PolygoneCollection extends Collection {
 					if ($segment1->contient($segment2->getPointA()) && $segment1->contient($segment2->getPointB())) {
 						if (is_null($segment1->coefficientDirecteur)) {
 							$signe = ($segment1->getPointB()->getOrdonnee() - $segment1->getPointA()->getOrdonnee()) * ($segment2->getPointB()->getOrdonnee() - $segment2->getPointA()->getOrdonnee());
-						}
-						else {
+						} else {
 							$signe = ($segment1->getPointB()->getAbcisse() - $segment1->getPointA()->getAbcisse()) * ($segment2->getPointB()->getAbcisse() - $segment2->getPointA()->getAbcisse());
 						}
 
@@ -180,18 +179,15 @@ class PolygoneCollection extends Collection {
 							$segmentsInput[] = new Segment($segment1->getPointA(), $segment2->getPointA());
 							$segmentsInput[] = new Segment($segment2->getPointA(), $segment2->getPointB());
 							$segmentsInput[] = new Segment($segment2->getPointB(), $segment1->getPointB());
-						}
-						else {
+						} else {
 							$segmentsInput[] = new Segment($segment1->getPointA(), $segment2->getPointB());
 							$segmentsInput[] = new Segment($segment2->getPointB(), $segment2->getPointA());
 							$segmentsInput[] = new Segment($segment2->getPointA(), $segment1->getPointB());
 						}
-					}
-					else if ($segment1->contient($segment2->getPointA())) {
+					} else if ($segment1->contient($segment2->getPointA())) {
 						$segmentsInput[] = new Segment($segment1->getPointA(), $segment2->getPointA());
 						$segmentsInput[] = new Segment($segment2->getPointA(), $segment1->getPointB());
-					}
-					else if ($segment1->contient($segment2->getPointB())) {
+					} else if ($segment1->contient($segment2->getPointB())) {
 						$segmentsInput[] = new Segment($segment1->getPointA(), $segment2->getPointB());
 						$segmentsInput[] = new Segment($segment2->getPointB(), $segment1->getPointB());
 					}
