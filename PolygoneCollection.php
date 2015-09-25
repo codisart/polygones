@@ -1,9 +1,10 @@
 <?php
-namespace Anah\AnahOpah\Utility;
 
-use Anah\AnahOpah\Utility\Polygone;
-use Anah\AnahOpah\Utility\Collection;
-use Anah\AnahOpah\Utility\Math;
+namespace Utility;
+
+use Utility\Polygone;
+use Utility\Collection;
+use Utility\Math;
 
 
 
@@ -15,11 +16,11 @@ class PolygoneCollection extends Collection {
 
 	private $segments;
 
-	public function __construct() {		
+	public function __construct() {
 		$this->segments = new Collection();
 	}
 
-	public function offsetSet($offset, $value) {		
+	public function offsetSet($offset, $value) {
 		if (parent::offsetSet($offset, $value) !== false) {
 			$segments = $value->getSegments();
 			$this->segments->append($segments);
@@ -32,7 +33,7 @@ class PolygoneCollection extends Collection {
 		if (count($this) === 0) {
 			return $this;
 		}
-		
+
 		$listeSegments = new Collection();
 		$inArraySegments = new Collection();
 
@@ -42,14 +43,14 @@ class PolygoneCollection extends Collection {
 			$inArray = false;
 			foreach ($listeSegments as $keyB => $segmentB) {
 				if ($segmentA->isEqual($segmentB)) {
-					$inArray = true;					
+					$inArray = true;
 					$inArraySegments[] = $segmentB;
 					unset($listeSegments[$keyB]);
 				}
 			}
 			foreach ($inArraySegments as $keyB => $segmentB) {
 				if ($segmentA->isEqual($segmentB)) {
-					$inArray = true;				
+					$inArray = true;
 				}
 			}
 			if (!$inArray) {
@@ -81,7 +82,7 @@ class PolygoneCollection extends Collection {
 		if (count($this) === 0) {
 			return null;
 		}
-		
+
 		if (count($this) === 1) {
 			return $this->contenu[0]->getBoundingbox();
 		}
@@ -89,9 +90,9 @@ class PolygoneCollection extends Collection {
 		$points = array();
 		foreach ($this as $poly) {
 			$boundingBox = $poly->getBoundingbox();
-			
-			$points[] = $boundingBox[0];	
-			$points[] = $boundingBox[1];	
+
+			$points[] = $boundingBox[0];
+			$points[] = $boundingBox[1];
 		}
 
 		$latmin = $latmax = $lgtmin = $lgtmax = null;
@@ -107,7 +108,7 @@ class PolygoneCollection extends Collection {
 			array($lgtmin, $latmin),
 		);
 		return $boundingbox;
-		
+
 
 	}
 
@@ -123,10 +124,10 @@ class PolygoneCollection extends Collection {
 		$points[] = $point;
 
 		$newPolygones = new PolygoneCollection();
-		
+
 		while ($listeSegments->count()) {
 			foreach ($listeSegments as $key => $segment) {
-				if ($point->isExtremite($segment)) {	
+				if ($point->isExtremite($segment)) {
 					$point = $segment->getOtherPoint($point);
 					unset($listeSegments[$key]);
 
@@ -138,13 +139,13 @@ class PolygoneCollection extends Collection {
 						}
 						$ptListe .= $pointOrigine->toJSON();
 						$newPolygones[] = new Polygone(json_decode("[".$ptListe."]"));
-						
+
 						if ($listeSegments->count()) {
 							$nPolygones = $this->buildPolygone($listeSegments);
 							$newPolygones->append($nPolygones);
 							$listeSegments = new Collection();
 						}
-					}					
+					}
 					$points[] = $point;
 					unset($listeSegments[$key]);
 
@@ -171,7 +172,7 @@ class PolygoneCollection extends Collection {
 						if (is_null($segment1->coefficientDirecteur)) {
 							$signe = ($segment1->getPointB()->getOrdonnee() - $segment1->getPointA()->getOrdonnee()) * ($segment2->getPointB()->getOrdonnee() - $segment2->getPointA()->getOrdonnee());
 						}
-						else {							
+						else {
 							$signe = ($segment1->getPointB()->getAbcisse() - $segment1->getPointA()->getAbcisse()) * ($segment2->getPointB()->getAbcisse() - $segment2->getPointA()->getAbcisse());
 						}
 
@@ -183,7 +184,7 @@ class PolygoneCollection extends Collection {
 						else {
 							$segmentsInput[] = new Segment($segment1->getPointA(), $segment2->getPointB());
 							$segmentsInput[] = new Segment($segment2->getPointB(), $segment2->getPointA());
-							$segmentsInput[] = new Segment($segment2->getPointA(), $segment1->getPointB());								
+							$segmentsInput[] = new Segment($segment2->getPointA(), $segment1->getPointB());
 						}
 					}
 					else if ($segment1->contient($segment2->getPointA())) {
@@ -202,7 +203,7 @@ class PolygoneCollection extends Collection {
 				}
 			}
 		}
-		
+
 		return $segments1;
 	}
 
@@ -210,7 +211,7 @@ class PolygoneCollection extends Collection {
 		$json = array();
 		foreach ($this->contenu as $polygone) {
 			$json[] = $polygone->toJSON();
-		}		
+		}
 		return '['.implode(', ', $json).']';
 	}
 

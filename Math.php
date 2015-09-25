@@ -1,5 +1,5 @@
 <?php
-namespace Anah\AnahOpah\Utility;
+namespace Utility;
 
 
 

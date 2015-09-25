@@ -1,15 +1,15 @@
 <?php
 
-namespace Anah\AnahOpah\Utility;
+namespace Utility;
 
 class Collection implements \ArrayAccess, \Iterator, \Countable {
 	protected $contenu = array();
-	protected $type; 
-	
+	protected $type;
+
 	public function __construct() {
-	
+
 	}
-	
+
 	public function offsetSet($offset, $value) {
 
 		if (empty($this->contenu)) {
@@ -26,21 +26,21 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 		else {
 			$this->contenu[$offset] = $value;
 		}
-		
+
 	}
-	
+
 	public function offsetExists($offset) {
 		return isset($this->contenu[$offset]);
 	}
-	
+
 	public function offsetUnset($offset) {
 		unset($this->contenu[$offset]);
 	}
-	
+
 	public function offsetGet($offset) {
 		return isset($this->contenu[$offset]) ? $this->contenu[$offset] : null;
 	}
-	
+
 	public function rewind() {
 		reset($this->contenu);
 	}
@@ -59,7 +59,7 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 
 	public function valid() {
 		return $this->current() !== false;
-	}    
+	}
 
 	public function count() {
 		return count($this->contenu);

@@ -1,14 +1,14 @@
 <?php
 
-namespace Anah\AnahOpah\Utility;
+namespace Utility;
 
-use Anah\AnahOpah\Utility\Point;
+use Utility\Point;
 
 /**
-* segment 
+* segment
 */
 class Segment {
-	
+
 	private $pointA;
 	private $pointB;
 
@@ -42,7 +42,7 @@ class Segment {
 			return $this->pointA;
 		}
 		return null;
-	}	
+	}
 
 
 	public function isEqual($segment) {
@@ -50,12 +50,12 @@ class Segment {
 	}
 
 
-	public function isOnSameDroite($segment) {		
+	public function isOnSameDroite($segment) {
 		if (is_null($this->coefficientDirecteur) && is_null($segment->coefficientDirecteur) && $this->pointA->getAbscisse() == $segment->getPointA()->getAbscisse()) {
 			return true;
 		}
-		else if (!is_null($this->coefficientDirecteur) && !is_null($segment->coefficientDirecteur)) {		
-			return ($this->coefficientDirecteur === $segment->coefficientDirecteur && $this->ordonneeOrigine === $segment->ordonneeOrigine);			
+		else if (!is_null($this->coefficientDirecteur) && !is_null($segment->coefficientDirecteur)) {
+			return ($this->coefficientDirecteur === $segment->coefficientDirecteur && $this->ordonneeOrigine === $segment->ordonneeOrigine);
 		}
 	}
 
@@ -65,17 +65,17 @@ class Segment {
 			return false;
 		}
 
-		if (is_null($this->coefficientDirecteur)) {		
+		if (is_null($this->coefficientDirecteur)) {
 			if ($segment->coefficientDirecteur == 0) {
 				if (Math::isBetween($segment->getPointA()->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee()) && isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
 					return true;
-				}	
+				}
 			}
 			else if (Math::isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
 				return true;
 			}
 		}
-		
+
 		return false; ;
 	}
 
@@ -83,7 +83,7 @@ class Segment {
 		if ($this->pointA->isEqual($point) || $this->pointB->isEqual($point)) {
 			return $this;
 		}
-		else if ($this->contient($point)) {			
+		else if ($this->contient($point)) {
 			$newSegments = new SegmentCollection();
 			$newSegments[] = new Segment($this->pointA, $point);
 			$newSegments[] = new Segment($point, $this->pointB);
@@ -106,4 +106,3 @@ class Segment {
 		return $json;
 	}
 }
-

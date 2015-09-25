@@ -1,16 +1,16 @@
 <?php
 
-namespace Anah\AnahOpah\Utility;
+namespace Utility;
 
-use Anah\AnahOpah\Utility\Collection;
-use Anah\AnahOpah\Utility\Segment;
-use Anah\AnahOpah\Utility\Point;
+use Utility\Collection;
+use Utility\Segment;
+use Utility\Point;
 
 /**
-* polygone 
+* polygone
 */
 class Polygone {
-	
+
 	private $segments;
 
 	public function __construct(array $pointsListe) {
@@ -23,7 +23,7 @@ class Polygone {
 				$pointA = new Point($pointA);
 				$pointB = new Point($pointB);
 				$this->segments[] = new Segment($pointA, $pointB);
-			}	
+			}
 			unset($pointA, $pointB);
 		}
 	}
@@ -33,7 +33,7 @@ class Polygone {
 		foreach ($this->segments as $segment) {
 			$json .= $segment->getPointA()->toJSON();
 			$json .= ",";
-		}	
+		}
 		$json .= $this->segments[0]->getPointA()->toJSON();
 		return "[".$json."]";
 	}
@@ -45,14 +45,14 @@ class Polygone {
 		return $this->segments;
 	}
 
-	public function getBoundingbox() {		
+	public function getBoundingbox() {
 		$latmin = $latmax = $lgtmin = $lgtmax = null;
 
 		foreach ($this->segments as $i=>$segment){
 			$lgtmin = Math::min($lgtmin, $segment->getPointA()->getAbscisse());
 			$lgtmax = Math::max($lgtmax, $segment->getPointA()->getAbscisse());
 			$latmin = Math::min($latmin, $segment->getPointA()->getOrdonnee());
-			$latmax = Math::max($latmax, $segment->getPointA()->getOrdonnee());		    
+			$latmax = Math::max($latmax, $segment->getPointA()->getOrdonnee());
 		}
 
 		$boundingbox = array(

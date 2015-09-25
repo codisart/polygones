@@ -1,12 +1,12 @@
 <?php
 
-namespace Anah\AnahOpah\Utility;
+namespace Utility;
 
 /**
-* point 
+* point
 */
 class Point {
-	
+
 	// axe X
 	private $abscisse;
 
