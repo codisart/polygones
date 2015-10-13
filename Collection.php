@@ -22,8 +22,7 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 
 		if (is_null($offset)) {
 			$this->contenu[] = $value;
-		}
-		else {
+		} else {
 			$this->contenu[$offset] = $value;
 		}
 
@@ -74,8 +73,7 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 		foreach ($collection as $key => $value) {
 			if (isset($this[$key])) {
 				$this[] = $value;
-			}
-			else {
+			} else {
 				$this[$key] = $value;
 			}
 		}
