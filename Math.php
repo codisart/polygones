@@ -57,7 +57,7 @@ class Math {
 	 * @param  Segment $vertexSecond [description]
 	 * @return integer                [description]
 	 */
-	public static function scalarProduct (Segment $vertexOne, Segment $vertexSecond) {
+	public static function scalarProduct(Segment $vertexOne, Segment $vertexSecond) {
 		$abscissaVertexOne = $vertexOne->getPointB()->getAbscisse() - $vertexOne->getPointA()->getAbscisse();
 		$ordinateVertexOne = $vertexOne->getPointB()->getOrdonnee() - $vertexOne->getPointA()->getOrdonnee();
 		$abscissaVertexSecond = $vertexSecond->getPointB()->getAbscisse() - $vertexSecond->getPointA()->getAbscisse();
