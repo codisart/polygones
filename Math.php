@@ -5,7 +5,7 @@ namespace Utility;
 
 
 /**
-* collection de polygone.
+* Math
 */
 class Math {
 
