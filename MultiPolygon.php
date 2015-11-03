@@ -12,17 +12,17 @@ use Utility\Point;
 */
 class MultiPolygon implements PolygonInterface
 {
-		public function toJSON() {
-			$json = "";
-			foreach ($this->segments as $segment) {
-				$json .= $segment->getPointA()->toJSON();
-				$json .= ",";
-			}
-			$json .= $this->segments[0]->getPointA()->toJSON();
-			return "[".$json."]";
-		}
+	private $polygons;
 
-		public function __toString() {
-			return $this->toJSON();
+	public function toJSON() {
+		$json = "";
+		foreach ($this->polygons as $polygon) {
+			$json[] = $polygon->toJSON();
 		}
+		return '['.implode(', ', $json).']';
+	}
+
+	public function __toString() {
+		return $this->toJSON();
+	}
 }
