@@ -46,4 +46,8 @@ class Point {
 		}
 		return false;
 	}
+
+	public function isInsidePolygon($polygon) {
+		return $polygon->contains($this);
+	}
 }
