@@ -165,11 +165,7 @@ class PolygoneCollection extends Collection {
 			$polygonChampions->shift();
 		} while ($polygonChampion = $polygonChampions->current());
 
-				var_dump($polygonFinals[1]->toJSON());
 		$polygonFinals[1]->normalize($polygonFinals[0]);
-				var_dump($polygonFinals[1]->toJSON());
-
-		// $polygonFinals[1]->normalize($polygonFinals[0]);
 	}
 
 

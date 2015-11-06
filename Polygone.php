@@ -144,7 +144,6 @@ class Polygone implements PolygonInterface {
 
 		foreach($myVertexes as $myKey => $myVertex) {
 			if($myVertex->getMidpoint()->isInsidePolygon($polygon)) {
-				var_dump($myKey);
 				$this->segments->_unset($myKey);
 			}
 		}
