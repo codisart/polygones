@@ -24,7 +24,7 @@ class PolygoneCollection extends Collection {
 		}
 	}
 
-	function __clone()
+	public function __clone()
 	{
 		$contenuTmp = array();
 		foreach ($this->contenu as $key => $value) {
