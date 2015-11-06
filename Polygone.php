@@ -105,14 +105,6 @@ class Polygone implements PolygonInterface {
 		return Math::determinant($vertex, $vertexSecond);
 	}
 
-
-	public function scalarProduct ($point1, $point2, $point3) {
-		$vertexSecond = new Segment($vertex->getPointA(), $point);
-		return Math::scalarProduct($vertex, $vertexSecond);
-		return ( ($point2->getAbscisse() - $point1->getAbscisse()) * ($point3->getAbscisse() - $point1->getAbscisse())
-			+ ($point2->getOrdonnee() -  $point1->getOrdonnee()) * ($point3->getOrdonnee() - $point1->getOrdonnee()) );
-	}
-
 	public function getPointsOfIntersect($polygon) {
 		$myVertexes = $this->segments;
 		$hisVertexes = $polygon->getSegments();
@@ -140,7 +132,6 @@ class Polygone implements PolygonInterface {
 
 	public function normalize($polygon) {
 		$myVertexes = $this->segments;
-		$hisVertexes = $polygon->getSegments();
 
 		foreach($myVertexes as $myKey => $myVertex) {
 			if($myVertex->getMidpoint()->isInsidePolygon($polygon)) {
