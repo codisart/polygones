@@ -172,41 +172,11 @@ class PolygoneCollection extends Collection {
 		$segments2 = clone $this->segments;
 
 		/*
-		$polygons = clone $this->contenu;
-
-		foreach($polygons as $polygon) {
-			foreach($segments1 as $key => $segment) {
-				// if($polygon->containsSegment($segment)) {
-				// 	break; continue; ?
-				// }
-
-				$segmentsOfPolygon = $polygon->getSegments();
-				foreach($segmentsOfPolygon as $segmentOfPolygon) {
-					$pointOfIntersection = $segment->getPointofIntersect($segmentOfPolygon);
-
-					if(!empty($pointOfIntersection)) {
-						$segmentsInput = new Collection();
-						$segmentsInput[] = new Segment($segment->getPointA(), $pointOfIntersection);
-						$segmentsInput[] = new Segment($pointOfIntersection, $segment->getPointB());
-
-						$segments->insert($key, $segmentsInput);
-					}
-				}
-			}
-		}
-		*/
-
-		/*
 			Pour tous les segments, vérifier si un des points est à l'intérieur d'un Polygone.
 				Si c'est le cas, pour tous les segments du polygone
 					chercher toutes les intersections avec le segment et créer deux segments à partir du premier
 					supprimer le segment contenu dans le polygone.
 		*/
-
-
-
-
-
 		while ($segment1 = $segments1->next()) {
 			$key1 = $segments1->key();
 
