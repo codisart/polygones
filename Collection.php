@@ -44,6 +44,9 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 		reset($this->contenu);
 	}
 
+	public function shift() {
+		return array_shift($this->contenu);
+	}
 	public function current() {
 		return current($this->contenu);
 	}
@@ -87,6 +90,10 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 			$arrayNewValues[] = $value;
 		}
 		array_splice($this->contenu, $index, 1, $arrayNewValues);
+	}
+
+	public function _unset($key) {
+		unset($this->contenu[$key]);
 	}
 
 	private function setType($value) {

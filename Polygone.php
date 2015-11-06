@@ -28,6 +28,11 @@ class Polygone implements PolygonInterface {
 		}
 	}
 
+	function __clone()
+	{
+		$this->segments = clone $this->segments;
+	}
+
 	public function toJSON() {
 		$json = "";
 		foreach ($this->segments as $segment) {
@@ -86,7 +91,7 @@ class Polygone implements PolygonInterface {
 			}
 		}
 
-		return $wn;
+		return $wn != 0;
 	}
 
 	/**
@@ -106,5 +111,46 @@ class Polygone implements PolygonInterface {
 		return Math::scalarProduct($vertex, $vertexSecond);
 		return ( ($point2->getAbscisse() - $point1->getAbscisse()) * ($point3->getAbscisse() - $point1->getAbscisse())
 			+ ($point2->getOrdonnee() -  $point1->getOrdonnee()) * ($point3->getOrdonnee() - $point1->getOrdonnee()) );
+	}
+
+	public function getPointsOfIntersect($polygon) {
+		$myVertexes = $this->segments;
+		$hisVertexes = $polygon->getSegments();
+
+		foreach($myVertexes as $myKey => $myVertex) {
+			foreach($hisVertexes as $hisKey => $hisVertex) {
+				if(!$myVertex->isEqual($hisVertex)) {
+					$pointOfIntersection = $myVertex->getPointOfIntersect($hisVertex);
+
+					if(!empty($pointOfIntersection)) {
+						$myVertexesPartitionned = new Collection();
+						$myVertexesPartitionned[] = new Segment($myVertex->getPointA(), $pointOfIntersection);
+						$myVertexesPartitionned[] = new Segment($pointOfIntersection, $myVertex->getPointB());
+						$this->insertNewPartsSegment($myKey, $myVertexesPartitionned);
+
+						$hisVertexesPartitionned = new Collection();
+						$hisVertexesPartitionned[] = new Segment($hisVertex->getPointA(), $pointOfIntersection);
+						$hisVertexesPartitionned[] = new Segment($pointOfIntersection, $hisVertex->getPointB());
+						$polygon->insertNewPartsSegment($hisKey, $hisVertexesPartitionned);
+					}
+				}
+			}
+		}
+	}
+
+	public function normalize($polygon) {
+		$myVertexes = $this->segments;
+		$hisVertexes = $polygon->getSegments();
+
+		foreach($myVertexes as $myKey => $myVertex) {
+			if($myVertex->getMidpoint()->isInsidePolygon($polygon)) {
+				var_dump($myKey);
+				$this->segments->_unset($myKey);
+			}
+		}
+	}
+
+	public function insertNewPartsSegment ($key, Collection $vertexes) {
+			$this->segments->insert($key, $vertexes);
 	}
 }

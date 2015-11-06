@@ -48,6 +48,6 @@ class Point {
 	}
 
 	public function isInsidePolygon($polygon) {
-		return $polygon->contains($this);
+		return $polygon->containsPoint($this);
 	}
 }

@@ -6,9 +6,6 @@ use Utility\Polygone;
 use Utility\Collection;
 use Utility\Math;
 
-
-
-
 /**
 * collection de polygone.
 */
@@ -27,6 +24,15 @@ class PolygoneCollection extends Collection {
 		}
 	}
 
+	function __clone()
+	{
+		$contenuTmp = array();
+		foreach ($this->contenu as $key => $value) {
+			$contenuTmp[$key] = clone $value;
+		}
+		$this->contenu = $contenuTmp;
+		$this->segments = clone $this->segments;
+	}
 
 
 	public function union() {
@@ -61,21 +67,6 @@ class PolygoneCollection extends Collection {
 		$newPolygones = $this->buildPolygone($listeSegments);
 
 		return $newPolygones;
-	}
-
-	private function getIntersections() {
-		$segmentsA = clone $this->segments;
-		$segmentsB = clone $this->segments;
-		$pointsIntersections = new Collection();
-
-		foreach ($segmentsA as $segmentA) {
-			foreach ($segmentsB as $segmentB) {
-				if ($segmentA->intersect($segmentB)) {
-					echo $segmentA->toJSON();
-					echo $segmentB->toJSON();
-				}
-			}
-		}
 	}
 
 	public function getBoundingbox() {
@@ -157,9 +148,70 @@ class PolygoneCollection extends Collection {
 		return $newPolygones;
 	}
 
+
+	public function getPointsOfIntersect() {
+		$polygonChampions = clone $this;
+		$polygonFinals = new PolygoneCollection();
+
+		$vertexes = new Collection();
+
+		$polygonChampion = $polygonChampions->current();
+
+		do {
+			while ($polygonContender = $polygonChampions->next()) {
+				$polygonChampion->getPointsOfIntersect($polygonContender);
+			}
+			$polygonFinals[] = $polygonChampion;
+			$polygonChampions->shift();
+		} while ($polygonChampion = $polygonChampions->current());
+
+				var_dump($polygonFinals[1]->toJSON());
+		$polygonFinals[1]->normalize($polygonFinals[0]);
+				var_dump($polygonFinals[1]->toJSON());
+
+		// $polygonFinals[1]->normalize($polygonFinals[0]);
+	}
+
+
 	private function normalize() {
 		$segments1 = clone $this->segments;
 		$segments2 = clone $this->segments;
+
+		/*
+		$polygons = clone $this->contenu;
+
+		foreach($polygons as $polygon) {
+			foreach($segments1 as $key => $segment) {
+				// if($polygon->containsSegment($segment)) {
+				// 	break; continue; ?
+				// }
+
+				$segmentsOfPolygon = $polygon->getSegments();
+				foreach($segmentsOfPolygon as $segmentOfPolygon) {
+					$pointOfIntersection = $segment->getPointofIntersect($segmentOfPolygon);
+
+					if(!empty($pointOfIntersection)) {
+						$segmentsInput = new Collection();
+						$segmentsInput[] = new Segment($segment->getPointA(), $pointOfIntersection);
+						$segmentsInput[] = new Segment($pointOfIntersection, $segment->getPointB());
+
+						$segments->insert($key, $segmentsInput);
+					}
+				}
+			}
+		}
+		*/
+
+		/*
+			Pour tous les segments, vérifier si un des points est à l'intérieur d'un Polygone.
+				Si c'est le cas, pour tous les segments du polygone
+					chercher toutes les intersections avec le segment et créer deux segments à partir du premier
+					supprimer le segment contenu dans le polygone.
+		*/
+
+
+
+
 
 		while ($segment1 = $segments1->next()) {
 			$key1 = $segments1->key();
@@ -167,6 +219,7 @@ class PolygoneCollection extends Collection {
 			$segmentsInput = new Collection();
 			foreach ($segments2 as $key2 => $segment2) {
 
+				// Crée trois segements à partir de deux segments qui sont sur la meme droite mais qui ne sont pas confondus.
 				if (!$segment1->isEqual($segment2) && $segment1->isOnSameDroite($segment2)) {
 					if ($segment1->contient($segment2->getPointA()) && $segment1->contient($segment2->getPointB())) {
 						if (is_null($segment1->coefficientDirecteur)) {

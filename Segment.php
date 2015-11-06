@@ -21,7 +21,7 @@ class Segment {
 
 		if ($this->pointA->getAbscisse() - $this->pointB->getAbscisse() != 0) {
 			$this->coefficientDirecteur = ($this->pointB->getOrdonnee() - $this->pointA->getOrdonnee()) / ($this->pointB->getAbscisse() - $this->pointA->getAbscisse());
-			$this->ordonneeOrigine = $this->pointA->getOrdonnee() - $this->pointB->getAbscisse() * $this->coefficientDirecteur;
+			$this->ordonneeOrigine = $this->pointA->getOrdonnee() - ($this->pointA->getAbscisse() * $this->coefficientDirecteur);
 		}
 
 	}
@@ -57,23 +57,22 @@ class Segment {
 		}
 	}
 
-
-	public function intersect($segment) {
-		if (is_null($this->coefficientDirecteur) && is_null($segment->coefficientDirecteur)) {
-			return false;
+	public function getPointOfIntersect($segment) {
+		if (Math::determinant($this, $segment) == 0) {
+			return null;
 		}
 
-		if (is_null($this->coefficientDirecteur)) {
-			if ($segment->coefficientDirecteur == 0) {
-				if (Math::isBetween($segment->getPointA()->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee()) && isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
-					return true;
-				}
-			} else if (Math::isBetween($this->pointA->getAbscisse(), $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())) {
-				return true;
-			}
-		}
+		$abscisseIntersection = ($segment->ordonneeOrigine - $this->ordonneeOrigine) / ($this->coefficientDirecteur - $segment->coefficientDirecteur);
 
-		return false; ;
+		if(
+			Math::isBetween($abscisseIntersection, $this->pointA->getAbscisse(), $this->pointB->getAbscisse())
+			&&
+			Math::isBetween($abscisseIntersection, $segment->pointA->getAbscisse(), $segment->pointB->getAbscisse())
+		) {
+			$ordonneeIntersection = ($abscisseIntersection * $this->coefficientDirecteur) + $this->ordonneeOrigine;
+			return new Point(array($abscisseIntersection, $ordonneeIntersection));
+		}
+		return null;
 	}
 
 	public function partionnedByPoint(Point $point) {
@@ -86,6 +85,13 @@ class Segment {
 			return $newSegments;
 		}
 		return $this;
+	}
+
+	public function getMidpoint() {
+		return new Point (array(
+			($this->pointA->getAbscisse() +  $this->pointB->getAbscisse()) / 2,
+			($this->pointA->getOrdonnee() +  $this->pointB->getOrdonnee()) / 2
+		));
 	}
 
 	public function contient(Point $point) {
