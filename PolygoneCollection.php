@@ -153,8 +153,6 @@ class PolygoneCollection extends Collection {
 		$polygonChampions = clone $this;
 		$polygonFinals = new PolygoneCollection();
 
-		$vertexes = new Collection();
-
 		$polygonChampion = $polygonChampions->current();
 
 		do {
