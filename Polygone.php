@@ -28,7 +28,7 @@ class Polygone implements PolygonInterface {
 		}
 	}
 
-	function __clone()
+	public function __clone()
 	{
 		$this->segments = clone $this->segments;
 	}
