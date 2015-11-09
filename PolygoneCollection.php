@@ -152,32 +152,32 @@ class PolygoneCollection extends Collection {
 	public function getPointsOfIntersect() {
 		$vectors = new Collection();
 
-		foreach($this->contenu as $keyChampion => $polygonChampion) {
+		foreach ($this->contenu as $keyChampion => $polygonChampion) {
 			$vectorsChampion = clone $polygonChampion->getSegments();
 
 			foreach ($this->contenu as $keyContender => $polygonContender) {
 				$vectorsContender = $polygonContender->getSegments();
 
-				if($keyChampion != $keyContender) {
+				if ($keyChampion != $keyContender) {
 					$vectorChampion = $vectorsChampion->current();
 
 					do {
 						$keyVectorChampion = $vectorsChampion->key();
 
-						foreach($vectorsContender as $keyVectorContender => $vectorContender) {
+						foreach ($vectorsContender as $keyVectorContender => $vectorContender) {
 
-							if(!$vectorChampion->isEqual($vectorContender)) {
+							if (!$vectorChampion->isEqual($vectorContender)) {
 								$pointOfIntersection = $vectorChampion->getPointOfIntersect($vectorContender);
 
-								if(!empty($pointOfIntersection)) {
+								if (!empty($pointOfIntersection)) {
 									$vectorPartitionned = new Collection();
 									$vectorFirstPart = new Segment($vectorChampion->getPointA(), $pointOfIntersection);
-									if(!$vectorFirstPart->getMidpoint()->isInsidePolygon($polygonContender)) {
+									if (!$vectorFirstPart->getMidpoint()->isInsidePolygon($polygonContender)) {
 										$vectorPartitionned[] = $vectorFirstPart;
 									}
 
 									$vectorSecondPart = new Segment($pointOfIntersection, $vectorChampion->getPointB());
-									if(!$vectorSecondPart->getMidpoint()->isInsidePolygon($polygonContender)) {
+									if (!$vectorSecondPart->getMidpoint()->isInsidePolygon($polygonContender)) {
 										$vectorPartitionned[] = $vectorSecondPart;
 									}
 
