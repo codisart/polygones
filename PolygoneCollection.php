@@ -153,17 +153,52 @@ class PolygoneCollection extends Collection {
 		$polygonChampions = clone $this;
 		$polygonFinals = new PolygoneCollection();
 
-		$polygonChampion = $polygonChampions->current();
+		$vectors = new Collection();
 
-		do {
-			while ($polygonContender = $polygonChampions->next()) {
-				$polygonChampion->getPointsOfIntersect($polygonContender);
+		foreach($this->contenu as $keyChampion => $polygonChampion) {
+			$vectorsChampion = clone $polygonChampion->getSegments();
+
+			foreach ($this->contenu as $keyContender => $polygonContender) {
+				$vectorsContender = $polygonContender->getSegments();
+
+				if($keyChampion != $keyContender) {
+					$vectorChampion = $vectorsChampion->current();
+
+					do {
+						$keyVectorChampion = $vectorsChampion->key();
+
+						foreach($vectorsContender as $keyVectorContender => $vectorContender) {
+
+							if(!$vectorChampion->isEqual($vectorContender)) {
+								$pointOfIntersection = $vectorChampion->getPointOfIntersect($vectorContender);
+
+								if(!empty($pointOfIntersection)) {
+									$vectorPartitionned = new Collection();
+									$vectorFirstPart = new Segment($vectorChampion->getPointA(), $pointOfIntersection);
+									if(!$vectorFirstPart->getMidpoint()->isInsidePolygon($polygonContender)) {
+										$vectorPartitionned[] = $vectorFirstPart;
+									}
+
+									$vectorSecondPart = new Segment($pointOfIntersection, $vectorChampion->getPointB());
+									if(!$vectorSecondPart->getMidpoint()->isInsidePolygon($polygonContender)) {
+										$vectorPartitionned[] = $vectorSecondPart;
+									}
+
+									$vectorsChampion->insert($keyVectorChampion, $vectorPartitionned);
+								}
+							}
+						}
+					}
+					while ($vectorChampion = $vectorsChampion->next());
+				}
 			}
-			$polygonFinals[] = $polygonChampion;
-			$polygonChampions->shift();
-		} while ($polygonChampion = $polygonChampions->current());
 
-		$polygonFinals[1]->normalize($polygonFinals[0]);
+			$vectors->append($vectorsChampion);
+		}
+
+		$newPolygones = $this->buildPolygone($vectors);
+
+		return $newPolygones;
 	}
 
 
