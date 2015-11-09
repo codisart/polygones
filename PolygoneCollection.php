@@ -150,9 +150,6 @@ class PolygoneCollection extends Collection {
 
 
 	public function getPointsOfIntersect() {
-		$polygonChampions = clone $this;
-		$polygonFinals = new PolygoneCollection();
-
 		$vectors = new Collection();
 
 		foreach($this->contenu as $keyChampion => $polygonChampion) {
