@@ -64,7 +64,7 @@ class Segment {
 
 		$abscisseIntersection = ($segment->ordonneeOrigine - $this->ordonneeOrigine) / ($this->coefficientDirecteur - $segment->coefficientDirecteur);
 
-		if(
+		if (
 			Math::isBetween($abscisseIntersection, $this->pointA->getAbscisse(), $this->pointB->getAbscisse())
 			&&
 			Math::isBetween($abscisseIntersection, $segment->pointA->getAbscisse(), $segment->pointB->getAbscisse())
@@ -88,9 +88,9 @@ class Segment {
 	}
 
 	public function getMidpoint() {
-		return new Point (array(
-			($this->pointA->getAbscisse() +  $this->pointB->getAbscisse()) / 2,
-			($this->pointA->getOrdonnee() +  $this->pointB->getOrdonnee()) / 2
+		return new Point(array(
+			($this->pointA->getAbscisse() + $this->pointB->getAbscisse()) / 2,
+			($this->pointA->getOrdonnee() + $this->pointB->getOrdonnee()) / 2
 		));
 	}
 

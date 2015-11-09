@@ -75,8 +75,8 @@ class Polygone implements PolygonInterface {
 	public function containsPointWN(Point $point) {
 		$wn = 0;
 
-		foreach ($this->segments as $i=>$segment){
-			if($segment->getPointA()->getOrdonnee() <= $point->getOrdonnee()) {
+		foreach ($this->segments as $i=>$segment) {
+			if ($segment->getPointA()->getOrdonnee() <= $point->getOrdonnee()) {
 				if ($segment->getPointB()->getOrdonnee() > $point->getOrdonnee()) {
 					if ($this->isLeft($segment, $point) > 0) {
 						++$wn;
@@ -100,7 +100,7 @@ class Polygone implements PolygonInterface {
 	 * @param  Point   $point  [description]
 	 * @return boolean         [description]
 	 */
-	public function isLeft(Segment $vertex,Point $point) {
+	public function isLeft(Segment $vertex, Point $point) {
 		$vertexSecond = new Segment($vertex->getPointA(), $point);
 		return Math::determinant($vertex, $vertexSecond);
 	}
@@ -109,12 +109,12 @@ class Polygone implements PolygonInterface {
 		$myVertexes = $this->segments;
 		$hisVertexes = $polygon->getSegments();
 
-		foreach($myVertexes as $myKey => $myVertex) {
-			foreach($hisVertexes as $hisKey => $hisVertex) {
-				if(!$myVertex->isEqual($hisVertex)) {
+		foreach ($myVertexes as $myKey => $myVertex) {
+			foreach ($hisVertexes as $hisKey => $hisVertex) {
+				if (!$myVertex->isEqual($hisVertex)) {
 					$pointOfIntersection = $myVertex->getPointOfIntersect($hisVertex);
 
-					if(!empty($pointOfIntersection)) {
+					if (!empty($pointOfIntersection)) {
 						$myVertexesPartitionned = new Collection();
 						$myVertexesPartitionned[] = new Segment($myVertex->getPointA(), $pointOfIntersection);
 						$myVertexesPartitionned[] = new Segment($pointOfIntersection, $myVertex->getPointB());
@@ -130,7 +130,7 @@ class Polygone implements PolygonInterface {
 		}
 	}
 
-	public function insertNewPartsSegment ($key, Collection $vertexes) {
+	public function insertNewPartsSegment($key, Collection $vertexes) {
 			$this->segments->insert($key, $vertexes);
 	}
 }
