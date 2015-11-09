@@ -92,10 +92,6 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 		array_splice($this->contenu, $index, 1, $arrayNewValues);
 	}
 
-	public function _unset($key) {
-		unset($this->contenu[$key]);
-	}
-
 	private function setType($value) {
 		if (is_object($value)) {
 			return $this->type = get_class($value);

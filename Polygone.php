@@ -130,16 +130,6 @@ class Polygone implements PolygonInterface {
 		}
 	}
 
-	public function normalize($polygon) {
-		$myVertexes = $this->segments;
-
-		foreach($myVertexes as $myKey => $myVertex) {
-			if($myVertex->getMidpoint()->isInsidePolygon($polygon)) {
-				$this->segments->_unset($myKey);
-			}
-		}
-	}
-
 	public function insertNewPartsSegment ($key, Collection $vertexes) {
 			$this->segments->insert($key, $vertexes);
 	}
