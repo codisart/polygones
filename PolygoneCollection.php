@@ -117,8 +117,10 @@ class PolygoneCollection extends Collection {
 		$newPolygones = new PolygoneCollection();
 
 		while ($listeSegments->count()) {
+			$isValid = false;
 			foreach ($listeSegments as $key => $segment) {
 				if ($point->isExtremite($segment)) {
+					$isValid = true;
 					$point = $segment->getOtherPoint($point);
 					unset($listeSegments[$key]);
 
@@ -142,6 +144,9 @@ class PolygoneCollection extends Collection {
 
 					break;
 				}
+			}
+			if(!$isValid) {
+				throw new \Exception("Vectors Not valid", 1);
 			}
 		}
 
