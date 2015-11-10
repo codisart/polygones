@@ -145,7 +145,7 @@ class PolygoneCollection extends Collection {
 					break;
 				}
 			}
-			if(!$isValid) {
+			if (!$isValid) {
 				throw new \Exception("Vectors Not valid", 1);
 			}
 		}
