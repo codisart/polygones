@@ -59,6 +59,10 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 		return next($this->contenu);
 	}
 
+	public function each() {
+		return each($this->contenu);
+	}
+
 	public function valid() {
 		return $this->current() !== false;
 	}
@@ -68,7 +72,6 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	public function append($collection) {
-
 		if (!(isset($collection) && is_object($collection) && get_class($collection) === get_class($this) && $collection->count() > 0)) {
 			return $this;
 		}
@@ -92,7 +95,7 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 		array_splice($this->contenu, $index, 1, $arrayNewValues);
 	}
 
-	private function setType($value) {
+	protected function setType($value) {
 		if (is_object($value)) {
 			return $this->type = get_class($value);
 		}
@@ -100,11 +103,13 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 		return $this->type = gettype($value);
 	}
 
-	private function checkType($value) {
+	protected function checkType($value) {
 		if (is_object($value)) {
 			return $this->type === get_class($value);
 		}
 
 		return $this->type === gettype($value);
 	}
+
+
 }
