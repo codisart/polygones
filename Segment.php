@@ -124,7 +124,7 @@ class Segment {
 		$edges = $polygon->getSegments();
 
 		foreach ($edges as $key => $edge) {
-			if($this->isEqual($edge)) {
+			if ($this->isEqual($edge)) {
 				return true;
 			}
 		}
