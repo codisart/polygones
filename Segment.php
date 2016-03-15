@@ -23,7 +23,6 @@ class Segment {
 			$this->coefficientDirecteur = ($this->pointB->getOrdonnee() - $this->pointA->getOrdonnee()) / ($this->pointB->getAbscisse() - $this->pointA->getAbscisse());
 			$this->ordonneeOrigine = $this->pointA->getOrdonnee() - ($this->pointA->getAbscisse() * $this->coefficientDirecteur);
 		}
-
 	}
 
 	public function getPointA() {
@@ -49,7 +48,7 @@ class Segment {
 	}
 
 
-	public function isOnSameDroite($segment) {
+	public function isOnSameLine($segment) {
 		if (is_null($this->coefficientDirecteur) && is_null($segment->coefficientDirecteur) && $this->pointA->getAbscisse() == $segment->getPointA()->getAbscisse()) {
 			return true;
 		} else if (!is_null($this->coefficientDirecteur) && !is_null($segment->coefficientDirecteur)) {
@@ -87,7 +86,7 @@ class Segment {
 		return $this;
 	}
 
-	public function getMidpoint() {
+	public function getMiddlePoint() {
 		return new Point(array(
 			($this->pointA->getAbscisse() + $this->pointB->getAbscisse()) / 2,
 			($this->pointA->getOrdonnee() + $this->pointB->getOrdonnee()) / 2
@@ -105,5 +104,30 @@ class Segment {
 	public function toJSON() {
 		$json = "[".$this->pointA->toJSON().",".$this->pointB->toJSON()."]";
 		return $json;
+	}
+
+	public function splitByPoint(Point $point) {
+		$newSegments = new Collection();
+		$newSegments[] = new Segment($this->getPointA(), $point);
+		$newSegments[] = new Segment($point, $this->getPointB());
+		return $newSegments;
+	}
+
+	public function getOrientationRelativeTo(Polygone $polygon) {
+		$segmentToBarycenter = new Segment($this->getPointA(), $polygon->getBarycenter());
+		$determinant = Math::determinant($this, $segmentToBarycenter);
+
+		return ($determinant > 0) - ($determinant < 0);
+	}
+
+	public function isEdgeOf(Polygone $polygon) {
+		$edges = $polygon->getSegments();
+
+		foreach ($edges as $key => $edge) {
+			if($this->isEqual($edge)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
