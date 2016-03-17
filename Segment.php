@@ -94,10 +94,11 @@ class Segment {
 	}
 
 	public function contient(Point $point) {
+		$determinantIsNull = Math::determinant($this, new Segment($this->getPointA(), $point)) === (float) 0;
 		if (is_null($this->coefficientDirecteur)) {
-			return Math::isBetween($point->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee());
+			return $determinantIsNull && Math::isBetween($point->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee());
 		} else {
-			return Math::isBetween($point->getAbscisse(), $this->pointA->getAbscisse(), $this->pointB->getAbscisse());
+			return $determinantIsNull && Math::isBetween($point->getAbscisse(), $this->pointA->getAbscisse(), $this->pointB->getAbscisse());
 		}
 	}
 
