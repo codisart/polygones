@@ -113,8 +113,8 @@ class Segment {
 		return $newSegments;
 	}
 
-	public function getOrientationRelativeTo(Polygone $polygon) {
-		$segmentToBarycenter = new Segment($this->getPointA(), $polygon->getBarycenter());
+	public function getOrientationRelativeToPoint(Point $point) {
+		$segmentToBarycenter = new Segment($this->getPointA(), $point);
 		$determinant = Math::determinant($this, $segmentToBarycenter);
 
 		return ($determinant > 0) - ($determinant < 0);
