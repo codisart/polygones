@@ -65,8 +65,7 @@ class Segment {
 
 		if (
 			Math::isBetween($abscisseIntersection, $this->pointA->getAbscisse(), $this->pointB->getAbscisse())
-			&&
-			Math::isBetween($abscisseIntersection, $segment->pointA->getAbscisse(), $segment->pointB->getAbscisse())
+			&& Math::isBetween($abscisseIntersection, $segment->pointA->getAbscisse(), $segment->pointB->getAbscisse())
 		) {
 			$ordonneeIntersection = ($abscisseIntersection * $this->coefficientDirecteur) + $this->ordonneeOrigine;
 			return new Point(array($abscisseIntersection, $ordonneeIntersection));
