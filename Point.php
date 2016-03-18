@@ -38,7 +38,7 @@ class Point {
 		return bccomp($this->abscisse, $point->getAbscisse(), 10) == 0 && bccomp($this->ordonnee, $point->getOrdonnee(), 10) == 0;
 	}
 
-	public function isExtremite($segment) {
+	public function isEndPoint($segment) {
 		if ($this->isEqual($segment->getPointA())) {
 			return true;
 		} elseif ($this->isEqual($segment->getPointB())) {
