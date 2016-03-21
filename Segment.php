@@ -49,11 +49,21 @@ class Segment {
 
 
 	public function isOnSameLine($segment) {
-		if (is_null($this->coefficientDirecteur) && is_null($segment->coefficientDirecteur) && $this->pointA->getAbscisse() == $segment->getPointA()->getAbscisse()) {
+		if (
+			is_null($this->coefficientDirecteur)
+			&& is_null($segment->coefficientDirecteur)
+			&& bccomp($this->getPointA()->getAbscisse(),$segment->getPointA()->getAbscisse(), 8) === 0
+		) {
 			return true;
-		} else if (!is_null($this->coefficientDirecteur) && !is_null($segment->coefficientDirecteur)) {
-			return ($this->coefficientDirecteur === $segment->coefficientDirecteur && $this->ordonneeOrigine === $segment->ordonneeOrigine);
+		} else if (
+			!is_null($this->coefficientDirecteur)
+			&& !is_null($segment->coefficientDirecteur)
+		) {
+			return
+				bccomp($this->coefficientDirecteur, $segment->coefficientDirecteur, 8) === 0
+				&& bccomp($this->ordonneeOrigine, $segment->ordonneeOrigine, 8) === 0;
 		}
+		return false;
 	}
 
 	public function getPointOfIntersect($segment) {
@@ -61,11 +71,17 @@ class Segment {
 			return null;
 		}
 
-		$abscisseIntersection = ($segment->ordonneeOrigine - $this->ordonneeOrigine) / ($this->coefficientDirecteur - $segment->coefficientDirecteur);
+		if (is_null($this->coefficientDirecteur)) {
+			$abscisseIntersection = $this->getPointA()->getAbscisse();
+		} elseif (is_null($segment->coefficientDirecteur)) {
+			$abscisseIntersection = $segment->getPointA()->getAbscisse();
+		} else {
+			$abscisseIntersection = ($segment->ordonneeOrigine - $this->ordonneeOrigine) / ($this->coefficientDirecteur - $segment->coefficientDirecteur);
+		}
 
 		if (
-			Math::isBetween($abscisseIntersection, $this->pointA->getAbscisse(), $this->pointB->getAbscisse())
-			&& Math::isBetween($abscisseIntersection, $segment->pointA->getAbscisse(), $segment->pointB->getAbscisse())
+			Math::isBetween($abscisseIntersection, $this->getPointA()->getAbscisse(), $this->getPointB()->getAbscisse())
+			&& Math::isBetween($abscisseIntersection, $segment->getPointA()->getAbscisse(), $segment->getPointB()->getAbscisse())
 		) {
 			$ordonneeIntersection = ($abscisseIntersection * $this->coefficientDirecteur) + $this->ordonneeOrigine;
 			return new Point(array($abscisseIntersection, $ordonneeIntersection));
@@ -92,12 +108,12 @@ class Segment {
 		));
 	}
 
-	public function contient(Point $point) {
-		$determinantIsNull = Math::determinant($this, new Segment($this->getPointA(), $point)) === (float) 0;
+	public function containsPoint(Point $point) {
+		$segmentToCompare = new Segment($this->getPointA(), $point);
 		if (is_null($this->coefficientDirecteur)) {
-			return $determinantIsNull && Math::isBetween($point->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee());
+			return $this->isOnSameLine($segmentToCompare) && Math::isBetween($point->getOrdonnee(), $this->pointA->getOrdonnee(), $this->pointB->getOrdonnee());
 		} else {
-			return $determinantIsNull && Math::isBetween($point->getAbscisse(), $this->pointA->getAbscisse(), $this->pointB->getAbscisse());
+			return $this->isOnSameLine($segmentToCompare) && Math::isBetween($point->getAbscisse(), $this->pointA->getAbscisse(), $this->pointB->getAbscisse());
 		}
 	}
 
