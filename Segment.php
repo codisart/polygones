@@ -92,7 +92,7 @@ class Segment {
 	public function partionnedByPoint(Point $point) {
 		if ($this->pointA->isEqual($point) || $this->pointB->isEqual($point)) {
 			return $this;
-		} else if ($this->contient($point)) {
+		} else if ($this->containsPoint($point)) {
 			$newSegments = new SegmentCollection();
 			$newSegments[] = new Segment($this->pointA, $point);
 			$newSegments[] = new Segment($point, $this->pointB);
