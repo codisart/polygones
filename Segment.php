@@ -130,20 +130,15 @@ class Segment {
 	}
 
 	public function getOrientationRelativeToPoint(Point $point) {
-		$segmentToBarycenter = new Segment($this->getPointA(), $point);
-		$determinant = Math::determinant($this, $segmentToBarycenter);
-
+		$determinant = Math::determinant($this, new Segment($this->getPointA(), $point));
 		return ($determinant > 0) - ($determinant < 0);
 	}
 
-	public function isEdgeOf(Polygone $polygon) {
-		$edges = $polygon->getSegments();
-
-		foreach ($edges as $key => $edge) {
-			if ($this->isEqual($edge)) {
-				return true;
-			}
-		}
-		return false;
+	public function isBetweenPolygons($polygonChampion, $polygonContender) {
+		return bccomp(
+			$this->getOrientationRelativeToPoint($polygonChampion->getBarycenter()),
+			-$this->getOrientationRelativeToPoint($polygonContender->getBarycenter()),
+			8
+		) === 0;
 	}
 }
