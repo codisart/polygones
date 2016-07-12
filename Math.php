@@ -68,8 +68,8 @@ class Math {
 
 	/**
 	 * [getNorm description]
-	 * @param  Segment $vertex [description]
-	 * @return [type]          [description]
+	 * @param  Segment $vertex	[description]
+	 * @return float    	    [description]
 	 */
 	public function getNorm(Segment $vertex) {
 		$precision = 5;
