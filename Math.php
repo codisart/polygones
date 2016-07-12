@@ -65,4 +65,31 @@ class Math {
 
 		return ($abscissaVertexOne * $abscissaVertexSecond) + ($ordinateVertexOne * $ordinateVertexSecond);
 	}
+
+	/**
+	 * [getNorm description]
+	 * @param  Segment $vertex [description]
+	 * @return [type]          [description]
+	 */
+	public function getNorm(Segment $vertex) {
+		$precision = 5;
+
+		return bcsqrt(
+			bcadd(
+				bcpow(
+					bcsub($vertex->getPointB()->getAbscisse(), $vertex->getPointA()->getAbscisse(), $precision),
+					'2',
+					$precision
+				),
+				bcpow(
+					bcsub($vertex->getPointB()->getOrdonnee(), $vertex->getPointA()->getOrdonnee(), $precision),
+					'2',
+					$precision
+				),
+				$precision
+			),
+			$precision
+		);
+	}
+
 }
