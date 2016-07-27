@@ -11,7 +11,6 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	public function offsetSet($offset, $value) {
-
 		if (empty($this->contenu)) {
 			$this->setType($value);
 		}
@@ -25,7 +24,6 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 		} else {
 			$this->contenu[$offset] = $value;
 		}
-
 	}
 
 	public function offsetExists($offset) {
@@ -93,6 +91,10 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 			$arrayNewValues[] = $value;
 		}
 		array_splice($this->contenu, $index, 1, $arrayNewValues);
+	}
+
+	public function delete($index) {
+		array_splice($this->contenu, $index, count($this->contenu), array_slice($this->contenu, $index+1));
 	}
 
 	protected function setType($value) {
