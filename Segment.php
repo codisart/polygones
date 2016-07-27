@@ -141,4 +141,8 @@ class Segment {
 			8
 		) === 0;
 	}
+
+	public function isStrictContainedByVertex($vertex) {
+		return $vertex->containsPoint($this->getPointA()) && $vertex->containsPoint($this->getPointB());
+	}
 }
