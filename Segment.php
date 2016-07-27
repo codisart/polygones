@@ -145,4 +145,22 @@ class Segment {
 	public function isStrictContainedByVertex($vertex) {
 		return $vertex->containsPoint($this->getPointA()) && $vertex->containsPoint($this->getPointB());
 	}
+
+	public function getPartitionsbyVertex($vertex) {
+		$pointA = $vertex->getPointA();
+		$pointB = $vertex->getPointB();
+
+		if ($vertex->isStrictContainedByVertex($this)) {
+			$newSegments = $this->splitByPoint($pointA);
+
+			if($newSegments[0]->containsPoint($pointB)) {
+				$newSegments->insert(0, $newSegments[0]->splitByPoint($pointB));
+			} else {
+				$newSegments->insert(1, $newSegments[1]->splitByPoint($pointB));
+			}
+			return $newSegments;
+		}
+
+		return null;
+	}
 }
