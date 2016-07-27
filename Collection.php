@@ -94,7 +94,7 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	public function delete($index) {
-		array_splice($this->contenu, $index, count($this->contenu), array_slice($this->contenu, $index+1));
+		array_splice($this->contenu, $index, count($this->contenu), array_slice($this->contenu, $index + 1));
 	}
 
 	protected function setType($value) {
