@@ -161,13 +161,6 @@ class Segment {
 			return $newSegments;
 		}
 
-		return null;
-	}
-
-	public function getPartitionsbyEndPointOfVertex($vertex) {
-		$pointA = $vertex->getPointA();
-		$pointB = $vertex->getPointB();
-
 		if ($this->containsPoint($pointA)) {
 			$splittingPoint = $pointA;
 		} else if ($this->containsPoint($pointB)) {
@@ -178,6 +171,10 @@ class Segment {
 			return $this->splitByPoint($splittingPoint);
 		}
 
+		return null;
+	}
+
+	public function getPartitionsbyEndPointOfVertex($vertex) {
 		return null;
 	}
 }
