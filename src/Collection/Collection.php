@@ -6,10 +6,6 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 	protected $contenu = array();
 	protected $type;
 
-	public function __construct() {
-
-	}
-
 	public function offsetSet($offset, $value) {
 		if (empty($this->contenu)) {
 			$this->setType($value);
@@ -91,10 +87,18 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 			$arrayNewValues[] = $value;
 		}
 		array_splice($this->contenu, $index, 1, $arrayNewValues);
+		return $this;
 	}
 
+	/**
+	 * [delete description]
+	 * @param  [type] $index [description]
+	 * @return [type]        [description]
+	 * @todo remove one of unset or delete
+	 */
 	public function delete($index) {
 		array_splice($this->contenu, $index, count($this->contenu), array_slice($this->contenu, $index + 1));
+		return $this;
 	}
 
 	protected function setType($value) {
@@ -112,6 +116,4 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 
 		return $this->type === gettype($value);
 	}
-
-
 }
