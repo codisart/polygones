@@ -85,7 +85,7 @@ class Polygon {
 
 	/**
 	 * Calcul du determinant entre le vertex et le vertex formé du point d'origne du vertex et le point.
-	 * @param  Segment $vertex [description]
+	 * @param  Segment $segment [description]
 	 * @param  Point   $point  [description]
 	 * @return boolean         [description]
 	 */

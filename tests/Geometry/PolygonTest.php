@@ -41,6 +41,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 		$this->expectException(\Exception::class);
 
 		$instance = new Polygon($pointsListe);
+		$this->assertInstanceOf(Polygon::class, $instance);
 	}
 
 	/**
