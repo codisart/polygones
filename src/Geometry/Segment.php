@@ -68,18 +68,18 @@ class Segment {
 
 	public function isOnSameLine($segment) {
 		if (
-			is_null($this->slope)
-			&& is_null($segment->slope)
+			is_null($this->getSlope())
+			&& is_null($segment->getSlope())
 			&& bccomp($this->getPointA()->getAbscissa(),$segment->getPointA()->getAbscissa(), 8) === 0
 		) {
 			return true;
 		} else if (
-			!is_null($this->slope)
-			&& !is_null($segment->slope)
+			!is_null($this->getSlope())
+			&& !is_null($segment->getSlope())
 		) {
 			return
-				bccomp($this->slope, $segment->slope, 8) === 0
-				&& bccomp($this->ordinateIntercept, $segment->ordinateIntercept, 8) === 0;
+				bccomp($this->getSlope(), $segment->getSlope(), 8) === 0
+				&& bccomp($this->getOrdinateIntercept(), $segment->getOrdinateIntercept(), 8) === 0;
 		}
 		return false;
 	}
@@ -89,12 +89,12 @@ class Segment {
 			return null;
 		}
 
-		if (is_null($this->slope)) {
+		if (is_null($this->getSlope())) {
 			$intersectAbscissa = $this->getPointA()->getAbscissa();
 
 			if (Math::isBetween($intersectAbscissa, $segment->getPointA()->getAbscissa(), $segment->getPointB()->getAbscissa()))
 			{
-				$intersectOrdinate = ($intersectAbscissa * $segment->slope) + $segment->ordinateIntercept;
+				$intersectOrdinate = ($intersectAbscissa * $segment->getSlope()) + $segment->getOrdinateIntercept();
 				$intersectPoint = new Point([$intersectAbscissa, $intersectOrdinate]);
 				if (
 					Math::isBetween($intersectOrdinate, $this->getPointA()->getOrdinate(), $this->getPointB()->getOrdinate())
@@ -106,12 +106,12 @@ class Segment {
 				}
 			}
 			return null;
-		} elseif (is_null($segment->slope)) {
+		} elseif (is_null($segment->getSlope())) {
 			$intersectAbscissa = $segment->getPointA()->getAbscissa();
 
 			if (Math::isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa()))
 			{
-				$intersectOrdinate = ($intersectAbscissa * $this->slope) + $this->ordinateIntercept;
+				$intersectOrdinate = ($intersectAbscissa * $this->getSlope()) + $this->getOrdinateIntercept();
 				$intersectPoint = new Point([$intersectAbscissa, $intersectOrdinate]);
 				if (
 					Math::isBetween($intersectOrdinate, $segment->getPointA()->getOrdinate(), $segment->getPointB()->getOrdinate())
@@ -125,14 +125,14 @@ class Segment {
 			return null;
 		}
 
-		$intersectAbscissa = ($segment->ordinateIntercept - $this->ordinateIntercept) / ($this->slope - $segment->slope);
+		$intersectAbscissa = ($segment->getOrdinateIntercept() - $this->getOrdinateIntercept()) / ($this->getSlope() - $segment->getSlope());
 
 		if (
 			Math::isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa())
 			&& Math::isBetween($intersectAbscissa, $segment->getPointA()->getAbscissa(), $segment->getPointB()->getAbscissa())
 			&& !$this->hasCommonEndPoint($segment)
 		) {
-			$intersectOrdinate = ($intersectAbscissa * $this->slope) + $this->ordinateIntercept;
+			$intersectOrdinate = ($intersectAbscissa * $this->getSlope()) + $this->getOrdinateIntercept();
 			return new Point(array($intersectAbscissa, $intersectOrdinate));
 		}
 		return null;
@@ -144,7 +144,7 @@ class Segment {
 		}
 
 		$segmentToCompare = new Segment($this->getPointA(), $point);
-		if (is_null($this->slope)) {
+		if (is_null($this->getSlope())) {
 			return
 				is_null($segmentToCompare->getSlope())
 				&& Math::isStrictBetween($point->getOrdinate(), $this->pointA->getOrdinate(), $this->pointB->getOrdinate());
@@ -213,7 +213,6 @@ class Segment {
 		$json = "[".$this->pointA->toJSON().",".$this->pointB->toJSON()."]";
 		return $json;
 	}
-
 
 	private function splitByPoint(Point $point) {
 		$newSegments = new Collection();
