@@ -42,6 +42,21 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($segment->getPointB(), $pointB);
 	}
 
+	/**
+	 * @dataProvider getPointsProvider
+	 */
+	public function testToJSON($pointACoordinates, $pointBCoordinates) {
+		$pointA = new Point($pointACoordinates);
+		$pointB = new Point($pointBCoordinates);
+
+        $segment = new Segment($pointA, $pointB);
+
+        $json = $segment->toJSON();
+
+		$this->assertInternalType('string', $json);
+		$this->assertEquals([$pointACoordinates, $pointBCoordinates], json_decode($json));
+	}
+
     public function isEqualProvider()
     {
         return [
@@ -128,6 +143,9 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
             [[[0, 0], [2, 5]], [[0, 0], [2, 5]], true],
             [[[1, 0], [2, 5]], [[2, 5], [1, 0]], true],
             [[[1, 1], [2, 2]], [[3, 3], [4, 4]], true],
+            [[[1, 1], [1, 2]], [[1, 3], [1, 4]], true],
+
+            [[[1, 1], [1, 2]], [[2, 3], [2, 4]], false],
             [[[0, 1], [2, 5]], [[0, 0], [2, 5]], false],
         ];
     }
@@ -166,6 +184,8 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
             [[[0, 0], [1, 1]], [[1, 4], [1, 5]], null],
             [[[0, 2], [2, 4]], [[0, 0], [2, 2]], null],
             [[[5, 0], [1, 4]], [[4, 5], [4, 4]], null],
+
+            [[[5, 0], [1, 4]], [[14, 5], [13, 4]], null],
         ];
     }
 
@@ -240,5 +260,37 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
         $point = new Point($pointCoordinates);
 
         $this->assertEquals($expected, $segment->containsPoint($point));
+    }
+
+    public function providerGetOrientationRelativeToPoint()
+    {
+        return [
+            [[[0, 0], [2, 2]], [1, 1], 0],
+            [[[0, 5], [5, 5]], [2.5, 5], 0],
+            [[[0, 0], [0, 5]], [0, 2], 0],
+
+            [[[0, 5], [5, 5]], [3, 4], -1],
+            [[[0, 0], [0, 5]], [1, 2], -1],
+            [[[0, 5], [0, 0]], [1, 2], 1],
+
+            // endpoints are considered inside
+            [[[0, 0], [2, 5]], [2, 5], 0],
+            [[[0, 1], [2, 5]], [0, 1], 0],
+        ];
+    }
+
+    /**
+     * @dataProvider providerGetOrientationRelativeToPoint
+     */
+    public function testGetOrientationRelativeToPoint($segmentCoordinates, $pointCoordinates, $expected)
+    {
+        $segment = new Segment(
+            new Point($segmentCoordinates[0]),
+            new Point($segmentCoordinates[1])
+        );
+
+        $point = new Point($pointCoordinates);
+
+        $this->assertEquals($expected, $segment->getOrientationRelativeToPoint($point));
     }
 }
