@@ -16,5 +16,9 @@
 			"Geometry\\": "src/Geometry",
 			"Math\\"	: "src/Math"
 		}
-	}
+	},
+    "scripts": {
+        "tests": "phpunit --bootstrap vendor/autoload.php tests -c phpunit.xml",
+        "tests.coverage": "phpunit --bootstrap vendor/autoload.php tests --coverage-html coverage -c phpunit.xml"
+    }
 }
