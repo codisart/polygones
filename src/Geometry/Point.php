@@ -30,12 +30,7 @@ class Point {
 		return bccomp($this->abscissa, $point->getAbscissa(), 10) == 0 && bccomp($this->ordinate, $point->getOrdinate(), 10) == 0;
 	}
 
-	public function isInsidePolygon($polygon) {
-		return $polygon->containsPoint($this);
-	}
-
 	public function toJSON() {
-		$json = "[".$this->abscissa.",".$this->ordinate."]";
-		return $json;
+		return '['.$this->abscissa.','.$this->ordinate.']';
 	}
 }

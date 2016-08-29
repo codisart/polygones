@@ -40,6 +40,21 @@ class PointTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($point->getOrdinate(), $ordinate);
 	}
 
+	/**
+	 * @dataProvider coordinatesProvider
+	 */
+	public function testToJSON($abscissa, $ordinate) {
+		$point = new Point([
+			$abscissa,
+			$ordinate,
+		]);
+
+        $json = $point->toJSON();
+
+		$this->assertInternalType('string', $json);
+		$this->assertEquals([$abscissa, $ordinate], json_decode($json));
+	}
+
 	public function twoPointsCoordinatesProvider()
 	{
 		return [
