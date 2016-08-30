@@ -176,34 +176,6 @@ class Segment {
 		return $this->strictContainsPoint($segment->getPointA()) && $this->strictContainsPoint($segment->getPointB());
 	}
 
-	public function getPartitionsbyVertex($vertex) {
-		$pointA = $vertex->getPointA();
-		$pointB = $vertex->getPointB();
-
-		if ($vertex->isStrictContainedByVertex($this)) {
-			$newVertexes = $this->splitByPoint($pointA);
-
-			if($newVertexes[0]->containsPoint($pointB)) {
-				$newVertexes->insert(0, $newVertexes[0]->splitByPoint($pointB));
-			} else {
-				$newVertexes->insert(1, $newVertexes[1]->splitByPoint($pointB));
-			}
-			return $newVertexes;
-		}
-
-		if ($this->containsPoint($pointA)) {
-			$splittingPoint = $pointA;
-		} else if ($this->containsPoint($pointB)) {
-			$splittingPoint = $pointB;
-		}
-
-		if(!empty($splittingPoint)) {
-			return $this->splitByPoint($splittingPoint);
-		}
-
-		return null;
-	}
-
 	public function hasCommonEndPoint($segment)
 	{
 		return $segment->hasForEndPoint($this->pointA) || $segment->hasForEndPoint($this->pointB);

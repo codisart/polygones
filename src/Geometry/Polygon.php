@@ -108,4 +108,37 @@ class Polygon {
 
 		return new Point([$abscissaBarycentre/$total, $ordonneeBarycentre/$total]);
 	}
+
+	public function getAllSegmentsIntersectionWith($polygonContender) {
+		$mySegments = clone $this->segments;
+		$hisSegments = clone $polygonContender->getSegments();
+		$allSegments = new Collection();
+
+		foreach ($mySegments as $myKey => $mySegment) {
+			foreach ($hisSegments as $hisKey => $hisSegment) {
+
+				$newSegments = $mySegment->getPartitionsbySegment($hisSegment);
+				if($newSegments) {
+					$mySegments->insert($myKey, $newSegments);
+					$mySegment = $newSegments[0];
+				}
+
+				$newSegments = $hisSegment->getPartitionsbySegment($mySegment);
+				if($newSegments) {
+					$hisSegments->insert($hisKey, $newSegments);
+					$hisSegment = $newSegments[0];
+				}
+
+				// if ($myVertex->isEqual($hisVertex)) {
+				// 	$hisVertexes->delete($hisKey);
+				// 	if ($myVertex->isBetweenPolygons($this, $polygonContender)) {
+				// 		$thisSegments->delete($myKey);
+				// 		break;
+				// 	}
+				// }
+			}
+		}
+
+		return $allSegments->append($mySegments)->append($hisSegments);
+	}
 }

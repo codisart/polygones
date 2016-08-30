@@ -73,8 +73,9 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 	public function providerContainsPoint()
 	{
 		return [
-			[[[0,0], [0,5], [5,5], [5,0], [0,0]], [4, 4], true],
-			[[[1,1], [1,5], [5,5], [5,1], [1,1]], [6, 6], false],
+			[[[0,0], [0,5], [5,5], [5,0], [0,0]], [4,4], true],
+			[[[1,1], [1,5], [5,5], [5,1], [1,1]], [6,6], false],
+			[[[1,1], [1,5], [5,5], [5,1], [1,1]], [5,3], false],
 		];
 	}
 
@@ -86,5 +87,43 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 		$instance 	= new Polygon($polygonCoordinates);
 		$point 		= new Point($pointCoordinates);
 		$this->assertEquals($expected, $instance->containsPoint($point));
+	}
+
+	public function providerGetAllSegmentsIntersectionWith()
+	{
+		return [
+			[
+                [[0,0], [0,5], [5,5], [5,0], [0,0]],
+                [[10,10], [10,15], [15,15], [15,10], [10,10]],
+                [
+                    [0,0], [0,5], [5,5], [5,0], [10,10], [10,15], [15,15], [15,10],
+                ],
+            ],
+			[
+                [[1,1], [1,5], [5,5], [5,1], [1,1]],
+                [[3,0], [3,6], [7,6], [7,0], [3,0]],
+                [
+                    [1,1], [1,5], [3,5], [5,5], [5,1], [3,1], [3,0], [3,1], [3,5], [3,6], [7,6], [7,0]
+                ],
+            ],
+		];
+	}
+
+	/**
+	 * @dataProvider providerGetAllSegmentsIntersectionWith
+	 */
+	public function testGetAllSegmentsIntersectionWith($polygonACoordinates, $polygonBCoordinates, $expectedCoordinates)
+	{
+		$polygonA 	= new Polygon($polygonACoordinates);
+		$polygonB   = new Polygon($polygonBCoordinates);
+
+        $segments = $polygonA->getAllSegmentsIntersectionWith($polygonB);
+
+        $json = [];
+        foreach ($segments as $key => $segment) {
+        	$json[] = [$segment->getPointA()->getAbscissa(), $segment->getPointA()->getOrdinate()];
+        }
+        
+		$this->assertEquals($expectedCoordinates, $json);
 	}
 }
