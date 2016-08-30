@@ -91,14 +91,10 @@ class CollectionTest extends TestCase
 		$elementsToAdd[] = new \DateTime;
 		$elementsToAdd[] = new \DateTime;
 
-		$element = $instance->append($elementsToAdd);
-
 		$this->assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
 		$this->assertEquals(2, count($instance));
 
 		$elementsToAdd = new Collection();
-
-		$element = $instance->append($elementsToAdd);
 
 		$this->assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
 		$this->assertEquals(2, count($instance));
