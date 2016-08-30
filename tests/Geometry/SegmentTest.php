@@ -262,6 +262,36 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $segment->containsPoint($point));
     }
 
+    public function providerStrictContainsPoint()
+    {
+        return [
+            [[[0, 0], [2, 2]], [1, 1], true],
+            [[[0, 5], [5, 5]], [2.5, 5], true],
+            [[[0, 0], [0, 5]], [0, 2], true],
+
+            [[[0, 5], [5, 5]], [3, 4], false],
+            [[[0, 0], [0, 5]], [1, 2], false],
+
+            // endpoints are considered inside
+            [[[0, 0], [2, 5]], [2, 5], false],
+            [[[0, 1], [2, 5]], [0, 1], false],
+        ];
+    }
+
+    /**
+     * @dataProvider providerStrictContainsPoint
+     */
+    public function testStrictContainsPoint($segmentCoordinates, $pointCoordinates, $expected) {
+        $segment = new Segment(
+            new Point($segmentCoordinates[0]),
+            new Point($segmentCoordinates[1])
+        );
+
+        $point = new Point($pointCoordinates);
+
+        $this->assertEquals($expected, $segment->strictContainsPoint($point));
+    }
+
     public function providerGetOrientationRelativeToPoint()
     {
         return [

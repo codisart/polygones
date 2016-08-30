@@ -139,27 +139,10 @@ class Segment {
 	}
 
 	public function containsPoint(Point $point) {
-		if ($this->hasForEndPoint($point)) {
-			return true;
-		}
-
-		$segmentToCompare = new Segment($this->getPointA(), $point);
-		if (is_null($this->getSlope())) {
-			return
-				is_null($segmentToCompare->getSlope())
-				&& Math::isStrictBetween($point->getOrdinate(), $this->pointA->getOrdinate(), $this->pointB->getOrdinate());
-		} else {
-			return
-				$this->isOnSameLine($segmentToCompare)
-				&& Math::isStrictBetween($point->getAbscissa(), $this->pointA->getAbscissa(), $this->pointB->getAbscissa());
-		}
+		return $this->hasForEndPoint($point) || $this->strictContainsPoint($point);
 	}
 
 	public function strictContainsPoint(Point $point) {
-		if ($this->hasForEndPoint($point)) {
-			return false;
-		}
-
 		$segmentToCompare = new Segment($this->getPointA(), $point);
 		if (is_null($this->getSlope())) {
 			return
