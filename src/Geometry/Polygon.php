@@ -97,16 +97,16 @@ class Polygon {
 
 	public function getBarycenter() {
 		$total = 0;
-		$abscissaBarycentre = 0;
-		$ordonneeBarycentre = 0;
+		$abscissaBarycenter = 0;
+		$ordinateBarycenter = 0;
 
 		foreach ($this->segments as $key => $segment) {
 			$total++;
-			$abscissaBarycentre += $segment->getPointA()->getAbscisse();
-			$ordonneeBarycentre += $segment->getPointA()->getOrdonnee();
+			$abscissaBarycenter += $segment->getPointA()->getAbscissa();
+			$ordinateBarycenter += $segment->getPointA()->getOrdinate();
 		}
 
-		return new Point([$abscissaBarycentre/$total, $ordonneeBarycentre/$total]);
+		return new Point([$abscissaBarycenter/$total, $abscissaBarycenter/$total]);
 	}
 
 	public function getAllSegmentsIntersectionWith($polygonContender) {

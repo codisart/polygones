@@ -123,7 +123,29 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
         foreach ($segments as $key => $segment) {
         	$json[] = [$segment->getPointA()->getAbscissa(), $segment->getPointA()->getOrdinate()];
         }
-        
+
 		$this->assertEquals($expectedCoordinates, $json);
+	}
+
+	public function providerGetBarycenter()
+	{
+		return [
+			[[[0,0], [0,5], [5,5], [5,0], [0,0]], [2.5,2.5]],
+		];
+	}
+
+	/**
+	 * @dataProvider providerGetBarycenter
+	 */
+	public function testGetBarycenter($polygonCoordinates, $expectedPointCoordinates)
+	{
+		$polygon 	= new Polygon($polygonCoordinates);
+
+		$point   = new Point($expectedPointCoordinates);
+
+        $barycenter = $polygon->getBarycenter();
+
+        $this->assertInstanceOf(Point::class, $barycenter);
+		$this->assertEquals($point->toJSON(), $barycenter->toJSON());
 	}
 }
