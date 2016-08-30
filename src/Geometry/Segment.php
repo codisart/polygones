@@ -155,6 +155,23 @@ class Segment {
 		}
 	}
 
+	public function strictContainsPoint(Point $point) {
+		if ($this->hasForEndPoint($point)) {
+			return false;
+		}
+
+		$segmentToCompare = new Segment($this->getPointA(), $point);
+		if (is_null($this->getSlope())) {
+			return
+				is_null($segmentToCompare->getSlope())
+				&& Math::isStrictBetween($point->getOrdinate(), $this->pointA->getOrdinate(), $this->pointB->getOrdinate());
+		} else {
+			return
+				$this->isOnSameLine($segmentToCompare)
+				&& Math::isStrictBetween($point->getAbscissa(), $this->pointA->getAbscissa(), $this->pointB->getAbscissa());
+		}
+	}
+
 	public function getOrientationRelativeToPoint(Point $point) {
 		$determinant = Math::determinant($this, new Segment($this->getPointA(), $point));
 		return ($determinant > 0) - ($determinant < 0);
@@ -169,7 +186,11 @@ class Segment {
 	}
 
 	public function isStrictContainedBySegment($segment) {
-		return $segment->containsPoint($this->getPointA()) && $segment->containsPoint($this->getPointB());
+		return $segment->strictContainsPoint($this->getPointA()) && $segment->strictContainsPoint($this->getPointB());
+	}
+
+	public function strictContainsSegment($segment) {
+		return $this->strictContainsPoint($segment->getPointA()) && $this->strictContainsPoint($segment->getPointB());
 	}
 
 	public function getPartitionsbyVertex($vertex) {
@@ -200,10 +221,6 @@ class Segment {
 		return null;
 	}
 
-	public function getPartitionsbyEndPointOfVertex($vertex) {
-		return null;
-	}
-
 	public function hasCommonEndPoint($segment)
 	{
 		return $segment->hasForEndPoint($this->pointA) || $segment->hasForEndPoint($this->pointB);
@@ -219,5 +236,42 @@ class Segment {
 		$newSegments[] = new Segment($this->getPointA(), $point);
 		$newSegments[] = new Segment($point, $this->getPointB());
 		return $newSegments;
+	}
+
+	public function getPartitionsbySegment($segment)
+	{
+		if (!$this->isOnSameLine($segment) && !$this->hasCommonEndPoint($segment)) {
+			$pointOfIntersection = $this->getPointOfIntersect($segment);
+
+			if (!empty($pointOfIntersection) && !$this->hasForEndPoint($pointOfIntersection)) {
+				return $this->splitByPoint($pointOfIntersection);
+			}
+		} else {
+			$pointA = $segment->getPointA();
+			$pointB = $segment->getPointB();
+
+			if ($this->strictContainsSegment($segment)) {
+				$newSegments = $this->splitByPoint($pointA);
+
+				if($newSegments[0]->strictContainsPoint($pointB)) {
+					$newSegments->insert(0, $newSegments[0]->splitByPoint($pointB));
+				} else {
+					$newSegments->insert(1, $newSegments[1]->splitByPoint($pointB));
+				}
+				return $newSegments;
+			}
+
+			if ($this->strictContainsPoint($pointA)) {
+				$splittingPoint = $pointA;
+			} else if ($this->strictContainsPoint($pointB)) {
+				$splittingPoint = $pointB;
+			}
+
+			if(!empty($splittingPoint)) {
+				return $this->splitByPoint($splittingPoint);
+			}
+		}
+
+		return null;
 	}
 }

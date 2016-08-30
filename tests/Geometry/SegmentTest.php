@@ -293,4 +293,90 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $segment->getOrientationRelativeToPoint($point));
     }
+
+    public function providerGetPartitionsbySegment()
+    {
+        return [
+            [
+                [[0, 0], [2, 2]],
+                [[1, 1], [4, 5]],
+                [[[0, 0], [1, 1]], [[1, 1],[2, 2]]]
+            ],
+            [
+                [[1, 1], [4, 5]],
+                [[0, 0], [2, 2]],
+                null
+            ],
+            [
+                [[0, 0], [2, 2]],
+                [[0, 2], [2, 0]],
+                [[[0, 0], [1, 1]], [[1, 1],[2, 2]]]
+            ],
+            [
+                [[0, 0], [2, 2]],
+                [[1, 0],[2, 2]],
+                null
+            ],
+
+            // same line
+            [
+                [[0, 0], [2, 2]],
+                [[1, 1],[2, 2]],
+                [[[0, 0], [1, 1]], [[1, 1],[2, 2]]]
+            ],
+            [
+                [[0, 0], [3, 3]],
+                [[1, 1],[2, 2]],
+                [[[0, 0], [1, 1]], [[1, 1],[2, 2]], [[2, 2],[3, 3]]]
+            ],
+            [
+                [[0, 0], [3, 3]],
+                [[2, 2],[1, 1]],
+                [[[0, 0], [1, 1]], [[1, 1],[2, 2]], [[2, 2],[3, 3]]]
+            ],
+            [
+                [[0, 0], [3, 3]],
+                [[2, 2],[5, 5]],
+                [[[0, 0], [2, 2]], [[2, 2],[3, 3]]]
+            ],
+            [
+                [[2, 2],[5, 5]],
+                [[0, 0], [3, 3]],
+                [[[2, 2],[3, 3]], [[3, 3], [5, 5]]]
+            ],
+            [
+                [[2, 2],[5, 5]],
+                [[6, 6], [8, 8]],
+                null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider providerGetPartitionsbySegment
+     */
+    public function testGetPartitionsbySegment($segmentACoordinates, $segmentBCoordinates, $expected)
+    {
+        $segmentA = new Segment(
+            new Point($segmentACoordinates[0]),
+            new Point($segmentACoordinates[1])
+        );
+
+        $segmentB = new Segment(
+            new Point($segmentBCoordinates[0]),
+            new Point($segmentBCoordinates[1])
+        );
+
+        $segments = $segmentA->getPartitionsbySegment($segmentB);
+
+        $json = null;
+        if ($segments) {
+            $json = [];
+            foreach ($segments as $key => $segment) {
+                $json[] = json_decode($segment->toJSON());
+            }
+        }
+
+        $this->assertEquals($expected, $json);
+    }
 }
