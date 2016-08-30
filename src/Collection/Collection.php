@@ -91,9 +91,6 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	/**
-	 * [delete description]
-	 * @param  [type] $index [description]
-	 * @return [type]        [description]
 	 * @todo remove one of unset or delete
 	 */
 	public function delete($index) {
