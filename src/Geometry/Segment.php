@@ -168,10 +168,6 @@ class Segment {
 		) === 0;
 	}
 
-	public function isStrictContainedBySegment($segment) {
-		return $segment->strictContainsPoint($this->getPointA()) && $segment->strictContainsPoint($this->getPointB());
-	}
-
 	public function strictContainsSegment($segment) {
 		return $this->strictContainsPoint($segment->getPointA()) && $this->strictContainsPoint($segment->getPointB());
 	}
