@@ -94,7 +94,6 @@ class Polygon {
 		return Math::determinant($segment, $segmentSecond);
 	}
 
-
 	public function getBarycenter() {
 		$total = 0;
 		$abscissaBarycenter = 0;
@@ -140,5 +139,49 @@ class Polygon {
 		}
 
 		return $allSegments->append($mySegments)->append($hisSegments);
+	}
+
+	public function buildFromSegments(Collection $segments) {
+		if ($segments->getType() !== Segment::class) {
+			throw new \Exception('Argument is not a Collection of Segment');
+		}
+
+		$segments->rewind();
+		$point = $segments->current()->getPointA();
+		$pointOrigine = $point;
+
+		$points = [];
+		$points[] = $point;
+
+		while ($segments->count()) {
+			$segment 	= $segments->current();
+			$key 		= $segments->key();
+
+			$point 	= $segment->getOtherPoint($point);
+			unset($segments[$key]);
+
+			if ($pointOrigine->isEqual($point)) {
+				$ptListe = "";
+				foreach ($points as $pt) {
+					$ptListe .= $pt->toJSON();
+					$ptListe .= ",";
+				}
+				$ptListe .= $pointOrigine->toJSON();
+				return new Polygon(json_decode("[".$ptListe."]"));
+			}
+			$points[] = $point;
+		}
+
+		return $newPolygones;
+	}
+
+	public function toJSON() {
+		$json = "";
+		foreach ($this->segments as $segment) {
+			$json .= $segment->getPointA()->toJSON();
+			$json .= ",";
+		}
+		$json .= $this->segments[0]->getPointA()->toJSON();
+		return "[".$json."]";
 	}
 }

@@ -5,6 +5,7 @@ namespace GeometryTest;
 use Collection\Collection;
 use Geometry\Polygon;
 use Geometry\Point;
+use Geometry\Segment;
 
 class PolygonTest extends \PHPUnit_Framework_TestCase
 {
@@ -148,4 +149,36 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Point::class, $barycenter);
 		$this->assertEquals($point->toJSON(), $barycenter->toJSON());
 	}
+    
+    public function providerBuildFromSegments()
+    {
+		return [
+            // first case
+			[
+                [
+                    [[0,0],[0,5]],
+                    [[0,5],[5,5]],
+                    [[5,5],[5,0]],
+                    [[5,0],[0,0]],
+                ],
+                [[0,0], [0,5], [5,5], [5,0], [0,0]],
+            ],
+		];
+    }
+
+	/**
+	 * @dataProvider providerBuildFromSegments
+	 */
+    public function testBuildFromSegments($segmentsCoordinate, $expectedPolygon)
+    {
+        $segments = new Collection;
+        foreach ($segmentsCoordinate as $key => $segmentCoordinate) {
+            $segments[] = new Segment(
+                new Point($segmentCoordinate[0]),
+                new Point($segmentCoordinate[1])
+            );
+        }
+
+        $this->assertEquals($expectedPolygon, json_decode(Polygon::buildFromSegments($segments)->toJSON()));
+    }
 }

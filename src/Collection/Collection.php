@@ -113,4 +113,8 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 
 		return $this->type === gettype($value);
 	}
+
+	public function getType() {
+		return $this->type;
+	}
 }
