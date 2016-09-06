@@ -171,8 +171,6 @@ class Polygon {
 			}
 			$points[] = $point;
 		}
-
-		return $newPolygones;
 	}
 
 	public function toJSON() {
