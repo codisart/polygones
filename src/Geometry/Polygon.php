@@ -141,7 +141,7 @@ class Polygon {
 		return $allSegments->append($mySegments)->append($hisSegments);
 	}
 
-	public function buildFromSegments(Collection $segments) {
+	static public function buildFromSegments(Collection $segments) {
 		if ($segments->getType() !== Segment::class) {
 			throw new \Exception('Argument is not a Collection of Segment');
 		}
