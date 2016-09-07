@@ -140,8 +140,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetBarycenter($polygonCoordinates, $expectedPointCoordinates)
 	{
-		$polygon 	= new Polygon($polygonCoordinates);
-
+		$polygon = new Polygon($polygonCoordinates);
 		$point   = new Point($expectedPointCoordinates);
 
         $barycenter = $polygon->getBarycenter();
@@ -149,7 +148,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Point::class, $barycenter);
 		$this->assertEquals($point->toJSON(), $barycenter->toJSON());
 	}
-    
+
     public function providerBuildFromSegments()
     {
 		return [

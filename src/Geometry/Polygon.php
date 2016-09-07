@@ -15,8 +15,10 @@ class Polygon {
 	private $segments;
 
 	public function __construct(array $pointsListe) {
+		$lengthListe = count($pointsListe);
+
 		if (
-			count($pointsListe) <= 3
+			$lengthListe <= 3
 			|| end($pointsListe) !== reset($pointsListe)
 		) {
 			throw new \Exception("Not a polygon");
@@ -24,16 +26,12 @@ class Polygon {
 
 		$this->segments = new Collection();
 
-		foreach ($pointsListe as $pointA) {
-			$pointB = next($pointsListe);
-
-			if ($pointB) {
-				$pointA = new Point($pointA);
-				$pointB = new Point($pointB);
-				$this->segments[] = new Segment($pointA, $pointB);
-			}
+		for($i = 0; $i < $lengthListe -1; ++$i) {
+			$pointA = new Point(current($pointsListe));
+			$pointB = new Point(next($pointsListe));
+			$this->segments[] = new Segment($pointA, $pointB);
 			unset($pointA, $pointB);
-		}
+		}		
 	}
 
 	public function getSegments() {
