@@ -1,9 +1,6 @@
 <?php
 namespace Utility;
 
-
-
-
 /**
 * Math
 */
@@ -31,6 +28,15 @@ class Math {
 	 *
 	 */
 	public static function isBetween($int, $first, $second) {
+		$min = min($first, $second);
+		$max = max($first, $second);
+		return ($min <= $int && $int <= $max);
+	}
+
+	/**
+	 *
+	 */
+	public static function isStrictBetween($int, $first, $second) {
 		$min = min($first, $second);
 		$max = max($first, $second);
 		return ($min < $int && $int < $max);
