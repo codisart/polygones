@@ -31,7 +31,7 @@ class Polygon {
 			$pointB = new Point(next($pointsListe));
 			$this->segments[] = new Segment($pointA, $pointB);
 			unset($pointA, $pointB);
-		}		
+		}
 	}
 
 	public function getSegments() {
@@ -110,6 +110,7 @@ class Polygon {
 		$mySegments = clone $this->segments;
 		$hisSegments = clone $polygonContender->getSegments();
 		$allSegments = new Collection();
+		$newSegments = new Collection();
 
 		foreach ($mySegments as $myKey => $mySegment) {
 			foreach ($hisSegments as $hisKey => $hisSegment) {
@@ -126,17 +127,31 @@ class Polygon {
 					$hisSegment = $newSegments[0];
 				}
 
-				// if ($myVertex->isEqual($hisVertex)) {
-				// 	$hisVertexes->delete($hisKey);
-				// 	if ($myVertex->isBetweenPolygons($this, $polygonContender)) {
-				// 		$thisSegments->delete($myKey);
-				// 		break;
-				// 	}
-				// }
+				if ($mySegment->isEqual($hisSegment)) {
+					$hisSegments->delete($hisKey);
+					if ($mySegment->isBetweenPolygons($this, $polygonContender)) {
+						$mySegments->delete($myKey);
+						break;
+					}
+				}
 			}
 		}
 
-		return $allSegments->append($mySegments)->append($hisSegments);
+		$allSegments
+			->append($mySegments)
+			->append($hisSegments);
+
+		foreach ($allSegments as $key => $segment) {
+			$middlePoint = $segment->getMiddlePoint();
+
+			if ($this->containsPoint($middlePoint) || $polygonContender->containsPoint($middlePoint)) {
+				continue;
+			} else {
+				$newSegments[] = $segment;
+			}
+		}
+
+		return $newSegments;
 	}
 
 	static public function buildFromSegments(Collection $segments) {
@@ -170,7 +185,7 @@ class Polygon {
 			$points[] = $point;
 		}
 	}
-
+	
 	public function toJSON() {
 		$json = "";
 		foreach ($this->segments as $segment) {
