@@ -190,7 +190,6 @@ class Polygon {
 						);
 						$segments = new Collection;
 					}
-					return $newPolygones;
 				}
 				$points[] = $point;
 				$segments->rewind();
@@ -199,6 +198,7 @@ class Polygon {
 				$segments->next();
 			}
 		}
+		return $newPolygones;
 	}
 
 	public function toJSON() {

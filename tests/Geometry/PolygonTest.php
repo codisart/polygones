@@ -133,6 +133,18 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
                     [[5,0],[0,0]],
                 ],
             ],
+			[
+                [[0,0], [0,5], [5,5], [5,0], [0,0]],
+                [[10,0], [10,5], [5,5], [5,0], [10,0]],
+                [
+                    [[0,0],[0,5]],
+                    [[0,5],[5,5]],
+                    [[5,0],[0,0]],
+                    [[10,0],[10,5]],
+                    [[10,5],[5,5]],
+                    [[5,0],[10,0]],
+                ],
+            ],
 		];
 	}
 
@@ -213,7 +225,6 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @dataProvider providerBuildFromSegments
-	 * @tags plop
 	 */
     public function testBuildFromSegments($segmentsCoordinate, $expectedPolygon)
     {
@@ -231,5 +242,15 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals($expectedPolygon, $json);
+    }
+
+    public function testExceptionBuildFromSegments()
+    {
+        $collection = new Collection;
+
+        $collection[] = new Point([1,1]);
+
+        $this->expectException(\Exception::class);
+        Polygon::buildFromSegments($collection);
     }
 }
