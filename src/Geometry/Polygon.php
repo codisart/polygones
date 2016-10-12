@@ -165,27 +165,42 @@ class Polygon {
 
 		$points = [];
 		$points[] = $point;
+		$newPolygones = new Collection;
 
 		while ($segments->count()) {
 			$segment 	= $segments->current();
 			$key 		= $segments->key();
 
-			$point 	= $segment->getOtherPoint($point);
-			unset($segments[$key]);
+			if ($segment->hasForEndPoint($point)){
+				$point 	= $segment->getOtherPoint($point);
+				unset($segments[$key]);
 
-			if ($pointOrigine->isEqual($point)) {
-				$ptListe = "";
-				foreach ($points as $pt) {
-					$ptListe .= $pt->toJSON();
-					$ptListe .= ",";
+				if ($pointOrigine->isEqual($point)) {
+					$ptListe = "";
+					foreach ($points as $pt) {
+						$ptListe .= $pt->toJSON();
+						$ptListe .= ",";
+					}
+					$ptListe .= $pointOrigine->toJSON();
+					$newPolygones[] = new Polygon(json_decode("[".$ptListe."]"));
+
+					if ($segments->count()) {
+						$newPolygones->append(
+							self::buildFromSegments($segments)
+						);
+						$segments = new Collection;
+					}
+					return $newPolygones;
 				}
-				$ptListe .= $pointOrigine->toJSON();
-				return new Polygon(json_decode("[".$ptListe."]"));
+				$points[] = $point;
+				$segments->rewind();
 			}
-			$points[] = $point;
+			else {
+				$segments->next();
+			}
 		}
 	}
-	
+
 	public function toJSON() {
 		$json = "";
 		foreach ($this->segments as $segment) {
