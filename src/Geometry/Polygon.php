@@ -109,11 +109,10 @@ class Polygon {
 	public function getAllSegmentsIntersectionWith($polygonContender) {
 		$mySegments = clone $this->segments;
 		$hisSegments = clone $polygonContender->getSegments();
-		$allSegments = new Collection();
-		$newSegments = new Collection();
 
 		foreach ($mySegments as $myKey => $mySegment) {
 			foreach ($hisSegments as $hisKey => $hisSegment) {
+				$newSegments = new Collection();
 
 				$newSegments = $mySegment->getPartitionsbySegment($hisSegment);
 				if($newSegments) {
@@ -137,9 +136,12 @@ class Polygon {
 			}
 		}
 
-		$allSegments
+		$allSegments = (new Collection())
 			->append($mySegments)
-			->append($hisSegments);
+			->append($hisSegments)
+		;
+
+		$resultSegments = new Collection();
 
 		foreach ($allSegments as $key => $segment) {
 			$middlePoint = $segment->getMiddlePoint();
@@ -147,11 +149,11 @@ class Polygon {
 			if ($this->containsPoint($middlePoint) || $polygonContender->containsPoint($middlePoint)) {
 				continue;
 			} else {
-				$newSegments[] = $segment;
+					$resultSegments[] = $segment;
 			}
 		}
 
-		return $newSegments;
+		return $resultSegments;
 	}
 
 	static public function buildFromSegments(Collection $segments) {
@@ -199,6 +201,12 @@ class Polygon {
 			}
 		}
 		return $newPolygones;
+	}
+
+	public function union($polygonContender) {
+		return self::buildFromSegments(
+			$this->getAllSegmentsIntersectionWith($polygonContender)
+		);
 	}
 
 	public function toJSON() {

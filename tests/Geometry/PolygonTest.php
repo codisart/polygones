@@ -158,6 +158,8 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 
         $segments = $polygonA->getAllSegmentsIntersectionWith($polygonB);
 
+        $this->assertInstanceOf(Collection::class, $segments);
+
         $json = [];
         foreach ($segments as $key => $segment) {
         	$json[] = [
@@ -220,6 +222,19 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
                     [[10,10], [10,15], [15,15], [15,10], [10,10]],
                 ]
             ],
+            [
+                [
+                    [[0,0],[0,5]],
+                    [[1,5],[5,5]],
+                    [[5,1],[5,0]],
+                    [[0,5],[1,5]],
+                    [[5,5],[5,1]],
+                    [[5,0],[0,0]],
+                ],
+                [
+                    [[0,0], [0,5], [1,5], [5,5], [5,1], [5,0], [0,0]],
+                ]
+            ]
 		];
     }
 
@@ -252,5 +267,34 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 
         $this->expectException(\Exception::class);
         Polygon::buildFromSegments($collection);
+    }
+
+    public function providerUnion()
+    {
+        return [
+            [
+                [[0,0], [0,5], [5,5], [5,0], [0,0]],
+                [[1,1], [1,5], [5,5], [5,1], [1,1]],
+                [
+                    [[0,0], [0,5], [1,5], [5,5], [5,1], [5,0], [0,0]],
+                ]
+            ]
+        ];
+    }
+
+    /**
+	 * @dataProvider providerUnion
+     */
+    public function testUnion($polygonACoordinates, $polygonBCoordinates, $expectedPolygonsCoordinates)
+    {
+		$polygonA 	= new Polygon($polygonACoordinates);
+		$polygonB   = new Polygon($polygonBCoordinates);
+
+        $json = [];
+        foreach ($polygonA->union($polygonB) as $polygon) {
+            $json[] = json_decode($polygon->toJSON());
+        }
+
+        $this->assertEquals($expectedPolygonsCoordinates, $json);
     }
 }
