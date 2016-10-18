@@ -17,9 +17,11 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 
 		if (is_null($offset)) {
 			$this->contenu[] = $value;
-		} else {
-			$this->contenu[$offset] = $value;
+			return true;
 		}
+
+		$this->contenu[$offset] = $value;
+		return true;
 	}
 
 	public function offsetExists($offset) {
@@ -83,7 +85,7 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 
 	public function insert($index, $newValues) {
 		$arrayNewValues = array();
-		foreach ($newValues as $key => $value) {
+		foreach ($newValues as $value) {
 			$arrayNewValues[] = $value;
 		}
 		array_splice($this->contenu, $index, 1, $arrayNewValues);
