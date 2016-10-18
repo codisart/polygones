@@ -90,39 +90,9 @@ class Segment {
 		}
 
 		if (is_null($this->getSlope())) {
-			$intersectAbscissa = $this->getPointA()->getAbscissa();
-
-			if (Math::isBetween($intersectAbscissa, $segment->getPointA()->getAbscissa(), $segment->getPointB()->getAbscissa()))
-			{
-				$intersectOrdinate = ($intersectAbscissa * $segment->getSlope()) + $segment->getOrdinateIntercept();
-				$intersectPoint = new Point([$intersectAbscissa, $intersectOrdinate]);
-				if (
-					Math::isBetween($intersectOrdinate, $this->getPointA()->getOrdinate(), $this->getPointB()->getOrdinate())
-					&& !($segment->hasForEndPoint($intersectPoint)
-					&& $this->hasForEndPoint($intersectPoint))
-				)
-				{
-					return $intersectPoint;
-				}
-			}
-			return null;
+			return $segment->getPointOfIntersectForNullSlope($this);
 		} elseif (is_null($segment->getSlope())) {
-			$intersectAbscissa = $segment->getPointA()->getAbscissa();
-
-			if (Math::isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa()))
-			{
-				$intersectOrdinate = ($intersectAbscissa * $this->getSlope()) + $this->getOrdinateIntercept();
-				$intersectPoint = new Point([$intersectAbscissa, $intersectOrdinate]);
-				if (
-					Math::isBetween($intersectOrdinate, $segment->getPointA()->getOrdinate(), $segment->getPointB()->getOrdinate())
-					&& !($segment->hasForEndPoint($intersectPoint)
-					&& $this->hasForEndPoint($intersectPoint))
-				)
-				{
-					return $intersectPoint;
-				}
-			}
-			return null;
+			return $this->getPointOfIntersectForNullSlope($segment);
 		}
 
 		$intersectAbscissa = ($segment->getOrdinateIntercept() - $this->getOrdinateIntercept()) / ($this->getSlope() - $segment->getSlope());
@@ -138,21 +108,41 @@ class Segment {
 		return null;
 	}
 
+	public function getPointOfIntersectForNullSlope($segment) {
+		$intersectAbscissa = $segment->getPointA()->getAbscissa();
+
+		if (Math::isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa()))
+		{
+			$intersectOrdinate = ($intersectAbscissa * $this->getSlope()) + $this->getOrdinateIntercept();
+			$intersectPoint = new Point([$intersectAbscissa, $intersectOrdinate]);
+			if (
+				Math::isBetween($intersectOrdinate, $segment->getPointA()->getOrdinate(), $segment->getPointB()->getOrdinate())
+				&& !($segment->hasForEndPoint($intersectPoint)
+				&& $this->hasForEndPoint($intersectPoint))
+			)
+			{
+				return $intersectPoint;
+			}
+		}
+		return null;
+	}
+
 	public function containsPoint(Point $point) {
 		return $this->hasForEndPoint($point) || $this->strictContainsPoint($point);
 	}
 
 	public function strictContainsPoint(Point $point) {
 		$segmentToCompare = new Segment($this->getPointA(), $point);
+
 		if (is_null($this->getSlope())) {
 			return
 				is_null($segmentToCompare->getSlope())
 				&& Math::isStrictBetween($point->getOrdinate(), $this->pointA->getOrdinate(), $this->pointB->getOrdinate());
-		} else {
-			return
-				$this->isOnSameLine($segmentToCompare)
-				&& Math::isStrictBetween($point->getAbscissa(), $this->pointA->getAbscissa(), $this->pointB->getAbscissa());
 		}
+
+		return
+			$this->isOnSameLine($segmentToCompare)
+			&& Math::isStrictBetween($point->getAbscissa(), $this->pointA->getAbscissa(), $this->pointB->getAbscissa());
 	}
 
 	public function getOrientationRelativeToPoint(Point $point) {
@@ -197,30 +187,27 @@ class Segment {
 			if (!empty($pointOfIntersection) && !$this->hasForEndPoint($pointOfIntersection)) {
 				return $this->splitByPoint($pointOfIntersection);
 			}
-		} else {
-			$pointA = $segment->getPointA();
-			$pointB = $segment->getPointB();
+			return null;
+		}
 
-			if ($this->strictContainsSegment($segment)) {
-				$newSegments = $this->splitByPoint($pointA);
+		$pointA = $segment->getPointA();
+		$pointB = $segment->getPointB();
 
-				if($newSegments[0]->strictContainsPoint($pointB)) {
-					$newSegments->insert(0, $newSegments[0]->splitByPoint($pointB));
-				} else {
-					$newSegments->insert(1, $newSegments[1]->splitByPoint($pointB));
-				}
-				return $newSegments;
+		if ($this->strictContainsSegment($segment)) {
+			$newSegments = $this->splitByPoint($pointA);
+
+			$index = 1;
+			if($newSegments[0]->strictContainsPoint($pointB)) {
+				$index = 0;
 			}
 
-			if ($this->strictContainsPoint($pointA)) {
-				$splittingPoint = $pointA;
-			} else if ($this->strictContainsPoint($pointB)) {
-				$splittingPoint = $pointB;
-			}
+			return $newSegments->insert($index, $newSegments[$index]->splitByPoint($pointB));
+		}
 
-			if(!empty($splittingPoint)) {
-				return $this->splitByPoint($splittingPoint);
-			}
+		if ($this->strictContainsPoint($pointA)) {
+			return $this->splitByPoint($pointA);
+		} else if ($this->strictContainsPoint($pointB)) {
+			return $this->splitByPoint($pointB);
 		}
 
 		return null;

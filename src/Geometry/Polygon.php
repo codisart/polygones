@@ -41,25 +41,23 @@ class Polygon {
 	public function getBoundingbox() {
 		$latmin = $latmax = $lgtmin = $lgtmax = null;
 
-		foreach ($this->segments as $i=>$segment) {
+		foreach ($this->segments as $segment) {
 			$lgtmin = Math::min($lgtmin, $segment->getPointA()->getAbscissa());
 			$lgtmax = Math::max($lgtmax, $segment->getPointA()->getAbscissa());
 			$latmin = Math::min($latmin, $segment->getPointA()->getOrdinate());
 			$latmax = Math::max($latmax, $segment->getPointA()->getOrdinate());
 		}
 
-		$boundingbox = [
+		return [
 			[$latmax, $lgtmax],
 			[$latmin, $lgtmin],
 		];
-
-		return $boundingbox;
 	}
 
 	public function containsPoint(Point $point) {
 		$wn = 0;
 
-		foreach ($this->segments as $i => $segment) {
+		foreach ($this->segments as $segment) {
 			if ($segment->containsPoint($point)) {
 				return false;
 			}
@@ -97,7 +95,7 @@ class Polygon {
 		$abscissaBarycenter = 0;
 		$ordinateBarycenter = 0;
 
-		foreach ($this->segments as $key => $segment) {
+		foreach ($this->segments as $segment) {
 			$total++;
 			$abscissaBarycenter += $segment->getPointA()->getAbscissa();
 			$ordinateBarycenter += $segment->getPointA()->getOrdinate();
@@ -143,14 +141,13 @@ class Polygon {
 
 		$resultSegments = new Collection();
 
-		foreach ($allSegments as $key => $segment) {
+		foreach ($allSegments as $segment) {
 			$middlePoint = $segment->getMiddlePoint();
-
 			if ($this->containsPoint($middlePoint) || $polygonContender->containsPoint($middlePoint)) {
 				continue;
-			} else {
-					$resultSegments[] = $segment;
 			}
+
+			$resultSegments[] = $segment;
 		}
 
 		return $resultSegments;
@@ -173,6 +170,7 @@ class Polygon {
 			$segment 	= $segments->current();
 			$key 		= $segments->key();
 
+			$segments->next();
 			if ($segment->hasForEndPoint($point)){
 				$point 	= $segment->getOtherPoint($point);
 				unset($segments[$key]);
@@ -195,9 +193,6 @@ class Polygon {
 				}
 				$points[] = $point;
 				$segments->rewind();
-			}
-			else {
-				$segments->next();
 			}
 		}
 		return $newPolygones;
