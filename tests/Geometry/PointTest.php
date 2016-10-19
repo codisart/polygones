@@ -6,7 +6,7 @@ use Geometry\Point;
 
 class PointTest extends \PHPUnit_Framework_TestCase
 {
-    public function coordinatesProvider()
+    public function providerCoordinates()
     {
         return [
             [0, 0],
@@ -17,31 +17,20 @@ class PointTest extends \PHPUnit_Framework_TestCase
     }
 
 	/**
-	 * @dataProvider coordinatesProvider
+	 * @dataProvider providerCoordinates
 	 */
-	public function testGetAbscissa($abscissa, $ordinate) {
+	public function testGetCoordinates($abscissa, $ordinate) {
 		$point = new Point([
 			$abscissa,
 			$ordinate,
 		]);
 
 		$this->assertEquals($point->getAbscissa(), $abscissa);
-	}
-
-	/**
-	 * @dataProvider coordinatesProvider
-	 */
-	public function testGetOrdinate($abscissa, $ordinate) {
-		$point = new Point([
-			$abscissa,
-			$ordinate,
-		]);
-
 		$this->assertEquals($point->getOrdinate(), $ordinate);
 	}
 
 	/**
-	 * @dataProvider coordinatesProvider
+	 * @dataProvider providerCoordinates
 	 */
 	public function testToJSON($abscissa, $ordinate) {
 		$point = new Point([
@@ -55,7 +44,7 @@ class PointTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals([$abscissa, $ordinate], json_decode($json));
 	}
 
-	public function twoPointsCoordinatesProvider()
+	public function providerTwoPointsCoordinates()
 	{
 		return [
 			[[0, 0], [0, 0], true],
@@ -66,7 +55,7 @@ class PointTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @dataProvider twoPointsCoordinatesProvider
+	 * @dataProvider providerTwoPointsCoordinates
 	 */
 	public function testIsEqual($pointCoordinates, $otherPointCoordinates, $expected) {
 		$point 		= new Point($pointCoordinates);
