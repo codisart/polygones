@@ -38,11 +38,23 @@ class CollectionTest extends TestCase
 		$this->assertFalse(isset($instance[2]));
 	}
 
-	public function testShift(){
+	public function providerArrayAccess()
+	{
 		$instance = new Collection();
 
 		$instance[] = 'orange';
 		$instance[] = 'banana';
+
+		return [
+			[$instance]
+		];
+	}
+
+	/**
+	 * @dataProvider providerArrayAccess
+	 */
+	public function testShift($instance)
+	{
 		$instance[] = 'apple';
 		$instance[] = 'raspberry';
 
@@ -53,11 +65,10 @@ class CollectionTest extends TestCase
 		$this->assertEquals(3, count($instance));
 	}
 
-	public function testEach(){
-		$instance = new Collection();
-
-		$instance[] = 'orange';
-		$instance[] = 'banana';
+	/**
+	 * @dataProvider providerArrayAccess
+	 */
+	public function testEach($instance){
 		$instance[] = 'apple';
 		$instance[] = 'raspberry';
 
@@ -67,12 +78,10 @@ class CollectionTest extends TestCase
 		$this->assertEquals(4, count($instance));
 	}
 
-	public function testAppend(){
-		$instance = new Collection();
-
-		$instance[] = 'orange';
-		$instance[] = 'banana';
-
+	/**
+	 * @dataProvider providerArrayAccess
+	 */
+	public function testAppend($instance){
 		$elementsToAdd = new Collection();
 		$elementsToAdd[] = 'apple';
 		$elementsToAdd[] = 'raspberry';
@@ -81,12 +90,10 @@ class CollectionTest extends TestCase
 		$this->assertEquals(4, count($instance));
 	}
 
-	public function testWrongTypeCollectionToAppend(){
-		$instance = new Collection();
-
-		$instance[] = 'orange';
-		$instance[] = 'banana';
-
+	/**
+	 * @dataProvider providerArrayAccess
+	 */
+	public function testWrongTypeCollectionToAppend($instance){
 		$elementsToAdd = new Collection();
 		$elementsToAdd[] = new \DateTime;
 		$elementsToAdd[] = new \DateTime;
@@ -100,12 +107,10 @@ class CollectionTest extends TestCase
 		$this->assertEquals(2, count($instance));
 	}
 
-	public function testInsert() {
-		$instance = new Collection();
-
-		$instance[] = 'orange';
-		$instance[] = 'banana';
-
+	/**
+	 * @dataProvider providerArrayAccess
+	 */
+	public function testInsert($instance) {
 		$elementsToAdd = new Collection();
 		$elementsToAdd[] = 'apple';
 		$elementsToAdd[] = 'raspberry';
@@ -114,11 +119,10 @@ class CollectionTest extends TestCase
 		$this->assertEquals(3, count($instance));
 	}
 
-	public function testDelete() {
-		$instance = new Collection();
-
-		$instance[] = 'orange';
-		$instance[] = 'banana';
+	/**
+	 * @dataProvider providerArrayAccess
+	 */
+	public function testDelete($instance) {
 		$instance[] = 'apple';
 		$instance[] = 'raspberry';
 
