@@ -23,7 +23,8 @@ class CollectionTest extends TestCase
 		$this->assertEquals(1, count($instance));
 	}
 
-	public function testElementWithIndexToCollection() {
+	public function testElementWithIndexToCollection()
+	{
 		$instance = new Collection();
 
 		$instance[] = new \DateTime;
@@ -53,7 +54,7 @@ class CollectionTest extends TestCase
 	/**
 	 * @dataProvider providerArrayAccess
 	 */
-	public function testShift($instance)
+	public function testShift(Collection $instance)
 	{
 		$instance[] = 'apple';
 		$instance[] = 'raspberry';
@@ -68,7 +69,8 @@ class CollectionTest extends TestCase
 	/**
 	 * @dataProvider providerArrayAccess
 	 */
-	public function testEach($instance){
+	public function testEach(Collection $instance)
+	{
 		$instance[] = 'apple';
 		$instance[] = 'raspberry';
 
@@ -81,7 +83,8 @@ class CollectionTest extends TestCase
 	/**
 	 * @dataProvider providerArrayAccess
 	 */
-	public function testAppend($instance){
+	public function testAppend(Collection $instance)
+	{
 		$elementsToAdd = new Collection();
 		$elementsToAdd[] = 'apple';
 		$elementsToAdd[] = 'raspberry';
@@ -93,7 +96,7 @@ class CollectionTest extends TestCase
 	/**
 	 * @dataProvider providerArrayAccess
 	 */
-	public function testWrongTypeCollectionToAppend($instance){
+	public function testWrongTypeCollectionToAppend(Collection $instance){
 		$elementsToAdd = new Collection();
 		$elementsToAdd[] = new \DateTime;
 		$elementsToAdd[] = new \DateTime;
@@ -110,7 +113,7 @@ class CollectionTest extends TestCase
 	/**
 	 * @dataProvider providerArrayAccess
 	 */
-	public function testInsert($instance) {
+	public function testInsert(Collection $instance) {
 		$elementsToAdd = new Collection();
 		$elementsToAdd[] = 'apple';
 		$elementsToAdd[] = 'raspberry';
@@ -122,7 +125,7 @@ class CollectionTest extends TestCase
 	/**
 	 * @dataProvider providerArrayAccess
 	 */
-	public function testDelete($instance) {
+	public function testDelete(Collection $instance) {
 		$instance[] = 'apple';
 		$instance[] = 'raspberry';
 
