@@ -165,12 +165,12 @@ class Polygon {
 		$newPolygones = new Collection;
 
 		while ($segments->count()) {
-			$segment 	= $segments->current();
-			$key 		= $segments->key();
+			$segment = $segments->current();
+			$key = $segments->key();
 
 			$segments->next();
-			if ($segment->hasForEndPoint($point)){
-				$point 	= $segment->getOtherPoint($point);
+			if ($segment->hasForEndPoint($point)) {
+				$point = $segment->getOtherPoint($point);
 				unset($segments[$key]);
 
 				if ($pointOrigine->isEqual($point)) {
