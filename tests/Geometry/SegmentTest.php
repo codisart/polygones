@@ -8,15 +8,15 @@ use Geometry\Segment;
 
 class SegmentTest extends \PHPUnit_Framework_TestCase
 {
-    public function providerGetPoints()
-    {
-        return [
-            [[0, 0], [2, 5]],
-            [[0, 1], [2, 5]],
-            [[1, 0], [2, 5]],
-            [[1, 1], [2, 5]],
-        ];
-    }
+	public function providerGetPoints()
+	{
+		return [
+			[[0, 0], [2, 5]],
+			[[0, 1], [2, 5]],
+			[[1, 0], [2, 5]],
+			[[1, 1], [2, 5]],
+		];
+	}
 
 	/**
 	 * @dataProvider providerGetPoints
@@ -38,23 +38,23 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 		$pointA = new Point($pointACoordinates);
 		$pointB = new Point($pointBCoordinates);
 
-        $segment = new Segment($pointA, $pointB);
+		$segment = new Segment($pointA, $pointB);
 
-        $json = $segment->toJSON();
+		$json = $segment->toJSON();
 
 		$this->assertInternalType('string', $json);
 		$this->assertEquals([$pointACoordinates, $pointBCoordinates], json_decode($json));
 	}
 
-    public function isEqualProvider()
-    {
-        return [
-            [[[0, 0], [2, 5]], [[0, 0], [2, 5]], true],
-            [[[0, 1], [2, 5]], [[2, 5], [0, 1]], true],
-            [[[1, 0], [2, 5]], [[1, 0], [3, 4]], false],
-            [[[1, 1], [2, 5]], [[1, 1], [0, 0]], false],
-        ];
-    }
+	public function isEqualProvider()
+	{
+		return [
+			[[[0, 0], [2, 5]], [[0, 0], [2, 5]], true],
+			[[[0, 1], [2, 5]], [[2, 5], [0, 1]], true],
+			[[[1, 0], [2, 5]], [[1, 0], [3, 4]], false],
+			[[[1, 1], [2, 5]], [[1, 1], [0, 0]], false],
+		];
+	}
 
 	/**
 	 * @dataProvider isEqualProvider
@@ -73,15 +73,15 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($segment->isEqual($otherSegment), $expected);
 	}
 
-    public function providerHasForEndPoint()
-    {
-        return [
-            [[[0, 0], [2, 5]], [2, 5], true],
-            [[[0, 1], [2, 5]], [0, 1], true],
-            [[[1, 0], [2, 5]], [3, 4], false],
-            [[[1, 1], [2, 5]], [0, 0], false],
-        ];
-    }
+	public function providerHasForEndPoint()
+	{
+		return [
+			[[[0, 0], [2, 5]], [2, 5], true],
+			[[[0, 1], [2, 5]], [0, 1], true],
+			[[[1, 0], [2, 5]], [3, 4], false],
+			[[[1, 1], [2, 5]], [0, 0], false],
+		];
+	}
 
 	/**
 	 * @dataProvider providerHasForEndPoint
@@ -165,7 +165,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
             [[[1, 4], [1, 5]], [[0, 0], [1, 1]], null],
             [[[0, 0], [2, 2]], [[0, 2], [2, 4]], null],
             [[[4, 5], [4, 4]], [[5, 0], [1, 4]], null],
-            [[[82.9562,98.729],[52.16232,12.5954]], [[91.12968,35.716],[38.349,67.74]], [65.90079400141, 51.023302695207]],
+            [[[82.9562, 98.729], [52.16232, 12.5954]], [[91.12968, 35.716], [38.349, 67.74]], [65.90079400141, 51.023302695207]],
 
             [[[0, 2], [2, 0]], [[0, 0], [2, 2]], [1, 1]],
             [[[0, 0], [4, 4]], [[0, 4], [2, 2]], [2, 2]],
@@ -319,7 +319,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
             [
                 [[0, 0], [2, 2]],
                 [[1, 1], [4, 5]],
-                [[[0, 0], [1, 1]], [[1, 1],[2, 2]]]
+                [[[0, 0], [1, 1]], [[1, 1], [2, 2]]]
             ],
             [
                 [[1, 1], [4, 5]],
@@ -329,42 +329,42 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
             [
                 [[0, 0], [2, 2]],
                 [[0, 2], [2, 0]],
-                [[[0, 0], [1, 1]], [[1, 1],[2, 2]]]
+                [[[0, 0], [1, 1]], [[1, 1], [2, 2]]]
             ],
             [
                 [[0, 0], [2, 2]],
-                [[1, 0],[2, 2]],
+                [[1, 0], [2, 2]],
                 null
             ],
 
             // same line
             [
                 [[0, 0], [2, 2]],
-                [[1, 1],[2, 2]],
-                [[[0, 0], [1, 1]], [[1, 1],[2, 2]]]
+                [[1, 1], [2, 2]],
+                [[[0, 0], [1, 1]], [[1, 1], [2, 2]]]
             ],
             [
                 [[0, 0], [3, 3]],
-                [[1, 1],[2, 2]],
-                [[[0, 0], [1, 1]], [[1, 1],[2, 2]], [[2, 2],[3, 3]]]
+                [[1, 1], [2, 2]],
+                [[[0, 0], [1, 1]], [[1, 1], [2, 2]], [[2, 2], [3, 3]]]
             ],
             [
                 [[0, 0], [3, 3]],
-                [[2, 2],[1, 1]],
-                [[[0, 0], [1, 1]], [[1, 1],[2, 2]], [[2, 2],[3, 3]]]
+                [[2, 2], [1, 1]],
+                [[[0, 0], [1, 1]], [[1, 1], [2, 2]], [[2, 2], [3, 3]]]
             ],
             [
                 [[0, 0], [3, 3]],
-                [[2, 2],[5, 5]],
-                [[[0, 0], [2, 2]], [[2, 2],[3, 3]]]
+                [[2, 2], [5, 5]],
+                [[[0, 0], [2, 2]], [[2, 2], [3, 3]]]
             ],
             [
-                [[2, 2],[5, 5]],
+                [[2, 2], [5, 5]],
                 [[0, 0], [3, 3]],
-                [[[2, 2],[3, 3]], [[3, 3], [5, 5]]]
+                [[[2, 2], [3, 3]], [[3, 3], [5, 5]]]
             ],
             [
-                [[2, 2],[5, 5]],
+                [[2, 2], [5, 5]],
                 [[6, 6], [8, 8]],
                 null
             ],

@@ -70,7 +70,7 @@ class Segment {
 		if (
 			is_null($this->getSlope())
 			&& is_null($segment->getSlope())
-			&& bccomp($this->getPointA()->getAbscissa(),$segment->getPointA()->getAbscissa(), 8) === 0
+			&& bccomp($this->getPointA()->getAbscissa(), $segment->getPointA()->getAbscissa(), 8) === 0
 		) {
 			return true;
 		} else if (
@@ -197,7 +197,7 @@ class Segment {
 			$newSegments = $this->splitByPoint($pointA);
 
 			$index = 1;
-			if($newSegments[0]->strictContainsPoint($pointB)) {
+			if ($newSegments[0]->strictContainsPoint($pointB)) {
 				$index = 0;
 			}
 
