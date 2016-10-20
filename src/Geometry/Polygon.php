@@ -110,8 +110,6 @@ class Polygon {
 
 		foreach ($mySegments as $myKey => $mySegment) {
 			foreach ($hisSegments as $hisKey => $hisSegment) {
-				$newSegments = new Collection();
-
 				$newSegments = $mySegment->getPartitionsbySegment($hisSegment);
 				if($newSegments) {
 					$mySegments->insert($myKey, $newSegments);

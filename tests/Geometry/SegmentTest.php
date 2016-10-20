@@ -8,7 +8,7 @@ use Geometry\Segment;
 
 class SegmentTest extends \PHPUnit_Framework_TestCase
 {
-    public function getPointsProvider()
+    public function providerGetPoints()
     {
         return [
             [[0, 0], [2, 5]],
@@ -19,31 +19,20 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
     }
 
 	/**
-	 * @dataProvider getPointsProvider
+	 * @dataProvider providerGetPoints
 	 */
-	public function testGetPointA($pointACoordinates, $pointBCoordinates) {
+	public function testGetPoints($pointACoordinates, $pointBCoordinates) {
 		$pointA = new Point($pointACoordinates);
 		$pointB = new Point($pointBCoordinates);
 
 		$segment = new Segment($pointA, $pointB);
 
 		$this->assertEquals($segment->getPointA(), $pointA);
-	}
-
-	/**
-	 * @dataProvider getPointsProvider
-	 */
-	public function testGetPointB($pointACoordinates, $pointBCoordinates) {
-		$pointA = new Point($pointACoordinates);
-		$pointB = new Point($pointBCoordinates);
-
-		$segment = new Segment($pointA, $pointB);
-
 		$this->assertEquals($segment->getPointB(), $pointB);
 	}
 
 	/**
-	 * @dataProvider getPointsProvider
+	 * @dataProvider providerGetPoints
 	 */
 	public function testToJSON($pointACoordinates, $pointBCoordinates) {
 		$pointA = new Point($pointACoordinates);
