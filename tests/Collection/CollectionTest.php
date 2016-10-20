@@ -96,7 +96,7 @@ class CollectionTest extends TestCase
 	/**
 	 * @dataProvider providerArrayAccess
 	 */
-	public function testWrongTypeCollectionToAppend(Collection $instance){
+	public function testWrongTypeCollectionToAppend(Collection $instance) {
 		$elementsToAdd = new Collection();
 		$elementsToAdd[] = new \DateTime;
 		$elementsToAdd[] = new \DateTime;

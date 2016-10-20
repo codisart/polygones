@@ -26,7 +26,7 @@ class Polygon {
 
 		$this->segments = new Collection();
 
-		for($i = 0; $i < $lengthListe -1; ++$i) {
+		for ($i = 0; $i < $lengthListe - 1; ++$i) {
 			$pointA = new Point(current($pointsListe));
 			$pointB = new Point(next($pointsListe));
 			$this->segments[] = new Segment($pointA, $pointB);
@@ -101,7 +101,7 @@ class Polygon {
 			$ordinateBarycenter += $segment->getPointA()->getOrdinate();
 		}
 
-		return new Point([$abscissaBarycenter/$total, $abscissaBarycenter/$total]);
+		return new Point([$abscissaBarycenter / $total, $abscissaBarycenter / $total]);
 	}
 
 	public function getAllSegmentsIntersectionWith($polygonContender) {
@@ -111,13 +111,13 @@ class Polygon {
 		foreach ($mySegments as $myKey => $mySegment) {
 			foreach ($hisSegments as $hisKey => $hisSegment) {
 				$newSegments = $mySegment->getPartitionsbySegment($hisSegment);
-				if($newSegments) {
+				if ($newSegments) {
 					$mySegments->insert($myKey, $newSegments);
 					$mySegment = $newSegments[0];
 				}
 
 				$newSegments = $hisSegment->getPartitionsbySegment($mySegment);
-				if($newSegments) {
+				if ($newSegments) {
 					$hisSegments->insert($hisKey, $newSegments);
 					$hisSegment = $newSegments[0];
 				}

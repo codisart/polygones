@@ -6,15 +6,15 @@ use Geometry\Point;
 
 class PointTest extends \PHPUnit_Framework_TestCase
 {
-    public function providerCoordinates()
-    {
-        return [
-            [0, 0],
-            [0, 1],
-            [1, 0],
-            [1, 1]
-        ];
-    }
+	public function providerCoordinates()
+	{
+		return [
+			[0, 0],
+			[0, 1],
+			[1, 0],
+			[1, 1]
+		];
+	}
 
 	/**
 	 * @dataProvider providerCoordinates
@@ -38,7 +38,7 @@ class PointTest extends \PHPUnit_Framework_TestCase
 			$ordinate,
 		]);
 
-        $json = $point->toJSON();
+		$json = $point->toJSON();
 
 		$this->assertInternalType('string', $json);
 		$this->assertEquals([$abscissa, $ordinate], json_decode($json));
@@ -58,7 +58,7 @@ class PointTest extends \PHPUnit_Framework_TestCase
 	 * @dataProvider providerTwoPointsCoordinates
 	 */
 	public function testIsEqual($pointCoordinates, $otherPointCoordinates, $expected) {
-		$point 		= new Point($pointCoordinates);
+		$point = new Point($pointCoordinates);
 		$otherPoint = new Point($otherPointCoordinates);
 
 		$this->assertEquals($point->isEqual($otherPoint), $expected);

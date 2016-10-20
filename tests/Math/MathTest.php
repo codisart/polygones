@@ -11,7 +11,7 @@ class MathTest extends \PHPUnit_Framework_TestCase
 	public function providerMin()
 	{
 		return [
-			[[1 , null, 3, -2], -2],
+			[[1, null, 3, -2], -2],
 			[[1], 1],
 		];
 	}
@@ -27,7 +27,7 @@ class MathTest extends \PHPUnit_Framework_TestCase
 	public function providerMax()
 	{
 		return [
-			[[1 , null, 3, -2], 3],
+			[[1, null, 3, -2], 3],
 			[[1], 1],
 		];
 	}
@@ -53,7 +53,7 @@ class MathTest extends \PHPUnit_Framework_TestCase
 
 			[1, 0, 0, false],
 			[35, 0, 5, false],
-			[35, 5,	0, false],
+			[35, 5, 0, false],
 		];
 	}
 
@@ -79,7 +79,7 @@ class MathTest extends \PHPUnit_Framework_TestCase
 
 			[1, 0, 0, false],
 			[35, 0, 5, false],
-			[35, 5,	0, false],
+			[35, 5, 0, false],
 		];
 	}
 
@@ -90,26 +90,26 @@ class MathTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(Math::isStrictBetween($int, $first, $second), $result);
 	}
 
-    public function providerDeterminant()
-    {
-        return [
-            [[[0, 0], [2, 2]], [[0, 2], [2, 0]], -8],
-        ];
-    }
+	public function providerDeterminant()
+	{
+		return [
+			[[[0, 0], [2, 2]], [[0, 2], [2, 0]], -8],
+		];
+	}
 
-    /**
-     * @dataProvider providerDeterminant
-     */
+	/**
+	 * @dataProvider providerDeterminant
+	 */
 	public function testDeterminant($segmentCoordinates, $otherSegmentCoordinates, $expected) {
 		$segment = new Segment(
-            new Point($segmentCoordinates[0]),
-            new Point($segmentCoordinates[1])
-        );
+			new Point($segmentCoordinates[0]),
+			new Point($segmentCoordinates[1])
+		);
 
-        $otherSegment = new Segment(
-            new Point($otherSegmentCoordinates[0]),
-            new Point($otherSegmentCoordinates[1])
-        );
+		$otherSegment = new Segment(
+			new Point($otherSegmentCoordinates[0]),
+			new Point($otherSegmentCoordinates[1])
+		);
 
 		$this->assertEquals(Math::determinant($segment, $otherSegment), $expected);
 	}
