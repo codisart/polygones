@@ -85,7 +85,7 @@ class Segment {
 	}
 
 	public function getPointOfIntersect($segment) {
-		if (Math::determinant($this, $segment) == 0) {
+		if (determinant($this, $segment) == 0) {
 			return null;
 		}
 
@@ -146,7 +146,7 @@ class Segment {
 	}
 
 	public function getOrientationRelativeToPoint(Point $point) {
-		$determinant = Math::determinant($this, new Segment($this->getPointA(), $point));
+		$determinant = determinant($this, new Segment($this->getPointA(), $point));
 		return ($determinant > 0) - ($determinant < 0);
 	}
 

@@ -87,7 +87,7 @@ class Polygon {
 	 */
 	private function isLeft(Segment $segment, Point $point) {
 		$segmentSecond = new Segment($segment->getPointA(), $point);
-		return Math::determinant($segment, $segmentSecond);
+		return determinant($segment, $segmentSecond);
 	}
 
 	public function getBarycenter() {

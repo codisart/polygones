@@ -12,6 +12,9 @@
        "phpmd/phpmd" : "@stable"
 	},
 	"autoload": {
+		"files": [
+            "src/Geometry/operations.php"
+        ],
 		"psr-4": {
 			"Collection\\": "src/Collection",
 			"Geometry\\": "src/Geometry",
