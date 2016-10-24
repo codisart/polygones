@@ -3,9 +3,10 @@
 namespace GeometryTest;
 
 use Collection\Collection;
-use Geometry\Polygon;
 use Geometry\Point;
+use Geometry\Polygon;
 use Geometry\Segment;
+use Math;
 
 class PolygonTest extends \PHPUnit_Framework_TestCase
 {
