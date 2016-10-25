@@ -12,10 +12,13 @@
        "phpmd/phpmd" : "@stable"
 	},
 	"autoload": {
+		"files": [
+            "src/Geometry/operations.php",
+            "src/Math/operations.php"
+        ],
 		"psr-4": {
 			"Collection\\": "src/Collection",
-			"Geometry\\": "src/Geometry",
-			"Math\\"	: "src/Math"
+			"Geometry\\": "src/Geometry"
 		}
 	},
     "scripts": {

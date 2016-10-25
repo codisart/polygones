@@ -5,7 +5,8 @@ namespace Geometry;
 use Collection\Collection;
 use Geometry\Point;
 use Geometry\Segment;
-use Math\Math;
+use function Math\max;
+use function Math\min;
 
 class Polygon {
 
@@ -42,10 +43,10 @@ class Polygon {
 		$latmin = $latmax = $lgtmin = $lgtmax = null;
 
 		foreach ($this->segments as $segment) {
-			$lgtmin = Math::min($lgtmin, $segment->getPointA()->getAbscissa());
-			$lgtmax = Math::max($lgtmax, $segment->getPointA()->getAbscissa());
-			$latmin = Math::min($latmin, $segment->getPointA()->getOrdinate());
-			$latmax = Math::max($latmax, $segment->getPointA()->getOrdinate());
+			$lgtmin = min($lgtmin, $segment->getPointA()->getAbscissa());
+			$lgtmax = max($lgtmax, $segment->getPointA()->getAbscissa());
+			$latmin = min($latmin, $segment->getPointA()->getOrdinate());
+			$latmax = max($latmax, $segment->getPointA()->getOrdinate());
 		}
 
 		return [
@@ -87,7 +88,7 @@ class Polygon {
 	 */
 	private function isLeft(Segment $segment, Point $point) {
 		$segmentSecond = new Segment($segment->getPointA(), $point);
-		return Math::determinant($segment, $segmentSecond);
+		return determinant($segment, $segmentSecond);
 	}
 
 	public function getBarycenter() {

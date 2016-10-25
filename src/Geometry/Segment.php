@@ -2,8 +2,11 @@
 
 namespace Geometry;
 
-use Math\Math;
 use Collection\Collection;
+use function Math\isBetween;
+use function Math\isStrictBetween;
+use function Math\max;
+use function Math\min;
 
 class Segment {
 
@@ -85,7 +88,7 @@ class Segment {
 	}
 
 	public function getPointOfIntersect($segment) {
-		if (Math::determinant($this, $segment) == 0) {
+		if (determinant($this, $segment) == 0) {
 			return null;
 		}
 
@@ -98,8 +101,8 @@ class Segment {
 		$intersectAbscissa = ($segment->getOrdinateIntercept() - $this->getOrdinateIntercept()) / ($this->getSlope() - $segment->getSlope());
 
 		if (
-			Math::isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa())
-			&& Math::isBetween($intersectAbscissa, $segment->getPointA()->getAbscissa(), $segment->getPointB()->getAbscissa())
+			isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa())
+			&& isBetween($intersectAbscissa, $segment->getPointA()->getAbscissa(), $segment->getPointB()->getAbscissa())
 			&& !$this->hasCommonEndPoint($segment)
 		) {
 			$intersectOrdinate = ($intersectAbscissa * $this->getSlope()) + $this->getOrdinateIntercept();
@@ -111,12 +114,12 @@ class Segment {
 	public function getPointOfIntersectForNullSlope($segment) {
 		$intersectAbscissa = $segment->getPointA()->getAbscissa();
 
-		if (Math::isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa()))
+		if (isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa()))
 		{
 			$intersectOrdinate = ($intersectAbscissa * $this->getSlope()) + $this->getOrdinateIntercept();
 			$intersectPoint = new Point([$intersectAbscissa, $intersectOrdinate]);
 			if (
-				Math::isBetween($intersectOrdinate, $segment->getPointA()->getOrdinate(), $segment->getPointB()->getOrdinate())
+				isBetween($intersectOrdinate, $segment->getPointA()->getOrdinate(), $segment->getPointB()->getOrdinate())
 				&& !($segment->hasForEndPoint($intersectPoint)
 				&& $this->hasForEndPoint($intersectPoint))
 			)
@@ -137,16 +140,16 @@ class Segment {
 		if (is_null($this->getSlope())) {
 			return
 				is_null($segmentToCompare->getSlope())
-				&& Math::isStrictBetween($point->getOrdinate(), $this->pointA->getOrdinate(), $this->pointB->getOrdinate());
+				&& isStrictBetween($point->getOrdinate(), $this->pointA->getOrdinate(), $this->pointB->getOrdinate());
 		}
 
 		return
 			$this->isOnSameLine($segmentToCompare)
-			&& Math::isStrictBetween($point->getAbscissa(), $this->pointA->getAbscissa(), $this->pointB->getAbscissa());
+			&& isStrictBetween($point->getAbscissa(), $this->pointA->getAbscissa(), $this->pointB->getAbscissa());
 	}
 
 	public function getOrientationRelativeToPoint(Point $point) {
-		$determinant = Math::determinant($this, new Segment($this->getPointA(), $point));
+		$determinant = determinant($this, new Segment($this->getPointA(), $point));
 		return ($determinant > 0) - ($determinant < 0);
 	}
 
