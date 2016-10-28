@@ -63,28 +63,24 @@ class Segment {
 	}
 
 	public function getMiddlePoint() {
-		return new Point(array(
+		return new Point([
 			($this->pointA->getAbscissa() + $this->pointB->getAbscissa()) / 2,
 			($this->pointA->getOrdinate() + $this->pointB->getOrdinate()) / 2
-		));
+		]);
 	}
 
 	public function isOnSameLine($segment) {
-		if (
-			is_null($this->getSlope())
-			&& is_null($segment->getSlope())
-			&& bccomp($this->getPointA()->getAbscissa(), $segment->getPointA()->getAbscissa(), 8) === 0
-		) {
-			return true;
-		} else if (
-			!is_null($this->getSlope())
-			&& !is_null($segment->getSlope())
-		) {
-			return
-				bccomp($this->getSlope(), $segment->getSlope(), 8) === 0
-				&& bccomp($this->getOrdinateIntercept(), $segment->getOrdinateIntercept(), 8) === 0;
-		}
-		return false;
+		return (
+				is_null($this->getSlope())
+			&& 	is_null($segment->getSlope())
+			&& 	bccomp($this->getPointA()->getAbscissa(), $segment->getPointA()->getAbscissa(), 8) === 0
+		)
+		|| (
+				!is_null($this->getSlope())
+			&& 	!is_null($segment->getSlope())
+			&&	bccomp($this->getSlope(), $segment->getSlope(), 8) === 0
+			&& 	bccomp($this->getOrdinateIntercept(), $segment->getOrdinateIntercept(), 8) === 0
+		);
 	}
 
 	public function getPointOfIntersect($segment) {
@@ -120,8 +116,7 @@ class Segment {
 			$intersectPoint = new Point([$intersectAbscissa, $intersectOrdinate]);
 			if (
 				isBetween($intersectOrdinate, $segment->getPointA()->getOrdinate(), $segment->getPointB()->getOrdinate())
-				&& !($segment->hasForEndPoint($intersectPoint)
-				&& $this->hasForEndPoint($intersectPoint))
+				&& !($segment->hasForEndPoint($intersectPoint) && $this->hasForEndPoint($intersectPoint))
 			)
 			{
 				return $intersectPoint;
@@ -137,15 +132,23 @@ class Segment {
 	public function strictContainsPoint(Point $point) {
 		$segmentToCompare = new Segment($this->getPointA(), $point);
 
-		if (is_null($this->getSlope())) {
-			return
-				is_null($segmentToCompare->getSlope())
-				&& isStrictBetween($point->getOrdinate(), $this->pointA->getOrdinate(), $this->pointB->getOrdinate());
-		}
-
-		return
-			$this->isOnSameLine($segmentToCompare)
-			&& isStrictBetween($point->getAbscissa(), $this->pointA->getAbscissa(), $this->pointB->getAbscissa());
+		return (
+				is_null($this->getSlope())
+			&& 	is_null($segmentToCompare->getSlope())
+			&& 	isStrictBetween(
+					$point->getOrdinate(),
+					$this->pointA->getOrdinate(),
+					$this->pointB->getOrdinate()
+				)
+		)
+		|| (
+				$this->isOnSameLine($segmentToCompare)
+			&& 	isStrictBetween(
+					$point->getAbscissa(),
+					$this->pointA->getAbscissa(),
+					$this->pointB->getAbscissa()
+				)
+		);
 	}
 
 	public function getOrientationRelativeToPoint(Point $point) {
@@ -161,24 +164,22 @@ class Segment {
 		) === 0;
 	}
 
-	public function strictContainsSegment($segment) {
-		return $this->strictContainsPoint($segment->getPointA()) && $this->strictContainsPoint($segment->getPointB());
-	}
-
 	public function hasCommonEndPoint($segment)
 	{
-		return $segment->hasForEndPoint($this->pointA) || $segment->hasForEndPoint($this->pointB);
-	}
-
-	public function toJSON() {
-		$json = "[".$this->pointA->toJSON().",".$this->pointB->toJSON()."]";
-		return $json;
+		return
+				$segment->hasForEndPoint($this->pointA)
+			|| 	$segment->hasForEndPoint($this->pointB);
 	}
 
 	private function splitByPoint(Point $point) {
 		$newSegments = new Collection();
-		$newSegments[] = new Segment($this->getPointA(), $point);
-		$newSegments[] = new Segment($point, $this->getPointB());
+
+		if ($this->strictContainsPoint($point)) {
+			$newSegments[] = new Segment($this->getPointA(), $point);
+			$newSegments[] = new Segment($point, $this->getPointB());
+			return $newSegments;
+		}
+		$newSegments[] = $this;
 		return $newSegments;
 	}
 
@@ -193,26 +194,18 @@ class Segment {
 			return null;
 		}
 
-		$pointA = $segment->getPointA();
-		$pointB = $segment->getPointB();
+		$partitions = $this->splitByPoint($segment->getPointA());
 
-		if ($this->strictContainsSegment($segment)) {
-			$newSegments = $this->splitByPoint($pointA);
-
-			$index = 1;
-			if ($newSegments[0]->strictContainsPoint($pointB)) {
-				$index = 0;
-			}
-
-			return $newSegments->insert($index, $newSegments[$index]->splitByPoint($pointB));
+		$length = $partitions->count();
+		for ($index = 0 ; $index < $length ; $index++) {
+			$partitions->insert($index, $partitions[$index]->splitByPoint($segment->getPointB()));
 		}
 
-		if ($this->strictContainsPoint($pointA)) {
-			return $this->splitByPoint($pointA);
-		} else if ($this->strictContainsPoint($pointB)) {
-			return $this->splitByPoint($pointB);
-		}
+		return $partitions->count() > 1 ? $partitions : null;
+	}
 
-		return null;
+	public function toJSON() {
+		$json = "[".$this->pointA->toJSON().",".$this->pointB->toJSON()."]";
+		return $json;
 	}
 }
