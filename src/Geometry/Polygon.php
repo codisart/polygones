@@ -1,10 +1,7 @@
 <?php
-
 namespace Geometry;
 
 use Collection\Collection;
-use Geometry\Point;
-use Geometry\Segment;
 use function Math\max;
 use function Math\min;
 

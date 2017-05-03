@@ -1,10 +1,6 @@
 <?php
-
 namespace Geometry;
 
-/**
-* point
-*/
 class Point {
 
 	// axe X

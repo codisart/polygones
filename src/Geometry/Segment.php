@@ -1,12 +1,9 @@
 <?php
-
 namespace Geometry;
 
 use Collection\Collection;
 use function Math\isBetween;
 use function Math\isStrictBetween;
-use function Math\max;
-use function Math\min;
 
 class Segment {
 

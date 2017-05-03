@@ -1,5 +1,4 @@
 <?php
-
 namespace Geometry;
 
 function determinant(Segment $segmentOne, Segment $segmentSecond) {
