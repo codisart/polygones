@@ -2,21 +2,25 @@
 namespace Math;
 
 /**
- * permet d'utiliser la fonction min de php sans renvoyer les valeurs false (NULL, FALSE, "")
- * @return mixed la valeur du paramètre considéré comme "inférieure" suivant la comparaison standard
+ * Find lowest value without considering falsy values (NULL, FALSE, "")
+ * @param array ...$values
+ * @return mixed returns the parameter value considered "lowest" according to standard comparisons.
  */
-function min() {
-	$variables = array_filter(func_get_args(), 'strlen');
-	return \min($variables);
+function min(...$values) {
+	return \min(
+	    array_filter($values, 'strlen')
+    );
 }
 
 /**
- * permet d'utiliser la fonction min de php sans renvoyer les valeurs false (NULL, FALSE, "")
- * @return mixed la valeur du paramètre considéré comme "inférieure" suivant la comparaison standard
+ * Find highest value without considering falsy values (NULL, FALSE, "")
+ * @param array ...$values
+ * @return mixed returns the parameter value considered "lowest" according to standard comparisons.
  */
-function max() {
-	$variables = array_filter(func_get_args(), 'strlen');
-	return \max($variables);
+function max(...$values) {
+    return \max(
+        array_filter($values, 'strlen')
+    );
 }
 
 function isBetween($int, $first, $second) {
