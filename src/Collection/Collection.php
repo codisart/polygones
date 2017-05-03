@@ -1,8 +1,10 @@
 <?php
 namespace Collection;
 
-class Collection implements \ArrayAccess, \Iterator, \Countable {
+class Collection implements \ArrayAccess, \Iterator, \Countable
+{
 	protected $contenu = array();
+
 	protected $type;
 
 	public function offsetSet($offset, $value) {
@@ -68,11 +70,11 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 		}
 
 		foreach ($collection as $key => $value) {
+            $newKey = $key;
 			if (isset($this[$key])) {
-				$this[] = $value;
-			} else {
-				$this[$key] = $value;
+                $newKey = $this->count();
 			}
+			$this[$newKey] = $value;
 		}
 
 		return $this;
