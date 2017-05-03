@@ -3,117 +3,135 @@ namespace Collection;
 
 class Collection implements \ArrayAccess, \Iterator, \Countable
 {
-	protected $contenu = array();
+    protected $contenu = [];
 
-	protected $type;
+    protected $type;
 
-	public function offsetSet($offset, $value) {
-		if (empty($this->contenu)) {
-			$this->setType($value);
-		}
+    public function offsetSet($offset, $value)
+    {
+        if (empty($this->contenu)) {
+            $this->setType($value);
+        }
 
-		if (!empty($this->contenu) && !$this->checkType($value)) {
-			return false;
-		}
+        if (!empty($this->contenu) && !$this->checkType($value)) {
+            return false;
+        }
 
-		if (is_null($offset)) {
-			$this->contenu[] = $value;
-			return true;
-		}
+        if (is_null($offset)) {
+            $this->contenu[] = $value;
+            return true;
+        }
 
-		$this->contenu[$offset] = $value;
-		return true;
-	}
+        $this->contenu[$offset] = $value;
+        return true;
+    }
 
-	public function offsetExists($offset) {
-		return isset($this->contenu[$offset]);
-	}
+    public function offsetExists($offset)
+    {
+        return isset($this->contenu[$offset]);
+    }
 
-	public function offsetUnset($offset) {
-		unset($this->contenu[$offset]);
-	}
+    public function offsetUnset($offset)
+    {
+        unset($this->contenu[$offset]);
+    }
 
-	public function offsetGet($offset) {
-		return isset($this->contenu[$offset]) ? $this->contenu[$offset] : null;
-	}
+    public function offsetGet($offset)
+    {
+        return isset($this->contenu[$offset]) ? $this->contenu[$offset] : null;
+    }
 
-	public function rewind() {
-		reset($this->contenu);
-	}
+    public function rewind()
+    {
+        reset($this->contenu);
+    }
 
-	public function shift() {
-		return array_shift($this->contenu);
-	}
-	public function current() {
-		return current($this->contenu);
-	}
+    public function shift()
+    {
+        return array_shift($this->contenu);
+    }
+    public function current()
+    {
+        return current($this->contenu);
+    }
 
-	public function key() {
-		return key($this->contenu);
-	}
+    public function key()
+    {
+        return key($this->contenu);
+    }
 
-	public function next() {
-		return next($this->contenu);
-	}
+    public function next()
+    {
+        return next($this->contenu);
+    }
 
-	public function valid() {
-		return $this->current() !== false;
-	}
+    public function valid()
+    {
+        return $this->current() !== false;
+    }
 
-	public function count() {
-		return count($this->contenu);
-	}
+    public function count()
+    {
+        return count($this->contenu);
+    }
 
-	public function append($collection) {
-		if (!(isset($collection) && is_object($collection) && get_class($collection) === get_class($this) && $collection->count() > 0)) {
-			return $this;
-		}
+    public function append($collection)
+    {
+        if (!(isset($collection) && is_object($collection) && get_class($collection) === get_class($this) && $collection->count() > 0)) {
+            return $this;
+        }
 
-		foreach ($collection as $key => $value) {
+        foreach ($collection as $key => $value) {
             $newKey = $key;
-			if (isset($this[$key])) {
+            if (isset($this[$key])) {
                 $newKey = $this->count();
-			}
-			$this[$newKey] = $value;
-		}
+            }
+            $this[$newKey] = $value;
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function insert($index, $newValues) {
-		$arrayNewValues = array();
-		foreach ($newValues as $value) {
-			$arrayNewValues[] = $value;
-		}
-		array_splice($this->contenu, $index, 1, $arrayNewValues);
-		return $this;
-	}
+    public function insert($index, $newValues)
+    {
+        $arrayNewValues = [];
+        foreach ($newValues as $value) {
+            $arrayNewValues[] = $value;
+        }
+        array_splice($this->contenu, $index, 1, $arrayNewValues);
+        return $this;
+    }
 
-	/**
-	 * @todo remove one of unset or delete
-	 */
-	public function delete($index) {
-		array_splice($this->contenu, $index, count($this->contenu), array_slice($this->contenu, $index + 1));
-		return $this;
-	}
+    /**
+     * @todo remove one of unset or delete
+     * @param mixed $index
+     */
+    public function delete($index)
+    {
+        array_splice($this->contenu, $index, count($this->contenu), array_slice($this->contenu, $index + 1));
+        return $this;
+    }
 
-	protected function setType($value) {
-		if (is_object($value)) {
-			return $this->type = get_class($value);
-		}
+    protected function setType($value)
+    {
+        if (is_object($value)) {
+            return $this->type = get_class($value);
+        }
 
-		return $this->type = gettype($value);
-	}
+        return $this->type = gettype($value);
+    }
 
-	protected function checkType($value) {
-		if (is_object($value)) {
-			return $this->type === get_class($value);
-		}
+    protected function checkType($value)
+    {
+        if (is_object($value)) {
+            return $this->type === get_class($value);
+        }
 
-		return $this->type === gettype($value);
-	}
+        return $this->type === gettype($value);
+    }
 
-	public function getType() {
-		return $this->type;
-	}
+    public function getType()
+    {
+        return $this->type;
+    }
 }
