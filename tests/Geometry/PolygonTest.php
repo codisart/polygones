@@ -1,14 +1,10 @@
 <?php
-
-namespace GeometryTest;
+namespace Geometry;
 
 use Collection\Collection;
-use Geometry\Point;
-use Geometry\Polygon;
-use Geometry\Segment;
-use Math;
+use PHPUnit\Framework\TestCase;
 
-class PolygonTest extends \PHPUnit_Framework_TestCase
+class PolygonTest extends TestCase
 {
 	public function instanceProvider()
 	{
@@ -24,7 +20,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 	public function testNewInstance($pointsListe) {
 		$instance = new Polygon($pointsListe);
 
-		$this->assertInstanceOf(Polygon::class, $instance);
+		self::assertInstanceOf(Polygon::class, $instance);
 	}
 
 	public function failInstanceProvider()
@@ -44,7 +40,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 		$this->expectException(\Exception::class);
 
 		$instance = new Polygon($pointsListe);
-		$this->assertInstanceOf(Polygon::class, $instance);
+		self::assertInstanceOf(Polygon::class, $instance);
 	}
 
 	/**
@@ -53,7 +49,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 	public function testGetSegments($pointsListe) {
 		$instance = new Polygon($pointsListe);
 
-		$this->assertInstanceOf(Collection::class, $instance->getSegments());
+		self::assertInstanceOf(Collection::class, $instance->getSegments());
 	}
 
 	public function providerGetBoundingBox()
@@ -70,7 +66,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 	public function testGetBoundingBox($pointsListe, $boudingBox) {
 		$instance = new Polygon($pointsListe);
 
-		$this->assertEquals($boudingBox, $instance->getBoundingBox());
+		self::assertEquals($boudingBox, $instance->getBoundingBox());
 	}
 
 	public function providerContainsPoint()
@@ -89,7 +85,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 	{
 		$instance = new Polygon($polygonCoordinates);
 		$point = new Point($pointCoordinates);
-		$this->assertEquals($expected, $instance->containsPoint($point));
+		self::assertEquals($expected, $instance->containsPoint($point));
 	}
 
 	public function providerGetAllSegmentsIntersectionWith()
@@ -160,7 +156,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 
 		$segments = $polygonA->getAllSegmentsIntersectionWith($polygonB);
 
-		$this->assertInstanceOf(Collection::class, $segments);
+		self::assertInstanceOf(Collection::class, $segments);
 
 		$json = [];
 		foreach ($segments as $key => $segment) {
@@ -170,7 +166,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 			];
 		}
 
-		$this->assertEquals($expectedCoordinates, $json);
+		self::assertEquals($expectedCoordinates, $json);
 	}
 
 	public function providerGetBarycenter()
@@ -190,8 +186,8 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 
 		$barycenter = $polygon->getBarycenter();
 
-		$this->assertInstanceOf(Point::class, $barycenter);
-		$this->assertEquals($point->toJSON(), $barycenter->toJSON());
+		self::assertInstanceOf(Point::class, $barycenter);
+		self::assertEquals($point->toJSON(), $barycenter->toJSON());
 	}
 
 	public function providerBuildFromSegments()
@@ -258,7 +254,7 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 			$json[] = json_decode($polygon->toJSON());
 		}
 
-		$this->assertEquals($expectedPolygon, $json);
+		self::assertEquals($expectedPolygon, $json);
 	}
 
 	public function testExceptionBuildFromSegments()
@@ -304,6 +300,6 @@ class PolygonTest extends \PHPUnit_Framework_TestCase
 			$json[] = json_decode($polygon->toJSON());
 		}
 
-		$this->assertEquals($expectedPolygonsCoordinates, $json);
+		self::assertEquals($expectedPolygonsCoordinates, $json);
 	}
 }

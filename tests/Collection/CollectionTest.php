@@ -1,8 +1,6 @@
 <?php
+namespace Collection;
 
-namespace CollectionTest;
-
-use Collection\Collection;
 use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
@@ -10,7 +8,7 @@ class CollectionTest extends TestCase
 	public function testCount() {
 		$instance = new Collection();
 
-		$this->assertInternalType('int', count($instance));
+		self::assertInternalType('int', count($instance));
 	}
 
 	public function testAddWrongTypeToCollection() {
@@ -19,8 +17,8 @@ class CollectionTest extends TestCase
 		$instance[] = new \DateInterval('PT30S');
 		$instance[] = new \DateTime;
 
-		$this->assertInternalType('int', count($instance));
-		$this->assertEquals(1, count($instance));
+		self::assertInternalType('int', count($instance));
+		self::assertCount(1, $instance);
 	}
 
 	public function testElementWithIndexToCollection()
@@ -30,13 +28,12 @@ class CollectionTest extends TestCase
 		$instance[] = new \DateTime;
 		$instance[2] = new \DateTime;
 
-		$this->assertInternalType('int', count($instance));
-		$this->assertEquals(2, count($instance));
-		$this->assertTrue(isset($instance[2]));
-		$this->assertInstanceOf(\DateTime::class, $instance[2]);
+		self::assertCount(2, $instance);
+		self::assertTrue(isset($instance[2]));
+		self::assertInstanceOf(\DateTime::class, $instance[2]);
 
 		unset($instance[2]);
-		$this->assertFalse(isset($instance[2]));
+		self::assertFalse(isset($instance[2]));
 	}
 
 	public function providerArrayAccess()
@@ -60,10 +57,10 @@ class CollectionTest extends TestCase
 		$instance[] = 'raspberry';
 
 		$element = $instance->shift();
-		$this->assertInternalType('string', $element);
-		$this->assertEquals('orange', $element);
+		self::assertInternalType('string', $element);
+		self::assertEquals('orange', $element);
 
-		$this->assertEquals(3, count($instance));
+		self::assertCount(3, $instance);
 	}
 
 	/**
@@ -76,8 +73,8 @@ class CollectionTest extends TestCase
 
 		$element = $instance->each();
 
-		$this->assertInternalType('array', $element);
-		$this->assertEquals(4, count($instance));
+		self::assertInternalType('array', $element);
+		self::assertCount(4, $instance);
 	}
 
 	/**
@@ -89,8 +86,8 @@ class CollectionTest extends TestCase
 		$elementsToAdd[] = 'apple';
 		$elementsToAdd[] = 'raspberry';
 
-		$this->assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
-		$this->assertEquals(4, count($instance));
+		self::assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
+		self::assertCount(4, $instance);
 	}
 
 	/**
@@ -101,13 +98,13 @@ class CollectionTest extends TestCase
 		$elementsToAdd[] = new \DateTime;
 		$elementsToAdd[] = new \DateTime;
 
-		$this->assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
-		$this->assertEquals(2, count($instance));
+		self::assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
+		self::assertCount(2, $instance);
 
 		$elementsToAdd = new Collection();
 
-		$this->assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
-		$this->assertEquals(2, count($instance));
+		self::assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
+		self::assertCount(2, $instance);
 	}
 
 	/**
@@ -118,8 +115,8 @@ class CollectionTest extends TestCase
 		$elementsToAdd[] = 'apple';
 		$elementsToAdd[] = 'raspberry';
 
-		$this->assertInstanceOf(Collection::class, $instance->insert(0, $elementsToAdd));
-		$this->assertEquals(3, count($instance));
+		self::assertInstanceOf(Collection::class, $instance->insert(0, $elementsToAdd));
+		self::assertCount(3, $instance);
 	}
 
 	/**
@@ -129,8 +126,8 @@ class CollectionTest extends TestCase
 		$instance[] = 'apple';
 		$instance[] = 'raspberry';
 
-		$this->assertInstanceOf(Collection::class, $instance->delete(2));
-		$this->assertFalse(isset($instance[3]));
-		$this->assertEquals(3, count($instance));
+		self::assertInstanceOf(Collection::class, $instance->delete(2));
+		self::assertFalse(isset($instance[3]));
+		self::assertCount(3, $instance);
 	}
 }

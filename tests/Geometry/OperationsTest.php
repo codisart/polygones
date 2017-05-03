@@ -1,7 +1,13 @@
 <?php
 namespace Geometry;
 
-class OperationsTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Class OperationsTest
+ * @package Geometry
+ */
+class OperationsTest extends TestCase
 {
     public function providerDeterminant()
     {
@@ -12,6 +18,10 @@ class OperationsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider providerDeterminant
+     *
+     * @param $segmentCoordinates
+     * @param $otherSegmentCoordinates
+     * @param $expected
      */
 	public function testDeterminant($segmentCoordinates, $otherSegmentCoordinates, $expected) {
 		$segment = new Segment(
@@ -24,6 +34,6 @@ class OperationsTest extends \PHPUnit_Framework_TestCase
             new Point($otherSegmentCoordinates[1])
         );
 
-		$this->assertEquals(determinant($segment, $otherSegment), $expected);
+		self::assertEquals(determinant($segment, $otherSegment), $expected);
 	}
 }

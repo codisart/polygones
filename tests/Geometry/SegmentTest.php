@@ -1,12 +1,9 @@
 <?php
+namespace Geometry;
 
-namespace GeometryTest;
+use PHPUnit\Framework\TestCase;
 
-use Collection\Collection;
-use Geometry\Point;
-use Geometry\Segment;
-
-class SegmentTest extends \PHPUnit_Framework_TestCase
+class SegmentTest extends TestCase
 {
 	public function providerGetPoints()
 	{
@@ -27,8 +24,8 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 
 		$segment = new Segment($pointA, $pointB);
 
-		$this->assertEquals($segment->getPointA(), $pointA);
-		$this->assertEquals($segment->getPointB(), $pointB);
+		self::assertEquals($segment->getPointA(), $pointA);
+        self::assertEquals($segment->getPointB(), $pointB);
 	}
 
 	/**
@@ -42,8 +39,8 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 
 		$json = $segment->toJSON();
 
-		$this->assertInternalType('string', $json);
-		$this->assertEquals([$pointACoordinates, $pointBCoordinates], json_decode($json));
+        self::assertInternalType('string', $json);
+        self::assertEquals([$pointACoordinates, $pointBCoordinates], json_decode($json));
 	}
 
 	public function isEqualProvider()
@@ -70,7 +67,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 			new Point($otherSegmentCoordinates[1])
 		);
 
-		$this->assertEquals($segment->isEqual($otherSegment), $expected);
+        self::assertEquals($segment->isEqual($otherSegment), $expected);
 	}
 
 	public function providerHasForEndPoint()
@@ -94,7 +91,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 
 		$point = new Point($pointCoordinates);
 
-		$this->assertEquals($segment->hasForEndPoint($point), $expected);
+        self::assertEquals($segment->hasForEndPoint($point), $expected);
 	}
 
 	public function getOtherPointProvider()
@@ -122,7 +119,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 			$expected = new Point($expected);
 		}
 
-		$this->assertEquals($segment->getOtherPoint($point), $expected);
+        self::assertEquals($segment->getOtherPoint($point), $expected);
 	}
 
 
@@ -153,7 +150,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 			new Point($otherSegmentCoordinates[1])
 		);
 
-		$this->assertEquals($segment->isOnSameLine($otherSegment), $expected);
+        self::assertEquals($segment->isOnSameLine($otherSegment), $expected);
 	}
 
 	public function getPointOfIntersectProvider()
@@ -196,7 +193,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 			$expected = new Point($expected);
 		}
 
-		$this->assertEquals($expected, $segment->getPointOfIntersect($otherSegment));
+        self::assertEquals($expected, $segment->getPointOfIntersect($otherSegment));
 	}
 
 	public function providerGetMiddlePoint()
@@ -218,7 +215,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 
 		$middlePoint = new Point($middlePointCoordinates);
 
-		$this->assertEquals($segment->getMiddlePoint(), $middlePoint);
+        self::assertEquals($segment->getMiddlePoint(), $middlePoint);
 	}
 
 	public function providerContainsPoint()
@@ -248,7 +245,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 
 		$point = new Point($pointCoordinates);
 
-		$this->assertEquals($expected, $segment->containsPoint($point));
+        self::assertEquals($expected, $segment->containsPoint($point));
 	}
 
 	public function providerStrictContainsPoint()
@@ -278,7 +275,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 
 		$point = new Point($pointCoordinates);
 
-		$this->assertEquals($expected, $segment->strictContainsPoint($point));
+        self::assertEquals($expected, $segment->strictContainsPoint($point));
 	}
 
 	public function providerGetOrientationRelativeToPoint()
@@ -310,7 +307,7 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 
 		$point = new Point($pointCoordinates);
 
-		$this->assertEquals($expected, $segment->getOrientationRelativeToPoint($point));
+        self::assertEquals($expected, $segment->getOrientationRelativeToPoint($point));
 	}
 
 	public function providerGetPartitionsbySegment()
@@ -386,16 +383,17 @@ class SegmentTest extends \PHPUnit_Framework_TestCase
 			new Point($segmentBCoordinates[1])
 		);
 
+		/** @var \Collection\Collection $segments */
 		$segments = $segmentA->getPartitionsbySegment($segmentB);
 
 		$json = null;
 		if ($segments) {
 			$json = [];
-			foreach ($segments as $key => $segment) {
+			foreach ($segments as $segment) {
 				$json[] = json_decode($segment->toJSON());
 			}
 		}
 
-		$this->assertEquals($expected, $json);
+		self::assertEquals($expected, $json);
 	}
 }

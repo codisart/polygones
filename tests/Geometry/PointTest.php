@@ -1,10 +1,9 @@
 <?php
+namespace Geometry;
 
-namespace GeometryTest;
+use PHPUnit\Framework\TestCase;
 
-use Geometry\Point;
-
-class PointTest extends \PHPUnit_Framework_TestCase
+class PointTest extends TestCase
 {
 	public function providerCoordinates()
 	{
@@ -25,8 +24,8 @@ class PointTest extends \PHPUnit_Framework_TestCase
 			$ordinate,
 		]);
 
-		$this->assertEquals($point->getAbscissa(), $abscissa);
-		$this->assertEquals($point->getOrdinate(), $ordinate);
+		self::assertEquals($point->getAbscissa(), $abscissa);
+		self::assertEquals($point->getOrdinate(), $ordinate);
 	}
 
 	/**
@@ -40,8 +39,8 @@ class PointTest extends \PHPUnit_Framework_TestCase
 
 		$json = $point->toJSON();
 
-		$this->assertInternalType('string', $json);
-		$this->assertEquals([$abscissa, $ordinate], json_decode($json));
+		self::assertInternalType('string', $json);
+		self::assertEquals([$abscissa, $ordinate], json_decode($json));
 	}
 
 	public function providerTwoPointsCoordinates()
@@ -61,7 +60,7 @@ class PointTest extends \PHPUnit_Framework_TestCase
 		$point = new Point($pointCoordinates);
 		$otherPoint = new Point($otherPointCoordinates);
 
-		$this->assertEquals($point->isEqual($otherPoint), $expected);
-		$this->assertEquals($otherPoint->isEqual($point), $expected);
+		self::assertEquals($point->isEqual($otherPoint), $expected);
+		self::assertEquals($otherPoint->isEqual($point), $expected);
 	}
 }

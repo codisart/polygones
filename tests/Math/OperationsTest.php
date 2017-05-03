@@ -1,11 +1,13 @@
 <?php
-
 namespace Math;
 
-use Geometry\Segment;
-use Geometry\Point;
+use PHPUnit\Framework\TestCase;
 
-class OperationsTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class OperationsTest
+ * @package Math
+ */
+class OperationsTest extends TestCase
 {
 	public function providerMin()
 	{
@@ -15,12 +17,15 @@ class OperationsTest extends \PHPUnit_Framework_TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider providerMin
-	 */
+    /**
+     * @dataProvider providerMin
+     *
+     * @param $args
+     * @param $expected
+     */
 	public function testMin($args, $expected)
 	{
-		$this->assertEquals($expected, min(...$args));
+		self::assertEquals($expected, min(...$args));
 	}
 
 	public function providerMax()
@@ -31,12 +36,15 @@ class OperationsTest extends \PHPUnit_Framework_TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider providerMax
-	 */
+    /**
+     * @dataProvider providerMax
+     *
+     * @param $args
+     * @param $expected
+     */
 	public function testMax($args, $expected)
 	{
-		$this->assertEquals($expected, max(...$args));
+		self::assertEquals($expected, max(...$args));
 	}
 
 	public function betweenProvider()
@@ -58,9 +66,14 @@ class OperationsTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @dataProvider betweenProvider
+     *
+     * @param $int
+     * @param $first
+     * @param $second
+     * @param $result
 	 */
 	public function testIsBetween($int, $first, $second, $result) {
-		$this->assertEquals(isBetween($int, $first, $second), $result);
+		self::assertEquals(isBetween($int, $first, $second), $result);
 	}
 
 	public function strictBetweenProvider()
@@ -82,10 +95,15 @@ class OperationsTest extends \PHPUnit_Framework_TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider strictBetweenProvider
-	 */
+    /**
+     * @dataProvider strictBetweenProvider
+     *
+     * @param $int
+     * @param $first
+     * @param $second
+     * @param $result
+     */
 	public function testIsStrictBetween($int, $first, $second, $result) {
-		$this->assertEquals(isStrictBetween($int, $first, $second), $result);
+		self::assertEquals(isStrictBetween($int, $first, $second), $result);
 	}
 }
