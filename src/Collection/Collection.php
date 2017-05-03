@@ -1,5 +1,4 @@
 <?php
-
 namespace Collection;
 
 class Collection implements \ArrayAccess, \Iterator, \Countable {
@@ -53,10 +52,6 @@ class Collection implements \ArrayAccess, \Iterator, \Countable {
 
 	public function next() {
 		return next($this->contenu);
-	}
-
-	public function each() {
-		return each($this->contenu);
 	}
 
 	public function valid() {

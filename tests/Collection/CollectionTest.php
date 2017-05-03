@@ -66,20 +66,6 @@ class CollectionTest extends TestCase
 	/**
 	 * @dataProvider providerArrayAccess
 	 */
-	public function testEach(Collection $instance)
-	{
-		$instance[] = 'apple';
-		$instance[] = 'raspberry';
-
-		$element = $instance->each();
-
-		self::assertInternalType('array', $element);
-		self::assertCount(4, $instance);
-	}
-
-	/**
-	 * @dataProvider providerArrayAccess
-	 */
 	public function testAppend(Collection $instance)
 	{
 		$elementsToAdd = new Collection();
