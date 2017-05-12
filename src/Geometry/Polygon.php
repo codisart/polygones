@@ -59,8 +59,9 @@ class Polygon
     {
         $wn = 0;
 
+        /** @var \Geometry\Segment $segment */
         foreach ($this->segments as $segment) {
-            if ($segment->containsPoint($point)) {
+            if ($segment->hasForEndPoint($point) || $segment->containsPoint($point)) {
                 return false;
             }
             if ($segment->getPointA()->getOrdinate() <= $point->getOrdinate()) {
@@ -209,14 +210,18 @@ class Polygon
         );
     }
 
+    public function toArray()
+    {
+        $array = [];
+        foreach ($this->segments as $segment) {
+            $array[] = $segment->getPointA()->toArray();
+        }
+        $array[] = $this->segments[0]->getPointA()->toArray();
+        return $array;
+    }
+
     public function toJSON()
     {
-        $json = '';
-        foreach ($this->segments as $segment) {
-            $json .= $segment->getPointA()->toJSON();
-            $json .= ',';
-        }
-        $json .= $this->segments[0]->getPointA()->toJSON();
-        return '['.$json.']';
+        return json_encode($this->toArray());
     }
 }

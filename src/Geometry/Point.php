@@ -30,8 +30,16 @@ class Point
         return bccomp($this->abscissa, $point->getAbscissa(), 10) == 0 && bccomp($this->ordinate, $point->getOrdinate(), 10) == 0;
     }
 
+    public function toArray()
+    {
+        return [
+            $this->abscissa,
+            $this->ordinate
+        ];
+    }
+
     public function toJSON()
     {
-        return '['.$this->abscissa.','.$this->ordinate.']';
+        return json_encode($this->toArray());
     }
 }
