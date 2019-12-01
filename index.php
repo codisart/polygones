@@ -23,8 +23,8 @@ $polygones = new PolygoneCollection();
 
 
 $polyJson = json_decode($source);
-if(is_array($polyJson)) {
-	foreach($polyJson as $poly){
+if (is_array($polyJson)) {
+	foreach ($polyJson as $poly) {
 		$polygon = new Polygone($poly[0]);
 		$polygones[] = $polygon;
 	}
@@ -102,8 +102,8 @@ $fusionPolygones = $polygones->union();
 
 
 		          <?php
-				  	echo $fusionPolygones->toJSON();
-				  ?>
+                        echo $fusionPolygones->toJSON();
+                    ?>
 
 		      ]
 		  },
@@ -134,8 +134,8 @@ $fusionPolygones = $polygones->union();
 		    "coordinates": [
 
 		          <?php
-		         	echo $polygones->toJSON();
-		          ?>
+                        echo $polygones->toJSON();
+                    ?>
 		        		      ]
 		  },
 		  "properties": {

@@ -12,7 +12,7 @@ class OperationsTest extends TestCase
 	public function providerMin()
 	{
 		return [
-			[[1 , null, 3, -2], -2],
+			[[1, null, 3, -2], -2],
 			[[1], 1],
 		];
 	}
@@ -31,7 +31,7 @@ class OperationsTest extends TestCase
 	public function providerMax()
 	{
 		return [
-			[[1 , null, 3, -2], 3],
+			[[1, null, 3, -2], 3],
 			[[1], 1],
 		];
 	}
@@ -60,7 +60,7 @@ class OperationsTest extends TestCase
 
 			[1, 0, 0, false],
 			[35, 0, 5, false],
-			[35, 5,	0, false],
+			[35, 5, 0, false],
 		];
 	}
 
@@ -91,7 +91,7 @@ class OperationsTest extends TestCase
 
 			[1, 0, 0, false],
 			[35, 0, 5, false],
-			[35, 5,	0, false],
+			[35, 5, 0, false],
 		];
 	}
 
@@ -103,7 +103,7 @@ class OperationsTest extends TestCase
      * @param $second
      * @param $result
      */
-	public function testIsStrictBetween($int, $first, $second, $result) {
-		self::assertEquals(isStrictBetween($int, $first, $second), $result);
-	}
+    public function testIsStrictBetween($int, $first, $second, $result) {
+        self::assertEquals(isStrictBetween($int, $first, $second), $result);
+    }
 }
