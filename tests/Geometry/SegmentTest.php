@@ -39,7 +39,7 @@ class SegmentTest extends TestCase
 
 		$json = $segment->toJSON();
 
-        self::assertInternalType('string', $json);
+        self::assertIsString($json);
         self::assertEquals([$pointACoordinates, $pointBCoordinates], json_decode($json));
 	}
 

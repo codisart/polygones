@@ -8,7 +8,7 @@ class CollectionTest extends TestCase
 	public function testCount() {
 		$instance = new Collection();
 
-		self::assertInternalType('int', count($instance));
+		self::assertIsInt(count($instance));
 	}
 
 	public function testAddWrongTypeToCollection() {
@@ -17,7 +17,7 @@ class CollectionTest extends TestCase
 		$instance[] = new \DateInterval('PT30S');
 		$instance[] = new \DateTime;
 
-		self::assertInternalType('int', count($instance));
+		self::assertIsInt(count($instance));
 		self::assertCount(1, $instance);
 	}
 
@@ -57,7 +57,7 @@ class CollectionTest extends TestCase
 		$instance[] = 'raspberry';
 
 		$element = $instance->shift();
-		self::assertInternalType('string', $element);
+		self::assertIsString($element);
 		self::assertEquals('orange', $element);
 
 		self::assertCount(3, $instance);

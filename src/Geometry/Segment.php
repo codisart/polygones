@@ -34,11 +34,6 @@ class Segment
         return $this->pointB;
     }
 
-    public function getSlope()
-    {
-        return $this->slope;
-    }
-
     public function getOrdinateIntercept()
     {
         return $this->ordinateIntercept;
@@ -55,8 +50,8 @@ class Segment
     public function isEqual(Segment $segment)
     {
         return (
-            $this->pointA->isEqual($segment->getPointA()) && $this->pointB->isEqual($segment->getPointB()))
-            || ($this->pointA->isEqual($segment->getPointB()) && $this->pointB->isEqual($segment->getPointA())
+            $this->pointA->isEqual($segment->pointA) && $this->pointB->isEqual($segment->pointB))
+            || ($this->pointA->isEqual($segment->pointB) && $this->pointB->isEqual($segment->pointA)
         );
     }
 
@@ -78,19 +73,19 @@ class Segment
 
     public function isOnSameLine(Segment $segment)
     {
-        if (is_null($this->getSlope())
-        &&  is_null($segment->getSlope())
-        &&  bccomp($this->getPointA()->getAbscissa(), $segment->getPointA()->getAbscissa(), 8) === 0
+        if (is_null($this->slope)
+        &&  is_null($segment->slope)
+        &&  bccomp($this->pointA->getAbscissa(), $segment->pointA->getAbscissa(), 8) === 0
         ) {
             return true;
         }
         if (
-            !is_null($this->getSlope())
-            && !is_null($segment->getSlope())
+            !is_null($this->slope)
+            && !is_null($segment->slope)
         ) {
             return
-                bccomp($this->getSlope(), $segment->getSlope(), 8) === 0
-                && bccomp($this->getOrdinateIntercept(), $segment->getOrdinateIntercept(), 8) === 0;
+                bccomp($this->slope, $segment->slope, 8) === 0
+                && bccomp($this->ordinateIntercept, $segment->ordinateIntercept, 8) === 0;
         }
         return false;
     }
@@ -101,20 +96,20 @@ class Segment
             return null;
         }
 
-        if (is_null($this->getSlope())) {
+        if (is_null($this->slope)) {
             return $segment->getPointOfIntersectForNullSlope($this);
-        } elseif (is_null($segment->getSlope())) {
+        } elseif (is_null($segment->slope)) {
             return $this->getPointOfIntersectForNullSlope($segment);
         }
 
-        $intersectAbscissa = ($segment->getOrdinateIntercept() - $this->getOrdinateIntercept()) / ($this->getSlope() - $segment->getSlope());
+        $intersectAbscissa = ($segment->ordinateIntercept - $this->ordinateIntercept) / ($this->slope - $segment->slope);
 
         if (
-            isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa())
-            && isBetween($intersectAbscissa, $segment->getPointA()->getAbscissa(), $segment->getPointB()->getAbscissa())
+            isBetween($intersectAbscissa, $this->pointA->getAbscissa(), $this->pointB->getAbscissa())
+            && isBetween($intersectAbscissa, $segment->pointA->getAbscissa(), $segment->pointB->getAbscissa())
             && !$this->hasCommonEndPoint($segment)
         ) {
-            $intersectOrdinate = ($intersectAbscissa * $this->getSlope()) + $this->getOrdinateIntercept();
+            $intersectOrdinate = ($intersectAbscissa * $this->slope) + $this->ordinateIntercept;
             return new Point([$intersectAbscissa, $intersectOrdinate]);
         }
         return null;
@@ -124,11 +119,11 @@ class Segment
     {
         $intersectAbscissa = $segment->getPointA()->getAbscissa();
 
-        if (isBetween($intersectAbscissa, $this->getPointA()->getAbscissa(), $this->getPointB()->getAbscissa())) {
-            $intersectOrdinate = ($intersectAbscissa * $this->getSlope()) + $this->getOrdinateIntercept();
+        if (isBetween($intersectAbscissa, $this->pointA->getAbscissa(), $this->pointB->getAbscissa())) {
+            $intersectOrdinate = ($intersectAbscissa * $this->slope) + $this->ordinateIntercept;
             $intersectPoint    = new Point([$intersectAbscissa, $intersectOrdinate]);
             if (
-                isBetween($intersectOrdinate, $segment->getPointA()->getOrdinate(), $segment->getPointB()->getOrdinate())
+                isBetween($intersectOrdinate, $segment->pointA->getOrdinate(), $segment->pointB->getOrdinate())
                 && !($segment->hasForEndPoint($intersectPoint)
                 && $this->hasForEndPoint($intersectPoint))
             ) {
@@ -140,11 +135,11 @@ class Segment
 
     public function containsPoint(Point $point)
     {
-        $segmentToCompare = new Segment($this->getPointA(), $point);
+        $segmentToCompare = new Segment($this->pointA, $point);
 
-        if (is_null($this->getSlope())) {
+        if (is_null($this->slope)) {
             return
-                is_null($segmentToCompare->getSlope())
+                is_null($segmentToCompare->slope)
                 && isStrictBetween($point->getOrdinate(), $this->pointA->getOrdinate(), $this->pointB->getOrdinate());
         }
 
@@ -155,11 +150,11 @@ class Segment
 
     public function getOrientationRelativeToPoint(Point $point)
     {
-        $determinant = determinant($this, new Segment($this->getPointA(), $point));
+        $determinant = determinant($this, new Segment($this->pointA, $point));
         return ($determinant > 0) - ($determinant < 0);
     }
 
-    public function isBetweenPolygons(Polygon $polygonChampion,Polygon $polygonContender)
+    public function isBetweenPolygons(Polygon $polygonChampion, Polygon $polygonContender)
     {
         return bccomp(
             $this->getOrientationRelativeToPoint($polygonChampion->getBarycenter()),
@@ -170,7 +165,7 @@ class Segment
 
     public function containsSegment(Segment $segment)
     {
-        return $this->containsPoint($segment->getPointA()) && $this->containsPoint($segment->getPointB());
+        return $this->containsPoint($segment->pointA) && $this->containsPoint($segment->pointB);
     }
 
     public function hasCommonEndPoint(Segment $segment)
@@ -181,8 +176,8 @@ class Segment
     private function splitByPoint(Point $point)
     {
         $newSegments   = new Collection();
-        $newSegments[] = new Segment($this->getPointA(), $point);
-        $newSegments[] = new Segment($point, $this->getPointB());
+        $newSegments[] = new Segment($this->pointA, $point);
+        $newSegments[] = new Segment($point, $this->pointB);
         return $newSegments;
     }
 
@@ -197,8 +192,8 @@ class Segment
             return null;
         }
 
-        $pointA = $segment->getPointA();
-        $pointB = $segment->getPointB();
+        $pointA = $segment->pointA;
+        $pointB = $segment->pointB;
 
         if ($this->containsSegment($segment)) {
             $newSegments = $this->splitByPoint($pointA);

@@ -64,17 +64,13 @@ class Polygon
             if ($segment->hasForEndPoint($point) || $segment->containsPoint($point)) {
                 return false;
             }
-            if ($segment->getPointA()->getOrdinate() <= $point->getOrdinate()) {
-                if ($segment->getPointB()->getOrdinate() > $point->getOrdinate()) {
-                    if ($this->isLeft($segment, $point) > 0) {
-                        ++$wn;
-                    }
+            if ($segment->getPointA()->isLower($point)) {
+                if ($segment->getPointB()->isStrictlyHigher($point) && $this->isLeft($segment, $point) > 0) {
+                    ++$wn;
                 }
             } else {
-                if ($segment->getPointB()->getOrdinate() <= $point->getOrdinate()) {
-                    if ($this->isLeft($segment, $point) < 0) {
-                        --$wn;
-                    }
+                if ($segment->getPointB()->isLower($point) && $this->isLeft($segment, $point) < 0) {
+                    --$wn;
                 }
             }
         }

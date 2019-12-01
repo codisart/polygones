@@ -114,11 +114,7 @@ class Collection implements \ArrayAccess, \Iterator, \Countable
 
     protected function setType($value)
     {
-        if (is_object($value)) {
-            return $this->type = get_class($value);
-        }
-
-        return $this->type = gettype($value);
+        $this->type = is_object($value) ? get_class($value) : gettype($value);
     }
 
     protected function checkType($value)
@@ -126,7 +122,6 @@ class Collection implements \ArrayAccess, \Iterator, \Countable
         if (is_object($value)) {
             return $this->type === get_class($value);
         }
-
         return $this->type === gettype($value);
     }
 

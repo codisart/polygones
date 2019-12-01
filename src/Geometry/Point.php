@@ -28,7 +28,17 @@ class Point
 
     public function isEqual($point)
     {
-        return bccomp($this->abscissa, $point->getAbscissa(), 10) == 0 && bccomp($this->ordinate, $point->getOrdinate(), 10) == 0;
+        return bccomp($this->abscissa, $point->abscissa, 10) == 0 && bccomp($this->ordinate, $point->ordinate, 10) == 0;
+    }
+
+    public function isStrictlyHigher($point) : bool
+    {
+        return $this->ordinate > $point->ordinate;
+    }
+
+    public function isLower($point) : bool
+    {
+        return $this->ordinate <= $point->ordinate;
     }
 
     public function toArray()
