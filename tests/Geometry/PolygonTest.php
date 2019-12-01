@@ -166,13 +166,20 @@ class PolygonTest extends TestCase
             ];
         }
 
-        self::assertEquals($expectedCoordinates, $json);
+        self::assertEquals($expectedCoordinates, $json, json_encode($json));
     }
 
     public function providerGetBarycenter()
     {
         return [
-            [[[0, 0], [0, 5], [5, 5], [5, 0], [0, 0]], [2.5, 2.5]],
+            [
+                [[0, 0], [0, 5], [5, 5], [5, 0], [0, 0]],
+                [2.5, 2.5]
+            ],
+            [
+                [[4,4],[2,2],[3,1],[4,4]],
+                [3, 2.3333333333333335]
+            ]
         ];
     }
 
@@ -284,6 +291,20 @@ class PolygonTest extends TestCase
                     [[0, 0], [0, 5], [1, 5], [4, 5], [5, 5], [5, 0], [0, 0]],
                 ],
             ],
+            [
+                [[1,1],[2,2],[3,1],[1,1]],
+                [[0,1],[2,2],[3,1],[0,1]],
+                [
+                    [[2,2],[3,1],[1,1],[0,1],[2,2]],
+                ],
+            ],
+            [
+                [[5,5],[2,2],[3,1],[5,5]],
+                [[4,4],[2,2],[3,1],[4,4]],
+                [
+                    [[5,5],[4,4],[2,2],[3,1],[5,5]],
+                ],
+            ],
         ];
     }
 
@@ -300,6 +321,6 @@ class PolygonTest extends TestCase
             $json[] = json_decode($polygon->toJSON());
         }
 
-        self::assertEquals($expectedPolygonsCoordinates, $json);
+        self::assertEquals($expectedPolygonsCoordinates, $json, json_encode($json));
     }
 }

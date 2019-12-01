@@ -102,13 +102,13 @@ class Polygon
             $ordinateBarycenter += $segment->getPointA()->getOrdinate();
         }
 
-        return new Point([$abscissaBarycenter / $total, $abscissaBarycenter / $total]);
+        return new Point([$abscissaBarycenter / $total, $ordinateBarycenter / $total]);
     }
 
     public function getAllSegmentsIntersectionWith($polygonContender)
     {
         $mySegments  = clone $this->segments;
-        $hisSegments = clone $polygonContender->getSegments();
+        $hisSegments = clone $polygonContender->segments;
 
         foreach ($mySegments as $myKey => $mySegment) {
             foreach ($hisSegments as $hisKey => $hisSegment) {

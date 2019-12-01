@@ -7,10 +7,16 @@ use function Math\isStrictBetween;
 
 class Segment
 {
+    /** Point */
     private $pointA;
+    
+    /** Point */
     private $pointB;
 
+    /** int */
     private $slope;
+
+    /** int */
     private $ordinateIntercept;
 
     public function __construct(Point $pointA, Point $pointB)
@@ -24,22 +30,17 @@ class Segment
         }
     }
 
-    public function getPointA()
+    public function getPointA() : Point
     {
         return $this->pointA;
     }
 
-    public function getPointB()
+    public function getPointB() : Point
     {
         return $this->pointB;
     }
 
-    public function getOrdinateIntercept()
-    {
-        return $this->ordinateIntercept;
-    }
-
-    public function getMiddlePoint()
+    public function getMiddlePoint() : Point
     {
         return new Point([
             ($this->pointA->getAbscissa() + $this->pointB->getAbscissa()) / 2,
@@ -47,19 +48,21 @@ class Segment
         ]);
     }
 
-    public function isEqual(Segment $segment)
+    public function isEqual(Segment $segment) : bool
     {
-        return (
-            $this->pointA->isEqual($segment->pointA) && $this->pointB->isEqual($segment->pointB))
-            || ($this->pointA->isEqual($segment->pointB) && $this->pointB->isEqual($segment->pointA)
-        );
+        return ($this->pointA->isEqual($segment->pointA) && $this->pointB->isEqual($segment->pointB))
+            || ($this->pointA->isEqual($segment->pointB) && $this->pointB->isEqual($segment->pointA))
+        ;
     }
 
-    public function hasForEndPoint(Point $point)
+    public function hasForEndPoint(Point $point) : bool
     {
         return $point->isEqual($this->pointA) || $point->isEqual($this->pointB);
     }
 
+    /**
+     * @return ?Point
+     */
     public function getOtherPoint(Point $point)
     {
         if ($point->isEqual($this->pointA)) {
@@ -71,25 +74,28 @@ class Segment
         return null;
     }
 
-    public function isOnSameLine(Segment $segment)
+    public function isOnSameLine(Segment $segment) : bool
     {
-        if (is_null($this->slope)
-        &&  is_null($segment->slope)
-        &&  bccomp($this->pointA->getAbscissa(), $segment->pointA->getAbscissa(), 8) === 0
+        if (
+            is_null($this->slope)
+         && is_null($segment->slope)
+         && bccomp($this->pointA->getAbscissa(), $segment->pointA->getAbscissa(), 8) === 0
         ) {
             return true;
         }
         if (
             !is_null($this->slope)
-            && !is_null($segment->slope)
+         && !is_null($segment->slope)
         ) {
-            return
-                bccomp($this->slope, $segment->slope, 8) === 0
+            return bccomp($this->slope, $segment->slope, 8) === 0
                 && bccomp($this->ordinateIntercept, $segment->ordinateIntercept, 8) === 0;
         }
         return false;
     }
 
+    /**
+     * @return ?Point
+     */
     public function getPointOfIntersect(Segment $segment)
     {
         if (determinant($this, $segment) == 0) {
@@ -115,6 +121,9 @@ class Segment
         return null;
     }
 
+    /**
+     * @return ?Point
+     */
     public function getPointOfIntersectForNullSlope(Segment $segment)
     {
         $intersectAbscissa = $segment->getPointA()->getAbscissa();
@@ -133,7 +142,7 @@ class Segment
         return null;
     }
 
-    public function containsPoint(Point $point)
+    public function containsPoint(Point $point) : bool
     {
         $segmentToCompare = new Segment($this->pointA, $point);
 
@@ -148,32 +157,30 @@ class Segment
             && isStrictBetween($point->getAbscissa(), $this->pointA->getAbscissa(), $this->pointB->getAbscissa());
     }
 
-    public function getOrientationRelativeToPoint(Point $point)
+    public function getOrientationRelativeToPoint(Point $point) : int
     {
         $determinant = determinant($this, new Segment($this->pointA, $point));
         return ($determinant > 0) - ($determinant < 0);
     }
 
-    public function isBetweenPolygons(Polygon $polygonChampion, Polygon $polygonContender)
+    public function isBetweenPolygons(Polygon $polygonChampion, Polygon $polygonContender) : bool
     {
-        return bccomp(
-            $this->getOrientationRelativeToPoint($polygonChampion->getBarycenter()),
-            - $this->getOrientationRelativeToPoint($polygonContender->getBarycenter()),
-            8
-        ) === 0;
+        return $this->getOrientationRelativeToPoint($polygonChampion->getBarycenter())
+           === -$this->getOrientationRelativeToPoint($polygonContender->getBarycenter())
+        ;
     }
 
-    public function containsSegment(Segment $segment)
+    public function containsSegment(Segment $segment) : bool
     {
         return $this->containsPoint($segment->pointA) && $this->containsPoint($segment->pointB);
     }
 
-    public function hasCommonEndPoint(Segment $segment)
+    public function hasCommonEndPoint(Segment $segment) : bool
     {
         return $segment->hasForEndPoint($this->pointA) || $segment->hasForEndPoint($this->pointB);
     }
 
-    private function splitByPoint(Point $point)
+    private function splitByPoint(Point $point) : Collection
     {
         $newSegments   = new Collection();
         $newSegments[] = new Segment($this->pointA, $point);
@@ -181,6 +188,9 @@ class Segment
         return $newSegments;
     }
 
+    /**
+     * @return ?Collection
+     */
     public function getPartitionsbySegment(Segment $segment)
     {
         if (!$this->isOnSameLine($segment) && !$this->hasCommonEndPoint($segment)) {
@@ -215,7 +225,7 @@ class Segment
         return null;
     }
 
-    public function toArray()
+    public function toArray() : array
     {
         return [
             $this->pointA->toArray(),
@@ -223,7 +233,7 @@ class Segment
         ];
     }
 
-    public function toJSON()
+    public function toJSON() : string
     {
         return json_encode($this->toArray());
     }
