@@ -26,16 +26,25 @@ class Point
         return $this->ordinate;
     }
 
+    /**
+     * @param Point $point
+     */
     public function isEqual($point)
     {
         return bccomp($this->abscissa, $point->abscissa, 10) == 0 && bccomp($this->ordinate, $point->ordinate, 10) == 0;
     }
 
+    /**
+     * @param Point $point
+     */
     public function isStrictlyHigher($point) : bool
     {
         return $this->ordinate > $point->ordinate;
     }
 
+    /**
+     * @param Point $point
+     */
     public function isLower($point) : bool
     {
         return $this->ordinate <= $point->ordinate;
