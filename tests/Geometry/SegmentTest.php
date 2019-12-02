@@ -277,8 +277,8 @@ class SegmentTest extends TestCase
 
         $point = new Point($pointCoordinates);
 
-		$orientation = $segment->getOrientationRelativeToPoint($point);
-		self::assertIsInt($orientation);
+        $orientation = $segment->getOrientationRelativeToPoint($point);
+        self::assertIsInt($orientation);
         self::assertEquals($expected, $orientation);
     }
 

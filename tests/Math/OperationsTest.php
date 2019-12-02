@@ -9,13 +9,13 @@ use PHPUnit\Framework\TestCase;
  */
 class OperationsTest extends TestCase
 {
-	public function providerMin()
-	{
-		return [
-			[[1, null, 3, -2], -2],
-			[[1], 1],
-		];
-	}
+    public function providerMin()
+    {
+        return [
+            [[1, null, 3, -2], -2],
+            [[1], 1],
+        ];
+    }
 
     /**
      * @dataProvider providerMin
@@ -23,18 +23,18 @@ class OperationsTest extends TestCase
      * @param $args
      * @param $expected
      */
-	public function testMin($args, $expected)
-	{
-		self::assertEquals($expected, min(...$args));
-	}
+    public function testMin($args, $expected)
+    {
+        self::assertEquals($expected, min(...$args));
+    }
 
-	public function providerMax()
-	{
-		return [
-			[[1, null, 3, -2], 3],
-			[[1], 1],
-		];
-	}
+    public function providerMax()
+    {
+        return [
+            [[1, null, 3, -2], 3],
+            [[1], 1],
+        ];
+    }
 
     /**
      * @dataProvider providerMax
@@ -42,58 +42,58 @@ class OperationsTest extends TestCase
      * @param $args
      * @param $expected
      */
-	public function testMax($args, $expected)
-	{
-		self::assertEquals($expected, max(...$args));
-	}
+    public function testMax($args, $expected)
+    {
+        self::assertEquals($expected, max(...$args));
+    }
 
-	public function betweenProvider()
-	{
-		return [
-			[0, 0, 0, true],
-			[2, 0, 5, true],
-			[2, 5, 0, true],
-			[0, 1, 0, true],
-			[1, 1, 0, true],
-			[0, 0, 1, true],
-			[1, 0, 1, true],
+    public function betweenProvider()
+    {
+        return [
+            [0, 0, 0, true],
+            [2, 0, 5, true],
+            [2, 5, 0, true],
+            [0, 1, 0, true],
+            [1, 1, 0, true],
+            [0, 0, 1, true],
+            [1, 0, 1, true],
 
-			[1, 0, 0, false],
-			[35, 0, 5, false],
-			[35, 5, 0, false],
-		];
-	}
+            [1, 0, 0, false],
+            [35, 0, 5, false],
+            [35, 5, 0, false],
+        ];
+    }
 
-	/**
-	 * @dataProvider betweenProvider
+    /**
+     * @dataProvider betweenProvider
      *
      * @param $int
      * @param $first
      * @param $second
      * @param $result
-	 */
-	public function testIsBetween($int, $first, $second, $result) {
-		self::assertEquals(isBetween($int, $first, $second), $result);
-	}
+     */
+    public function testIsBetween($int, $first, $second, $result) {
+        self::assertEquals(isBetween($int, $first, $second), $result);
+    }
 
-	public function strictBetweenProvider()
-	{
-		return [
-			[2, 0, 5, true],
-			[2, 5, 0, true],
+    public function strictBetweenProvider()
+    {
+        return [
+            [2, 0, 5, true],
+            [2, 5, 0, true],
 
-			[0, 0, 0, false],
+            [0, 0, 0, false],
 
-			[0, 1, 0, false],
-			[1, 1, 0, false],
-			[0, 0, 1, false],
-			[1, 0, 1, false],
+            [0, 1, 0, false],
+            [1, 1, 0, false],
+            [0, 0, 1, false],
+            [1, 0, 1, false],
 
-			[1, 0, 0, false],
-			[35, 0, 5, false],
-			[35, 5, 0, false],
-		];
-	}
+            [1, 0, 0, false],
+            [35, 0, 5, false],
+            [35, 5, 0, false],
+        ];
+    }
 
     /**
      * @dataProvider strictBetweenProvider
