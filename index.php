@@ -24,10 +24,10 @@ $polygones = new PolygoneCollection();
 
 $polyJson = json_decode($source);
 if (is_array($polyJson)) {
-	foreach ($polyJson as $poly) {
-		$polygon = new Polygone($poly[0]);
-		$polygones[] = $polygon;
-	}
+    foreach ($polyJson as $poly) {
+        $polygon = new Polygone($poly[0]);
+        $polygones[] = $polygon;
+    }
 }
 
 

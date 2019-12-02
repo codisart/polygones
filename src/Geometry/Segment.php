@@ -166,7 +166,7 @@ class Segment
     public function isBetweenPolygons(Polygon $polygonChampion, Polygon $polygonContender) : bool
     {
         return $this->getOrientationRelativeToPoint($polygonChampion->getBarycenter())
-           === -$this->getOrientationRelativeToPoint($polygonContender->getBarycenter())
+            === -$this->getOrientationRelativeToPoint($polygonContender->getBarycenter())
         ;
     }
 
