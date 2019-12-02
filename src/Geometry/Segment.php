@@ -7,16 +7,16 @@ use function Math\isStrictBetween;
 
 class Segment
 {
-    /** Point */
+    /** @var Point */
     private $pointA;
     
-    /** Point */
+    /** @var Point */
     private $pointB;
 
-    /** int */
+    /** @var int */
     private $slope;
 
-    /** int */
+    /** @var int */
     private $ordinateIntercept;
 
     public function __construct(Point $pointA, Point $pointB)
@@ -61,7 +61,7 @@ class Segment
     }
 
     /**
-     * @return ?Point
+     * @return Point|null
      */
     public function getOtherPoint(Point $point)
     {
@@ -94,7 +94,7 @@ class Segment
     }
 
     /**
-     * @return ?Point
+     * @return Point|null
      */
     public function getPointOfIntersect(Segment $segment)
     {
@@ -122,7 +122,7 @@ class Segment
     }
 
     /**
-     * @return ?Point
+     * @return Point|null
      */
     public function getPointOfIntersectForNullSlope(Segment $segment)
     {
@@ -189,7 +189,7 @@ class Segment
     }
 
     /**
-     * @return ?Collection
+     * @return Collection|null
      */
     public function getPartitionsbySegment(Segment $segment)
     {

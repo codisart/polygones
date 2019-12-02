@@ -3,8 +3,10 @@ namespace Collection;
 
 class Collection implements \ArrayAccess, \Iterator, \Countable
 {
+    /** @var array */
     protected $contenu = [];
 
+    /** @var string */
     protected $type;
 
     public function offsetSet($offset, $value)
@@ -123,6 +125,13 @@ class Collection implements \ArrayAccess, \Iterator, \Countable
             return $this->type === get_class($value);
         }
         return $this->type === gettype($value);
+    }
+
+    public function shouldBeTypeOf(string $type)
+    {
+        if($this->type !== $type) {
+            throw new \InvalidArgumentException('Argument is not a Collection of ' . $type);
+        }
     }
 
     public function getType()

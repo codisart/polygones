@@ -64,33 +64,47 @@ class Polygon
             if ($segment->hasForEndPoint($point) || $segment->containsPoint($point)) {
                 return false;
             }
-            if ($segment->getPointA()->isLower($point)) {
-                if ($segment->getPointB()->isStrictlyHigher($point) && $this->isLeft($segment, $point) > 0) {
-                    ++$wn;
-                }
-            } else {
-                if ($segment->getPointB()->isLower($point) && $this->isLeft($segment, $point) < 0) {
-                    --$wn;
-                }
-            }
+            $wn = $this->updateWn($segment, $point, $wn);
         }
 
         return $wn != 0;
     }
 
-    /**
-     * Calcul du determinant entre le vertex et le vertex formé du point d'origne du vertex et le point.
-     * @param  Segment $segment [description]
-     * @param  Point   $point  [description]
-     * @return boolean         [description]
-     */
-    private function isLeft(Segment $segment, Point $point)
-    {
-        $segmentSecond = new Segment($segment->getPointA(), $point);
-        return determinant($segment, $segmentSecond);
+    private function updateWn($segment, $point, $wn)
+    {        
+        if ($segment->getPointA()->isLower($point)) {
+            if ($segment->getPointB()->isStrictlyHigher($point) && $this->isLeft($segment, $point)) {
+                return ++$wn;
+            }
+            return $wn;
+        }
+        if ($segment->getPointB()->isLower($point) && $this->isRight($segment, $point)) {
+            return --$wn;
+        }
+        return $wn;
     }
 
-    public function getBarycenter()
+    /**
+     * Calcul du determinant entre un vecteur
+     * et le vecteur formé du point d'origne du premvier vecteur et un point particulier.
+     */
+    private function isLeft(Segment $segment, Point $point) : bool
+    {
+        $segmentSecond = new Segment($segment->getPointA(), $point);
+        return determinant($segment, $segmentSecond) > 0;
+    }
+
+    /**
+     * Calcul du determinant entre un vecteur
+     * et le vecteur formé du point d'origne du premvier vecteur et un point particulier.
+     */
+    private function isRight(Segment $segment, Point $point) : bool
+    {
+        $segmentSecond = new Segment($segment->getPointA(), $point);
+        return determinant($segment, $segmentSecond) < 0;
+    }
+
+    public function getBarycenter() : Point
     {
         $total              = 0;
         $abscissaBarycenter = 0;
@@ -153,55 +167,9 @@ class Polygon
         return $resultSegments;
     }
 
-    public static function buildFromSegments(Collection $segments)
-    {
-        if ($segments->getType() !== Segment::class) {
-            throw new \Exception('Argument is not a Collection of Segment');
-        }
-
-        $segments->rewind();
-        $point        = $segments->current()->getPointA();
-        $pointOrigine = $point;
-
-        $points       = [];
-        $points[]     = $point;
-        $newPolygones = new Collection;
-
-        while ($segments->count()) {
-            $segment = $segments->current();
-            $key     = $segments->key();
-
-            $segments->next();
-            if ($segment->hasForEndPoint($point)) {
-                $point = $segment->getOtherPoint($point);
-                unset($segments[$key]);
-
-                if ($pointOrigine->isEqual($point)) {
-                    $ptListe = '';
-                    foreach ($points as $pt) {
-                        $ptListe .= $pt->toJSON();
-                        $ptListe .= ',';
-                    }
-                    $ptListe .= $pointOrigine->toJSON();
-                    $newPolygones[] = new Polygon(json_decode('['.$ptListe.']'));
-
-                    if ($segments->count()) {
-                        $newPolygones->append(
-                            self::buildFromSegments($segments)
-                        );
-                        $segments = new Collection;
-                    }
-                }
-                $points[] = $point;
-                $segments->rewind();
-            }
-        }
-        return $newPolygones;
-    }
-
     public function union($polygonContender)
     {
-        return self::buildFromSegments(
+        return PolygonFactory::buildFromSegments(
             $this->getAllSegmentsIntersectionWith($polygonContender)
         );
     }

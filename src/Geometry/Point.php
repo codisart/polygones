@@ -4,10 +4,16 @@ namespace Geometry;
 
 class Point
 {
-    // axe X
+    /**
+     * represente l'axe X
+     * @var float
+     */
     private $abscissa;
 
-    // axe Y
+    /**
+     * represente l'axe Y
+     * @var float
+     */
     private $ordinate;
 
     public function __construct(array $coordonnees)
@@ -16,11 +22,17 @@ class Point
         $this->ordinate = $coordonnees[1];
     }
 
+    /**
+     * @return float
+     */
     public function getAbscissa()
     {
         return $this->abscissa;
     }
 
+    /**
+     * @return float
+     */
     public function getOrdinate()
     {
         return $this->ordinate;
@@ -29,9 +41,11 @@ class Point
     /**
      * @param Point $point
      */
-    public function isEqual($point)
+    public function isEqual($point) : bool
     {
-        return bccomp($this->abscissa, $point->abscissa, 10) == 0 && bccomp($this->ordinate, $point->ordinate, 10) == 0;
+        return bccomp($this->abscissa, $point->abscissa, 10) == 0
+            && bccomp($this->ordinate, $point->ordinate, 10) == 0
+        ;
     }
 
     /**
