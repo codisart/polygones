@@ -5,8 +5,20 @@ php:
   - '7.2'
   - '7.3'
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=3cd58a9897a0169ea4ac06d2b23666e7bf0d034fd99d76744697b0534595f4be
+
 install:
   - composer install
 
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
-  - vendor/bin/phpunit --bootstrap vendor/autoload.php tests -c phpunit.xml
+  - vendor/bin/phpunit --bootstrap vendor/autoload.php tests -c phpunit.xml --coverage-clover build/logs/clover.xml
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
