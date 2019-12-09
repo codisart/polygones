@@ -9,7 +9,16 @@ abstract class Collection implements \ArrayAccess, \Iterator, \Countable
     /** @var string */
     protected $type;
 
-    public abstract function offsetSet($offset, $value);
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $this->contenu[] = $value;
+            return true;
+        }
+
+        $this->contenu[$offset] = $value;
+        return true;
+    }
 
     public function offsetExists($offset)
     {
@@ -60,7 +69,18 @@ abstract class Collection implements \ArrayAccess, \Iterator, \Countable
         return count($this->contenu);
     }
 
-    abstract public function append($collection);
+    public function append($collection)
+    {
+        foreach ($collection as $key => $value) {
+            $newKey = $key;
+            if (isset($this[$key])) {
+                $newKey = $this->count();
+            }
+            $this[$newKey] = $value;
+        }
+
+        return $this;
+    }
 
     public function insert($index, $newValues)
     {

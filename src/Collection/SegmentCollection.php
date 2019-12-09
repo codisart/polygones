@@ -12,13 +12,7 @@ class SegmentCollection extends Collection
 
     private function offsetSetSegment($offset, Segment $value)
     {
-        if (is_null($offset)) {
-            $this->contenu[] = $value;
-            return true;
-        }
-
-        $this->contenu[$offset] = $value;
-        return true;
+        return parent::offsetSet($offset, $value);
     }
     
     public function append($collection)
@@ -28,14 +22,6 @@ class SegmentCollection extends Collection
 
     private function appendSegment(SegmentCollection $collection)
     {
-        foreach ($collection as $key => $value) {
-            $newKey = $key;
-            if (isset($this[$key])) {
-                $newKey = $this->count();
-            }
-            $this[$newKey] = $value;
-        }
-
-        return $this;
+        return parent::append($collection);
     }
 }
