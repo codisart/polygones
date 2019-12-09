@@ -2,13 +2,14 @@
 namespace Geometry;
 
 use Collection\Collection;
+use Collection\SegmentCollection;
 use function Math\max;
 use function Math\min;
 
 class Polygon
 {
     /**
-     * @var Collection
+     * @var SegmentCollection
      */
     private $segments;
 
@@ -23,12 +24,12 @@ class Polygon
             throw new \Exception('Not a polygon');
         }
 
-        $this->segments = new Collection();
+        $this->segments = new SegmentCollection();
 
         for ($i = 0; $i < $lengthListe - 1; ++$i) {
             $pointA           = new Point(current($pointsListe));
             $pointB           = new Point(next($pointsListe));
-            $this->segments[] = new Segment($pointA, $pointB);
+            $this->segments[] = Segment::create($pointA, $pointB);
             unset($pointA, $pointB);
         }
     }
@@ -90,7 +91,7 @@ class Polygon
      */
     private function isLeft(Segment $segment, Point $point) : bool
     {
-        $segmentSecond = new Segment($segment->getPointA(), $point);
+        $segmentSecond = Segment::create($segment->getPointA(), $point);
         return determinant($segment, $segmentSecond) > 0;
     }
 
@@ -100,7 +101,7 @@ class Polygon
      */
     private function isRight(Segment $segment, Point $point) : bool
     {
-        $segmentSecond = new Segment($segment->getPointA(), $point);
+        $segmentSecond = Segment::create($segment->getPointA(), $point);
         return determinant($segment, $segmentSecond) < 0;
     }
 
@@ -148,12 +149,12 @@ class Polygon
             }
         }
 
-        $allSegments = (new Collection())
+        $allSegments = (new SegmentCollection())
             ->append($mySegments)
             ->append($hisSegments)
         ;
 
-        $resultSegments = new Collection();
+        $resultSegments = new SegmentCollection();
 
         foreach ($allSegments as $segment) {
             $middlePoint = $segment->getMiddlePoint();

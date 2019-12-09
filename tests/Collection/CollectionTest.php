@@ -5,25 +5,44 @@ use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
 {
-    public function testCount() {
-        $instance = new Collection();
-
-        self::assertIsInt(count($instance));
+    private function setupCollection()
+    {
+        return new class() extends Collection {
+            public function offsetSet($offset, $value)
+            {
+                if (is_null($offset)) {
+                    $this->contenu[] = $value;
+                    return true;
+                }
+        
+                $this->contenu[$offset] = $value;
+                return true;
+            }
+    
+            public function append($collection)
+            {
+                foreach ($collection as $key => $value) {
+                    $newKey = $key;
+                    if (isset($this[$key])) {
+                        $newKey = $this->count();
+                    }
+                    $this[$newKey] = $value;
+                }
+        
+                return $this;
+            }
+        };
     }
 
-    public function testAddWrongTypeToCollection() {
-        $instance = new Collection();
-
-        $instance[] = new \DateInterval('PT30S');
-        $instance[] = new \DateTime;
+    public function testCount() {
+        $instance = $this->setupCollection();
 
         self::assertIsInt(count($instance));
-        self::assertCount(1, $instance);
     }
 
     public function testElementWithIndexToCollection()
     {
-        $instance = new Collection();
+        $instance = $this->setupCollection();
 
         $instance[] = new \DateTime;
         $instance[2] = new \DateTime;
@@ -38,7 +57,7 @@ class CollectionTest extends TestCase
 
     public function providerArrayAccess()
     {
-        $instance = new Collection();
+        $instance = $this->setupCollection();
 
         $instance[] = 'orange';
         $instance[] = 'banana';
@@ -68,7 +87,7 @@ class CollectionTest extends TestCase
      */
     public function testAppend(Collection $instance)
     {
-        $elementsToAdd = new Collection();
+        $elementsToAdd = $this->setupCollection();
         $elementsToAdd[] = 'apple';
         $elementsToAdd[] = 'raspberry';
 
@@ -79,25 +98,8 @@ class CollectionTest extends TestCase
     /**
      * @dataProvider providerArrayAccess
      */
-    public function testWrongTypeCollectionToAppend(Collection $instance) {
-        $elementsToAdd = new Collection();
-        $elementsToAdd[] = new \DateTime;
-        $elementsToAdd[] = new \DateTime;
-
-        self::assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
-        self::assertCount(2, $instance);
-
-        $elementsToAdd = new Collection();
-
-        self::assertInstanceOf(Collection::class, $instance->append($elementsToAdd));
-        self::assertCount(2, $instance);
-    }
-
-    /**
-     * @dataProvider providerArrayAccess
-     */
     public function testInsert(Collection $instance) {
-        $elementsToAdd = new Collection();
+        $elementsToAdd = $this->setupCollection();
         $elementsToAdd[] = 'apple';
         $elementsToAdd[] = 'raspberry';
 

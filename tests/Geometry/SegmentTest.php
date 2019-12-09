@@ -22,7 +22,7 @@ class SegmentTest extends TestCase
         $pointA = new Point($pointACoordinates);
         $pointB = new Point($pointBCoordinates);
 
-        $segment = new Segment($pointA, $pointB);
+        $segment = Segment::create($pointA, $pointB);
 
         self::assertEquals($segment->getPointA(), $pointA);
         self::assertEquals($segment->getPointB(), $pointB);
@@ -35,7 +35,7 @@ class SegmentTest extends TestCase
         $pointA = new Point($pointACoordinates);
         $pointB = new Point($pointBCoordinates);
 
-        $segment = new Segment($pointA, $pointB);
+        $segment = Segment::create($pointA, $pointB);
 
         $json = $segment->toJSON();
 
@@ -57,12 +57,12 @@ class SegmentTest extends TestCase
      * @dataProvider isEqualProvider
      */
     public function testIsEqual($segmentCoordinates, $otherSegmentCoordinates, $expected) {
-        $segment = new Segment(
+        $segment = Segment::create(
             new Point($segmentCoordinates[0]),
             new Point($segmentCoordinates[1])
         );
 
-        $otherSegment = new Segment(
+        $otherSegment = Segment::create(
             new Point($otherSegmentCoordinates[0]),
             new Point($otherSegmentCoordinates[1])
         );
@@ -84,7 +84,7 @@ class SegmentTest extends TestCase
      * @dataProvider providerHasForEndPoint
      */
     public function testHasForEndPoint($segmentCoordinates, $pointCoordinates, $expected) {
-        $segment = new Segment(
+        $segment = Segment::create(
             new Point($segmentCoordinates[0]),
             new Point($segmentCoordinates[1])
         );
@@ -108,7 +108,7 @@ class SegmentTest extends TestCase
      * @dataProvider getOtherPointProvider
      */
     public function testGetOtherPoint($segmentCoordinates, $pointCoordinates, $expected) {
-        $segment = new Segment(
+        $segment = Segment::create(
             new Point($segmentCoordinates[0]),
             new Point($segmentCoordinates[1])
         );
@@ -140,12 +140,12 @@ class SegmentTest extends TestCase
      * @dataProvider isOnSameLineProvider
      */
     public function testIsOnSameLine($segmentCoordinates, $otherSegmentCoordinates, $expected) {
-        $segment = new Segment(
+        $segment = Segment::create(
             new Point($segmentCoordinates[0]),
             new Point($segmentCoordinates[1])
         );
 
-        $otherSegment = new Segment(
+        $otherSegment = Segment::create(
             new Point($otherSegmentCoordinates[0]),
             new Point($otherSegmentCoordinates[1])
         );
@@ -179,12 +179,12 @@ class SegmentTest extends TestCase
      * @dataProvider getPointOfIntersectProvider
      */
     public function testGetPointOfIntersect($segmentCoordinates, $otherSegmentCoordinates, $expected) {
-        $segment = new Segment(
+        $segment = Segment::create(
             new Point($segmentCoordinates[0]),
             new Point($segmentCoordinates[1])
         );
 
-        $otherSegment = new Segment(
+        $otherSegment = Segment::create(
             new Point($otherSegmentCoordinates[0]),
             new Point($otherSegmentCoordinates[1])
         );
@@ -208,7 +208,7 @@ class SegmentTest extends TestCase
      * @dataProvider providerGetMiddlePoint
      */
     public function testGetMiddlePoint($segmentCoordinates, $middlePointCoordinates) {
-        $segment = new Segment(
+        $segment = Segment::create(
             new Point($segmentCoordinates[0]),
             new Point($segmentCoordinates[1])
         );
@@ -238,7 +238,7 @@ class SegmentTest extends TestCase
      * @dataProvider providerContainsPoint
      */
     public function testContainsPoint($segmentCoordinates, $pointCoordinates, $expected) {
-        $segment = new Segment(
+        $segment = Segment::create(
             new Point($segmentCoordinates[0]),
             new Point($segmentCoordinates[1])
         );
@@ -270,7 +270,7 @@ class SegmentTest extends TestCase
      */
     public function testGetOrientationRelativeToPoint($segmentCoordinates, $pointCoordinates, $expected)
     {
-        $segment = new Segment(
+        $segment = Segment::create(
             new Point($segmentCoordinates[0]),
             new Point($segmentCoordinates[1])
         );
@@ -293,7 +293,7 @@ class SegmentTest extends TestCase
             [
                 [[1, 1], [4, 5]],
                 [[0, 0], [2, 2]],
-                null
+                null,
             ],
             [
                 [[0, 0], [2, 2]],
@@ -303,7 +303,7 @@ class SegmentTest extends TestCase
             [
                 [[0, 0], [2, 2]],
                 [[1, 0], [2, 2]],
-                null
+                null,
             ],
 
             // same line
@@ -335,7 +335,7 @@ class SegmentTest extends TestCase
             [
                 [[2, 2], [5, 5]],
                 [[6, 6], [8, 8]],
-                null
+                null,
             ],
         ];
     }
@@ -345,12 +345,12 @@ class SegmentTest extends TestCase
      */
     public function testGetPartitionsbySegment($segmentACoordinates, $segmentBCoordinates, $expected)
     {
-        $segmentA = new Segment(
+        $segmentA = Segment::create(
             new Point($segmentACoordinates[0]),
             new Point($segmentACoordinates[1])
         );
 
-        $segmentB = new Segment(
+        $segmentB = Segment::create(
             new Point($segmentBCoordinates[0]),
             new Point($segmentBCoordinates[1])
         );

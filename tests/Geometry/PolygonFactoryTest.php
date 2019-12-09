@@ -2,7 +2,8 @@
 
 namespace Geometry;
 
-use Collection\Collection;
+use Collection\PolygonCollection;
+use Collection\SegmentCollection;
 use PHPUnit\Framework\TestCase;
 
 class PolygonFactoryTest extends TestCase
@@ -55,11 +56,9 @@ class PolygonFactoryTest extends TestCase
 
     public function testExceptionBuildFromSegments()
     {
-        $collection = new Collection;
+        $collection = new PolygonCollection;
 
-        $collection[] = new Point([1, 1]);
-
-        $this->expectException(\Exception::class);
+        $this->expectException('TypeError');
         PolygonFactory::buildFromSegments($collection);
     }
 
@@ -68,9 +67,9 @@ class PolygonFactoryTest extends TestCase
      */
     public function testBuildFromSegments($segmentsCoordinate, $expectedPolygon)
     {
-        $segments = new Collection;
+        $segments = new SegmentCollection;
         foreach ($segmentsCoordinate as $key => $segmentCoordinate) {
-            $segments[] = new Segment(
+            $segments[] = Segment::create(
                 new Point($segmentCoordinate[0]),
                 new Point($segmentCoordinate[1])
             );

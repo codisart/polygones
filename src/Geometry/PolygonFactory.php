@@ -2,23 +2,22 @@
 
 namespace Geometry;
 
-use Collection\Collection;
+use Collection\SegmentCollection;
+use Collection\PolygonCollection;
 use function Math\max;
 use function Math\min;
 
 class PolygonFactory 
 {
-    public static function buildFromSegments(Collection $segments) : Collection
+    public static function buildFromSegments(SegmentCollection $segments) : PolygonCollection
     {
-        $segments->shouldBeTypeOf(Segment::class);
-
         $segments->rewind();
         $point        = $segments->current()->getPointA();
         $pointOrigine = $point;
 
         $points       = [];
         $points[]     = $point;
-        $newPolygones = new Collection;
+        $newPolygones = new PolygonCollection;
 
         while ($segments->count()) {
             $segment = $segments->current();
@@ -36,7 +35,7 @@ class PolygonFactory
                         $newPolygones->append(
                             self::buildFromSegments($segments)
                         );
-                        $segments = new Collection;
+                        $segments = new SegmentCollection;
                     }
                 }
                 $points[] = $point;

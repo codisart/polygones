@@ -1,7 +1,7 @@
 <?php
 namespace Collection;
 
-class Collection implements \ArrayAccess, \Iterator, \Countable
+abstract class Collection implements \ArrayAccess, \Iterator, \Countable
 {
     /** @var array */
     protected $contenu = [];
@@ -9,24 +9,7 @@ class Collection implements \ArrayAccess, \Iterator, \Countable
     /** @var string */
     protected $type;
 
-    public function offsetSet($offset, $value)
-    {
-        if (empty($this->contenu)) {
-            $this->setType($value);
-        }
-
-        if (!empty($this->contenu) && !$this->checkType($value)) {
-            return false;
-        }
-
-        if (is_null($offset)) {
-            $this->contenu[] = $value;
-            return true;
-        }
-
-        $this->contenu[$offset] = $value;
-        return true;
-    }
+    public abstract function offsetSet($offset, $value);
 
     public function offsetExists($offset)
     {
@@ -77,22 +60,7 @@ class Collection implements \ArrayAccess, \Iterator, \Countable
         return count($this->contenu);
     }
 
-    public function append($collection)
-    {
-        if (!(isset($collection) && is_object($collection) && get_class($collection) === get_class($this) && $collection->count() > 0)) {
-            return $this;
-        }
-
-        foreach ($collection as $key => $value) {
-            $newKey = $key;
-            if (isset($this[$key])) {
-                $newKey = $this->count();
-            }
-            $this[$newKey] = $value;
-        }
-
-        return $this;
-    }
+    abstract public function append($collection);
 
     public function insert($index, $newValues)
     {
@@ -112,30 +80,5 @@ class Collection implements \ArrayAccess, \Iterator, \Countable
     {
         array_splice($this->contenu, $index, count($this->contenu), array_slice($this->contenu, $index + 1));
         return $this;
-    }
-
-    protected function setType($value)
-    {
-        $this->type = is_object($value) ? get_class($value) : gettype($value);
-    }
-
-    protected function checkType($value)
-    {
-        if (is_object($value)) {
-            return $this->type === get_class($value);
-        }
-        return $this->type === gettype($value);
-    }
-
-    public function shouldBeTypeOf(string $type)
-    {
-        if($this->type !== $type) {
-            throw new \InvalidArgumentException('Argument is not a Collection of ' . $type);
-        }
-    }
-
-    public function getType()
-    {
-        return $this->type;
     }
 }

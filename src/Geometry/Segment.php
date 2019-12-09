@@ -1,33 +1,32 @@
 <?php
 namespace Geometry;
 
-use Collection\Collection;
+use Collection\SegmentCollection;
 use function Math\isBetween;
 use function Math\isStrictBetween;
 
 class Segment
 {
     /** @var Point */
-    private $pointA;
+    protected $pointA;
     
     /** @var Point */
-    private $pointB;
+    protected $pointB;
 
     /** @var int */
-    private $slope;
+    protected $slope;
 
     /** @var int */
-    private $ordinateIntercept;
+    protected $ordinateIntercept;
 
-    public function __construct(Point $pointA, Point $pointB)
+    private function __construct(Point $pointA, Point $pointB)
     {
         $this->pointA = $pointA;
         $this->pointB = $pointB;
 
-        if ($this->pointA->getAbscissa() - $this->pointB->getAbscissa() !== 0) {
-            $this->slope             = ($this->pointB->getOrdinate() - $this->pointA->getOrdinate()) / ($this->pointB->getAbscissa() - $this->pointA->getAbscissa());
-            $this->ordinateIntercept = $this->pointA->getOrdinate() - ($this->pointA->getAbscissa() * $this->slope);
-        }
+        $this->slope = ($pointB->getOrdinate() - $pointA->getOrdinate()) / ($pointB->getAbscissa() - $pointA->getAbscissa());
+        
+        $this->ordinateIntercept = $pointA->getOrdinate() - ($pointA->getAbscissa() * $this->slope);
     }
 
     public function getPointA() : Point
@@ -76,90 +75,21 @@ class Segment
 
     public function isOnSameLine(Segment $segment) : bool
     {
-        if (
-            is_null($this->slope)
-         && is_null($segment->slope)
-         && bccomp($this->pointA->getAbscissa(), $segment->pointA->getAbscissa(), 8) === 0
-        ) {
-            return true;
-        }
-        if (
-            !is_null($this->slope)
-         && !is_null($segment->slope)
-        ) {
-            return bccomp($this->slope, $segment->slope, 8) === 0
-                && bccomp($this->ordinateIntercept, $segment->ordinateIntercept, 8) === 0;
-        }
-        return false;
-    }
-
-    /**
-     * @return Point|null
-     */
-    public function getPointOfIntersect(Segment $segment)
-    {
-        if (determinant($this, $segment) == 0) {
-            return null;
-        }
-
-        if (is_null($this->slope)) {
-            return $segment->getPointOfIntersectForNullSlope($this);
-        } elseif (is_null($segment->slope)) {
-            return $this->getPointOfIntersectForNullSlope($segment);
-        }
-
-        $intersectAbscissa = ($segment->ordinateIntercept - $this->ordinateIntercept) / ($this->slope - $segment->slope);
-
-        if (
-            isBetween($intersectAbscissa, $this->pointA->getAbscissa(), $this->pointB->getAbscissa())
-            && isBetween($intersectAbscissa, $segment->pointA->getAbscissa(), $segment->pointB->getAbscissa())
-            && !$this->hasCommonEndPoint($segment)
-        ) {
-            $intersectOrdinate = ($intersectAbscissa * $this->slope) + $this->ordinateIntercept;
-            return new Point([$intersectAbscissa, $intersectOrdinate]);
-        }
-        return null;
-    }
-
-    /**
-     * @return Point|null
-     */
-    public function getPointOfIntersectForNullSlope(Segment $segment)
-    {
-        $intersectAbscissa = $segment->getPointA()->getAbscissa();
-
-        if (isBetween($intersectAbscissa, $this->pointA->getAbscissa(), $this->pointB->getAbscissa())) {
-            $intersectOrdinate = ($intersectAbscissa * $this->slope) + $this->ordinateIntercept;
-            $intersectPoint    = new Point([$intersectAbscissa, $intersectOrdinate]);
-            if (
-                isBetween($intersectOrdinate, $segment->pointA->getOrdinate(), $segment->pointB->getOrdinate())
-                && !($segment->hasForEndPoint($intersectPoint)
-                && $this->hasForEndPoint($intersectPoint))
-            ) {
-                return $intersectPoint;
-            }
-        }
-        return null;
+        return bccomp($this->slope, $segment->slope, 8) === 0
+            && bccomp($this->ordinateIntercept, $segment->ordinateIntercept, 8) === 0;
     }
 
     public function containsPoint(Point $point) : bool
     {
-        $segmentToCompare = new Segment($this->pointA, $point);
+        $segmentToCompare = self::create($this->pointA, $point);
 
-        if (is_null($this->slope)) {
-            return
-                is_null($segmentToCompare->slope)
-                && isStrictBetween($point->getOrdinate(), $this->pointA->getOrdinate(), $this->pointB->getOrdinate());
-        }
-
-        return
-            $this->isOnSameLine($segmentToCompare)
+        return $this->isOnSameLine($segmentToCompare)
             && isStrictBetween($point->getAbscissa(), $this->pointA->getAbscissa(), $this->pointB->getAbscissa());
     }
 
     public function getOrientationRelativeToPoint(Point $point) : int
     {
-        $determinant = determinant($this, new Segment($this->pointA, $point));
+        $determinant = determinant($this, self::create($this->pointA, $point));
         return ($determinant > 0) - ($determinant < 0);
     }
 
@@ -180,16 +110,16 @@ class Segment
         return $segment->hasForEndPoint($this->pointA) || $segment->hasForEndPoint($this->pointB);
     }
 
-    private function splitByPoint(Point $point) : Collection
+    private function splitByPoint(Point $point) : SegmentCollection
     {
-        $newSegments   = new Collection();
-        $newSegments[] = new Segment($this->pointA, $point);
-        $newSegments[] = new Segment($point, $this->pointB);
+        $newSegments   = new SegmentCollection();
+        $newSegments[] = self::create($this->pointA, $point);
+        $newSegments[] = self::create($point, $this->pointB);
         return $newSegments;
     }
 
     /**
-     * @return Collection|null
+     * @return SegmentCollection|null
      */
     public function getPartitionsbySegment(Segment $segment)
     {
@@ -225,6 +155,55 @@ class Segment
         return null;
     }
 
+    /**
+     * @return Point|null
+     */
+    public function getPointOfIntersect(Segment $segment)
+    {
+        if (determinant($this, $segment) == 0) {
+            return null;
+        }
+
+        if (is_null($segment->slope)) {
+            return $this->getPointOfIntersectForNullSlope($segment);
+        }
+
+        if ($this->hasCommonEndPoint($segment)) {
+            return null;
+        }
+
+        $intersectAbscissa = ($segment->ordinateIntercept - $this->ordinateIntercept) / ($this->slope - $segment->slope);
+        if (isBetween($intersectAbscissa, $this->pointA->getAbscissa(), $this->pointB->getAbscissa())
+         && isBetween($intersectAbscissa, $segment->pointA->getAbscissa(), $segment->pointB->getAbscissa())
+        ) {
+            $intersectOrdinate = ($intersectAbscissa * $this->slope) + $this->ordinateIntercept;
+            return new Point([$intersectAbscissa, $intersectOrdinate]);
+        }
+        return null;
+    }
+
+    /**
+     * @return Point|null
+     */
+    public function getPointOfIntersectForNullSlope(Segment $segment)
+    {
+        $intersectAbscissa = $segment->getPointA()->getAbscissa();
+
+        if (!isBetween($intersectAbscissa, $this->pointA->getAbscissa(), $this->pointB->getAbscissa())) {
+            return null;
+        }
+
+        $intersectOrdinate = ($intersectAbscissa * $this->slope) + $this->ordinateIntercept;
+        $intersectPoint    = new Point([$intersectAbscissa, $intersectOrdinate]);
+
+        if (isBetween($intersectOrdinate, $segment->pointA->getOrdinate(), $segment->pointB->getOrdinate())
+         && !($segment->hasForEndPoint($intersectPoint) && $this->hasForEndPoint($intersectPoint))
+        ) {
+            return $intersectPoint;
+        }
+        return null;
+    }
+
     public function toArray() : array
     {
         return [
@@ -236,5 +215,18 @@ class Segment
     public function toJSON() : string
     {
         return json_encode($this->toArray());
+    }
+
+    protected static function hasSameAbscissa(Point $pointA, Point $pointB)
+    {
+        return $pointA->getAbscissa() - $pointB->getAbscissa() === 0;
+    }
+
+    public static function create(Point $pointA, Point $pointB)
+    {
+        if (self::hasSameAbscissa($pointA, $pointB)) {
+            return new VerticalSegment($pointA, $pointB);
+        }
+        return new self($pointA, $pointB);
     }
 }

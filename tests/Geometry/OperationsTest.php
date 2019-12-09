@@ -13,8 +13,8 @@ class OperationsTest extends TestCase
     {
         return [
             [
-                new Segment(new Point([0, 0]), new Point([2, 2])),
-                new Segment(new Point([0, 2]), new Point([2, 0])),
+                Segment::create(new Point([0, 0]), new Point([2, 2])),
+                Segment::create(new Point([0, 2]), new Point([2, 0])),
                 -8
             ],
         ];
