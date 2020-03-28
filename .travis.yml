@@ -1,13 +1,21 @@
 language: php
 
-php:
-  - '7.1'
-  - '7.2'
-  - '7.3'
+matrix:
+  include:
+    - php: 7.2
+    - php: 7.3
+    - php: 7.4
+    - php: nightly
+  allow_failures:
+    - php: nightly
+  fast_finish: true
 
 env:
   global:
     - CC_TEST_REPORTER_ID=3cd58a9897a0169ea4ac06d2b23666e7bf0d034fd99d76744697b0534595f4be
+
+os:
+  - linux
 
 install:
   - composer install
