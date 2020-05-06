@@ -3,3 +3,5 @@ logs/error.log
 vendor/
 coverage/
 .php_cs.cache
+
+composer.lock
