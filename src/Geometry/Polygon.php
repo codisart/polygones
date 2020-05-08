@@ -1,4 +1,5 @@
 <?php
+
 namespace Geometry;
 
 use Collection\Collection;
@@ -120,45 +121,50 @@ class Polygon
         return new Point([$abscissaBarycenter / $total, $ordinateBarycenter / $total]);
     }
 
-    public function getAllSegmentsIntersectionWith($polygonContender)
+    public function getAllSegmentsIntersectionWith(Polygon $that)
     {
-        $mySegments  = clone $this->segments;
-        $hisSegments = clone $polygonContender->segments;
+        $thisSegments = clone $this->segments;
+        $thatSegments = clone $that->segments;
 
-        foreach ($mySegments as $myKey => $mySegment) {
-            foreach ($hisSegments as $hisKey => $hisSegment) {
-                $newSegments = $mySegment->getPartitionsbySegment($hisSegment);
+        foreach ($thisSegments as $thisKey => $thisSegment) {
+            foreach ($thatSegments as $thatKey => $thatSegment) {
+                $newSegments = $thisSegment->partitionedBy($thatSegment);
                 if ($newSegments) {
-                    $mySegments->insert($myKey, $newSegments);
-                    $mySegment = $newSegments[0];
+                    $thisSegments->insert($thisKey, $newSegments);
+                    $thisSegment = $newSegments[0];
                 }
 
-                $newSegments = $hisSegment->getPartitionsbySegment($mySegment);
+                $newSegments = $thatSegment->partitionedBy($thisSegment);
                 if ($newSegments) {
-                    $hisSegments->insert($hisKey, $newSegments);
-                    $hisSegment = $newSegments[0];
+                    $thatSegments->insert($thatKey, $newSegments);
+                    $thatSegment = $newSegments[0];
                 }
 
-                if ($mySegment->isEqual($hisSegment)) {
-                    $hisSegments->delete($hisKey);
-                    if ($mySegment->isBetweenPolygons($this, $polygonContender)) {
-                        $mySegments->delete($myKey);
+                if ($thisSegment->isEqual($thatSegment)) {
+                    $thatSegments->delete($thatKey);
+                    if ($thisSegment->isBetweenPolygons($this, $that)) {
+                        $thisSegments->delete($thisKey);
                         break;
                     }
                 }
             }
         }
 
+        return $this->reduceSegments($thisSegments, $that, $thatSegments);
+    }
+
+    private function reduceSegments(SegmentCollection $thisSegments, Polygon $that, SegmentCollection $thatSegments)
+    {
         $allSegments = (new SegmentCollection())
-            ->append($mySegments)
-            ->append($hisSegments)
+            ->append($thisSegments)
+            ->append($thatSegments)
         ;
 
         $resultSegments = new SegmentCollection();
 
         foreach ($allSegments as $segment) {
             $middlePoint = $segment->getMiddlePoint();
-            if ($this->containsPoint($middlePoint) || $polygonContender->containsPoint($middlePoint)) {
+            if ($this->containsPoint($middlePoint) || $that->containsPoint($middlePoint)) {
                 continue;
             }
 
@@ -168,10 +174,10 @@ class Polygon
         return $resultSegments;
     }
 
-    public function union($polygonContender)
+    public function union($that)
     {
         return PolygonFactory::buildFromSegments(
-            $this->getAllSegmentsIntersectionWith($polygonContender)
+            $this->getAllSegmentsIntersectionWith($that)
         );
     }
 

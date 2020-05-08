@@ -282,7 +282,7 @@ class SegmentTest extends TestCase
         self::assertEquals($expected, $orientation);
     }
 
-    public function providerGetPartitionsbySegment()
+    public function providerPartitionedBySegment()
     {
         return [
             [
@@ -341,9 +341,9 @@ class SegmentTest extends TestCase
     }
 
     /**
-     * @dataProvider providerGetPartitionsbySegment
+     * @dataProvider providerPartitionedBySegment
      */
-    public function testGetPartitionsbySegment($segmentACoordinates, $segmentBCoordinates, $expected)
+    public function testPartitionedbySegment($segmentACoordinates, $segmentBCoordinates, $expected)
     {
         $segmentA = Segment::create(
             new Point($segmentACoordinates[0]),
@@ -356,7 +356,7 @@ class SegmentTest extends TestCase
         );
 
         /** @var \Collection\Collection $segments */
-        $segments = $segmentA->getPartitionsbySegment($segmentB);
+        $segments = $segmentA->partitionedBy($segmentB);
 
         $json = null;
         if ($segments) {

@@ -121,7 +121,7 @@ class Segment
     /**
      * @return SegmentCollection|null
      */
-    public function getPartitionsbySegment(Segment $segment)
+    public function partitionedBy(Segment $segment)
     {
         if (!$this->isOnSameLine($segment) && !$this->hasCommonEndPoint($segment)) {
             $pointOfIntersection = $this->getPointOfIntersect($segment);
