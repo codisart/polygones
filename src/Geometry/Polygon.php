@@ -128,13 +128,13 @@ class Polygon
 
         foreach ($thisSegments as $thisKey => $thisSegment) {
             foreach ($thatSegments as $thatKey => $thatSegment) {
-                $newSegments = $thisSegment->partitionedBy($thatSegment);
+                $newSegments = (new SegmentPartitionning())->process($thisSegment, $thatSegment);
                 if ($newSegments) {
                     $thisSegments->insert($thisKey, $newSegments);
                     $thisSegment = $newSegments[0];
                 }
 
-                $newSegments = $thatSegment->partitionedBy($thisSegment);
+                $newSegments = (new SegmentPartitionning())->process($thatSegment, $thisSegment);
                 if ($newSegments) {
                     $thatSegments->insert($thatKey, $newSegments);
                     $thatSegment = $newSegments[0];

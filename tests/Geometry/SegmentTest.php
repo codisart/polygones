@@ -355,8 +355,8 @@ class SegmentTest extends TestCase
             new Point($segmentBCoordinates[1])
         );
 
-        /** @var \Collection\Collection $segments */
-        $segments = $segmentA->partitionedBy($segmentB);
+        /** @var \Collection\SegmentCollection $segments */
+        $segments = (new SegmentPartitionning())->process($segmentA, $segmentB);
 
         $json = null;
         if ($segments) {

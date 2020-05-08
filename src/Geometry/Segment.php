@@ -13,10 +13,10 @@ class Segment
     /** @var Point */
     protected $pointB;
 
-    /** @var int */
+    /** @var float */
     protected $slope;
 
-    /** @var int */
+    /** @var float */
     protected $ordinateIntercept;
 
     private function __construct(Point $pointA, Point $pointB)
@@ -108,51 +108,6 @@ class Segment
     public function hasCommonEndPoint(Segment $segment) : bool
     {
         return $segment->hasForEndPoint($this->pointA) || $segment->hasForEndPoint($this->pointB);
-    }
-
-    private function splitByPoint(Point $point) : SegmentCollection
-    {
-        $newSegments   = new SegmentCollection();
-        $newSegments[] = self::create($this->pointA, $point);
-        $newSegments[] = self::create($point, $this->pointB);
-        return $newSegments;
-    }
-
-    /**
-     * @return SegmentCollection|null
-     */
-    public function partitionedBy(Segment $segment)
-    {
-        if (!$this->isOnSameLine($segment) && !$this->hasCommonEndPoint($segment)) {
-            $pointOfIntersection = $this->getPointOfIntersect($segment);
-
-            if (!empty($pointOfIntersection) && !$this->hasForEndPoint($pointOfIntersection)) {
-                return $this->splitByPoint($pointOfIntersection);
-            }
-            return null;
-        }
-
-        $pointA = $segment->pointA;
-        $pointB = $segment->pointB;
-
-        if ($this->containsSegment($segment)) {
-            $newSegments = $this->splitByPoint($pointA);
-
-            $index = 1;
-            if ($newSegments[0]->containsPoint($pointB)) {
-                $index = 0;
-            }
-
-            return $newSegments->insert($index, $newSegments[$index]->splitByPoint($pointB));
-        }
-
-        if ($this->containsPoint($pointA)) {
-            return $this->splitByPoint($pointA);
-        } elseif ($this->containsPoint($pointB)) {
-            return $this->splitByPoint($pointB);
-        }
-
-        return null;
     }
 
     /**
