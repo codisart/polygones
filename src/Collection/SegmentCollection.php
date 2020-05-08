@@ -26,7 +26,7 @@ class SegmentCollection extends Collection
     }
 
     /**
-     * @return false|Segment
+     * @return Segment
      */
     public function current()
     {
