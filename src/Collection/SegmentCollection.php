@@ -24,4 +24,12 @@ class SegmentCollection extends Collection
     {
         return parent::append($collection);
     }
+
+    /**
+     * @return false|Segment
+     */
+    public function current()
+    {
+        return parent::current();
+    }
 }

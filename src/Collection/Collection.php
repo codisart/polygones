@@ -44,6 +44,7 @@ abstract class Collection implements \ArrayAccess, \Iterator, \Countable
     {
         return array_shift($this->contenu);
     }
+
     public function current()
     {
         return current($this->contenu);
